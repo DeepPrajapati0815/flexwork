@@ -20,7 +20,27 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+const verifyTokenAndAuthorization = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.id === req.params.userId || req.user.isAdmin) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
+const verifyTokenAndAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
 
 module.exports = {
   verifyToken,
+  verifyTokenAndAuthorization,
 };

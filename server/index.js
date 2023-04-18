@@ -13,7 +13,7 @@ app.use(cors());
 app.use(cookieParser());
 
 // app router
-app.use("/api", router);
+app.use("/api/v1/", router);
 
 const PORT = process.env.PORT;
 
