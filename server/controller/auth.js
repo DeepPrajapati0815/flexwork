@@ -28,11 +28,14 @@ const registerUser = async (req, res) => {
       !password ||
       !confirmpassword
     ) {
+      infoLog("registerUser exit");
       res.status(400).json({ isRegister: false });
       return errorLog("Invalid Details");
     }
 
     if (password !== confirmpassword) {
+      infoLog("registerUser exit");
+
       res.status(400).json({ isRegister: false });
       return errorLog("Password Not Matched");
     }
@@ -44,6 +47,8 @@ const registerUser = async (req, res) => {
     });
 
     if (isRegistered) {
+      infoLog("registerUser exit");
+
       res.json({ isRegister: false });
       errorLog("User Already Exist!");
       return;
@@ -110,9 +115,11 @@ const loginUser = async (req, res) => {
       id: isRegistered._id,
       username: isRegistered.username,
       isClient: isRegistered.isClient,
+      isAdmin: isRegistered.isAdmin,
     });
+    console.log(token);
 
-    res.cookie("token", token, { maxAge: 9000000, httpOnly: true });
+    res.cookie("token", token, { maxAge: 9000000 });
 
     successLog("Successfully LoggedIn!");
     infoLog("loginUser exit");
