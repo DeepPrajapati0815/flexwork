@@ -38,7 +38,6 @@ const createProfile = async (req, res) => {
     infoLog("createProfile exit");
     return res.status(201).json({ isProfileCreated: true });
   } catch (error) {
-    console.log(error);
     infoLog("createProfile exit");
     errorLog("Error While creating freelancer profile!");
     return res.status(500).json({ isProfileCreated: false });

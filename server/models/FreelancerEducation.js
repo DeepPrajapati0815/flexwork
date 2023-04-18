@@ -17,7 +17,6 @@ const freelancerEducationSchema = new Schema(
     },
     profileId: {
       type: String,
-      unique: true,
       required: [true, "must provide freelancer profileId"],
     },
   },

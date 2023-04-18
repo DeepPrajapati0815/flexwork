@@ -22,7 +22,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.userId || req.user.isAdmin) {
+    if (req.user.id === req.headers.userId || req.user.isAdmin) {
       return next();
     }
 
@@ -40,7 +40,30 @@ const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
+const verifyTokenAndClient = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isClient) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
+const verifyTokenAndFreelancer = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (!req.user.isClient) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
 module.exports = {
   verifyToken,
   verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+  verifyTokenAndClient,
+  verifyTokenAndFreelancer,
 };

@@ -50,6 +50,7 @@ const UserSchema = new Schema(
     authMode: {
       type: String,
       required: true,
+      default: "manual",
     },
   },
   { timestamps: true }

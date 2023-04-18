@@ -73,6 +73,7 @@ const registerUser = async (req, res) => {
     infoLog("registerUser exit");
     return res.status(201).json({ isRegister: true });
   } catch (error) {
+    console.log(error);
     infoLog("registerUser exit");
     errorLog("Error While Registration!");
     return res.status(500).json({ isRegister: false });
@@ -93,7 +94,9 @@ const loginUser = async (req, res) => {
   try {
     // check if the user logged in or not
 
-    const isRegistered = await User.findOne({ username });
+    const isRegistered = await User.findOne({
+      $or: [{ username: username }, { email: username }],
+    });
 
     if (!isRegistered) {
       infoLog("loginUser exit");
@@ -114,10 +117,10 @@ const loginUser = async (req, res) => {
     const token = generateToken({
       id: isRegistered._id,
       username: isRegistered.username,
+      email: isRegistered.email,
       isClient: isRegistered.isClient,
       isAdmin: isRegistered.isAdmin,
     });
-    console.log(token);
 
     res.cookie("token", token, { maxAge: 9000000 });
 
