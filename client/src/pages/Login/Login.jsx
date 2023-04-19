@@ -30,6 +30,29 @@ const Login = () => {
     });
   };
 
+  const google = () => {
+    window.open("http://localhost:5000/auth/google", "_self");
+  };
+
+  const linkedin = () => {
+    window.open("http://localhost:5000/auth/linkedin", "_self");
+  };
+
+  const github = () => {
+    window.open("http://localhost:5000/auth/github", "_self");
+  };
+
+  const logout = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/auth/logout", {
+        withCredentials: true,
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="registerContainer loginContainer">
@@ -41,6 +64,11 @@ const Login = () => {
           className="registerRightContainer loginForm"
           onSubmit={handleSubmit}
         >
+          <button onClick={google}>Google</button>
+          <button onClick={linkedin}>Linkedin</button>
+          <button onClick={github}>Github</button>
+          <button onClick={logout}>logout</button>
+
           <input
             className="registerInput"
             type="text"

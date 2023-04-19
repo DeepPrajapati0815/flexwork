@@ -4,7 +4,6 @@ const FreelancerProfile = require("../models/FreelancerProfile");
 const createProfile = async (req, res) => {
   try {
     infoLog("createProfile entry");
-    console.log(req.user);
     const { title, description, image, rate, skills } = req.body;
 
     const user = req.user;

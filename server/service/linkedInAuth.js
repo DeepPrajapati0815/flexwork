@@ -1,6 +1,9 @@
 const LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
 const passport = require("passport");
 
+const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
+const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
+
 passport.use(
   new LinkedInStrategy(
     {
@@ -11,15 +14,7 @@ passport.use(
       state: true,
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      // asynchronous verification, for effect...
-      process.nextTick(function () {
-        // To keep the example simple, the user's LinkedIn profile is returned to
-        // represent the logged-in user. In a typical application, you would want
-        // to associate the LinkedIn account with a user record in your database,
-        // and return that user instead.
-        return done(null, profile);
-      });
+      done(null, profile);
     }
   )
 );
