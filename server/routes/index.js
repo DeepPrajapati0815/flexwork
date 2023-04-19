@@ -3,6 +3,7 @@ const authRouter = require("./auth");
 const freelancerProfileRouter = require("./freelancerProfile");
 const freelancerExperienceRouter = require("./freelancerExperience");
 const freelancerEducationRouter = require("./freelancerEducation");
+const freelancerPortfolioRouter = require("./freelancerPortfolio");
 
 // auth
 router.use("/auth", authRouter);
@@ -11,5 +12,6 @@ router.use("/auth", authRouter);
 router.use("/freelancer/profile", freelancerProfileRouter);
 router.use("/freelancer/experience", freelancerExperienceRouter);
 router.use("/freelancer/education", freelancerEducationRouter);
+router.use("/freelancer/portfolio", freelancerPortfolioRouter);
 
 module.exports = router;
