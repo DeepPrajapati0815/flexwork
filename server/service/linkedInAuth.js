@@ -11,7 +11,6 @@ passport.use(
       clientSecret: "nTDyidTM4XjINv1V",
       callbackURL: "http://localhost:5000/auth/linkedin/callback",
       scope: ["r_emailaddress", "r_liteprofile"],
-      state: true,
     },
     function (accessToken, refreshToken, profile, done) {
       process.nextTick(function () {

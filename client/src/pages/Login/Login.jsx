@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
-import logo from "../../img/png/logo.png";
 import axios from "axios";
-
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import AuthButton from "../../components/AuthButton/AuthButton";
+import googleIcon from "../../img/google.ico";
+import logo from "../../img/png/logo.png";
 import "./login.css";
 
 const Login = () => {
@@ -32,12 +34,11 @@ const Login = () => {
       password: "",
     });
   };
-
   const google = () => {
     window.open("http://localhost:5000/auth/google", "_self");
   };
 
-  const linkedin = () => {
+  const linkedIn = () => {
     window.open("http://localhost:5000/auth/linkedin", "_self");
   };
 
@@ -62,16 +63,38 @@ const Login = () => {
         <div className="registerLeftContainer ">
           <h1 className="formHeading">Login into Flexwork</h1>
           <img className="loginLogo" src={logo} alt="flexwork" />
+          <AuthButton
+            icon={
+              <img
+                src={googleIcon}
+                style={{ width: "17px" }}
+                alt="google"
+              ></img>
+            }
+            bg={"white"}
+            color={"grey"}
+            title={"Sign in with google"}
+            provider={google}
+          ></AuthButton>
+          <AuthButton
+            icon={<FaLinkedin></FaLinkedin>}
+            bg={"#0a66c2"}
+            color={"white"}
+            title={"Sign in with LinkedIn"}
+            provider={linkedIn}
+          ></AuthButton>
+          <AuthButton
+            icon={<FaGithub></FaGithub>}
+            bg={"#23282c"}
+            color={"white"}
+            title={"Sign in with Github"}
+            provider={github}
+          ></AuthButton>
         </div>
         <form
           className="registerRightContainer loginForm"
           onSubmit={handleSubmit}
         >
-          <button onClick={google}>Google</button>
-          <button onClick={linkedin}>Linkedin</button>
-          <button onClick={github}>Github</button>
-          <button onClick={logout}>logout</button>
-
           <input
             className="registerInput"
             type="text"
