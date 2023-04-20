@@ -29,7 +29,6 @@ const addExperience = async (req, res) => {
     infoLog("addEducation exit");
     return res.status(201).json({ isExperienceAdded: true });
   } catch (error) {
-    console.log(error);
     infoLog("addEducation exit");
     errorLog("Error While adding a experience to freelancer profile!");
     return res.status(500).json({ isExperienceAdded: false });

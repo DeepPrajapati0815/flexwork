@@ -1,17 +1,17 @@
 const {
-  verifyTokenAndFreelancer,
   verifyToken,
+  verifyTokenAndClient,
 } = require("../middleware/verifyToken");
 const {
   createProfile,
   updateProfile,
   getProfile,
-} = require("../controller/freelancerProfile");
+} = require("../controller/clientProfile");
 
 const router = require("express").Router();
 
-router.post("/", verifyTokenAndFreelancer, createProfile);
-router.put("/:userId", verifyTokenAndFreelancer, updateProfile);
+router.post("/", verifyTokenAndClient, createProfile);
+router.put("/:userId", verifyTokenAndClient, updateProfile);
 router.get("/:profileId", verifyToken, getProfile);
 
 module.exports = router;
