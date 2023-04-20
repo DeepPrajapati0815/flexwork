@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import logo from "../../img/png/logo.png";
+
 import axios from "../../utils/axiosInstance";
 
 import "./login.css";
@@ -29,6 +30,13 @@ const Login = () => {
       password: "",
     });
   };
+  const google = () => {
+    window.open("http://localhost:5000/auth/google", "_self");
+  };
+
+  const linkedIn = () => {
+    window.open("http://localhost:5000/auth/linkedin", "_self");
+  };
 
   return (
     <>
@@ -36,6 +44,9 @@ const Login = () => {
         <div className="registerLeftContainer ">
           <h1 className="formHeading">Login into Flexwork</h1>
           <img className="loginLogo" src={logo} alt="flexwork" />
+          <button onClick={google}>google</button>
+          <button onClick={linkedIn}>linkedIn</button>
+          <button>Github</button>
         </div>
         <form
           className="registerRightContainer loginForm"

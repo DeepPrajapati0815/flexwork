@@ -1,0 +1,39 @@
+.registerOptionContainer {
+  display: flex;
+  height: 70vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionContainer {
+  width: 50%;
+  margin: auto;
+}
+
+.radioBox {
+  background-color: white !important;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  width: 80%;
+  padding: 20px;
+  justify-content: space-between;
+  margin: 20px 10px;
+  border-radius: 15px;
+}
+.radioLabel {
+  margin-left: 20px;
+  height: 20px;
+  width: 80%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.optionImg {
+  width: 200px;
+  height: 180px;
+}

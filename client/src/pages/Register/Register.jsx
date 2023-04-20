@@ -57,33 +57,6 @@ const Register = () => {
           <h1 className="formHeading">Join as a client or freelancer</h1>
         </div>
         <form className="registerRightContainer" onSubmit={handleSubmit}>
-          <div className="mergeInput radioContainer">
-            <div className="radioBox">
-              <input
-                type="radio"
-                name="role"
-                defaultChecked
-                onChange={(e) =>
-                  setRegisterData({ ...registerData, isClient: false })
-                }
-                className="radioInput"
-                value={"client"}
-              />
-              <label className="radioLabel">Looking for a work ?</label>
-            </div>
-            <div className="radioBox">
-              <input
-                type="radio"
-                name="role"
-                className="radioInput"
-                onChange={(e) =>
-                  setRegisterData({ ...registerData, isClient: true })
-                }
-                value={"client"}
-              />
-              <label className="radioLabel">Looking to Hire ?</label>
-            </div>
-          </div>
           <div className="mergeInput ">
             <input
               className="registerInput inputGap"
