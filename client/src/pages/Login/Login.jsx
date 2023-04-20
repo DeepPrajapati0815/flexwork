@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import logo from "../../img/png/logo.png";
-import axios from "../../utils/axiosInstance";
+import axios from "axios";
 
 import "./login.css";
 
@@ -15,7 +15,10 @@ const Login = () => {
     e.preventDefault();
     try {
       if (loginData.username && loginData.password) {
-        const res = await axios.post("/auth/login", loginData);
+        const res = await axios.post(
+          "https://localhost:5000/auth/login",
+          loginData
+        );
         if (res.data.isLogin) {
           localStorage.setItem("isLogin", true);
           document.cookie = `isLogin=${res.data.isLogin};max-age=${
