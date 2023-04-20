@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
+import axios from "axios";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import AuthButton from "../../components/AuthButton/AuthButton";
+import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
-
-import axios from "../../utils/axiosInstance";
-
 import "./login.css";
 
 const Login = () => {
@@ -16,7 +17,10 @@ const Login = () => {
     e.preventDefault();
     try {
       if (loginData.username && loginData.password) {
-        const res = await axios.post("/auth/login", loginData);
+        const res = await axios.post(
+          "https://localhost:5000/auth/login",
+          loginData
+        );
         if (res.data.isLogin) {
           localStorage.setItem("isLogin", true);
           document.cookie = `isLogin=${res.data.isLogin};max-age=${
@@ -38,15 +42,54 @@ const Login = () => {
     window.open("http://localhost:5000/auth/linkedin", "_self");
   };
 
+  const github = () => {
+    window.open("http://localhost:5000/auth/github", "_self");
+  };
+
+  const logout = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/auth/logout", {
+        withCredentials: true,
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="registerContainer loginContainer">
         <div className="registerLeftContainer ">
           <h1 className="formHeading">Login into Flexwork</h1>
           <img className="loginLogo" src={logo} alt="flexwork" />
-          <button onClick={google}>google</button>
-          <button onClick={linkedIn}>linkedIn</button>
-          <button>Github</button>
+          <AuthButton
+            icon={
+              <img
+                src={googleIcon}
+                style={{ width: "17px" }}
+                alt="google"
+              ></img>
+            }
+            bg={"white"}
+            color={"grey"}
+            title={"Sign in with google"}
+            provider={google}
+          ></AuthButton>
+          <AuthButton
+            icon={<FaLinkedin></FaLinkedin>}
+            bg={"#0a66c2"}
+            color={"white"}
+            title={"Sign in with LinkedIn"}
+            provider={linkedIn}
+          ></AuthButton>
+          <AuthButton
+            icon={<FaGithub></FaGithub>}
+            bg={"#23282c"}
+            color={"white"}
+            title={"Sign in with Github"}
+            provider={github}
+          ></AuthButton>
         </div>
         <form
           className="registerRightContainer loginForm"

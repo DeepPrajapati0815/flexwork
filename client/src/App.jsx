@@ -1,19 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import Login from "./pages/Login/Login";
-import { useEffect } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { useState } from "react";
+import RegisterOption from "./pages/RegisterOption/RegisterOption";
 import Sidebar from "./components/Sidebar/Sidebar";
-import RegisterOption from "./components/RegisterOption/RegisterOption";
+import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 
 const App = () => {
   // const [user, setUser] = useState(null);
 
   const [isopen, setisopen] = useState(false);
-  const [isClient, setIsClient] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   const getUser = async () => {
     //
@@ -41,7 +40,17 @@ const App = () => {
         <Routes>
           <Route
             path="/register"
-            element={<RegisterOption setIsClient={setIsClient} />}
+            element={
+              <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+            }
+          />
+          <Route
+            path="/client/register"
+            element={<Register title={"Client"} />}
+          />
+          <Route
+            path="/freelancer/register"
+            element={<Register title={"Freelancer"} />}
           />
           <Route path="/login" element={<Login />} />
         </Routes>

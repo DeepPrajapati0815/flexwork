@@ -1,9 +1,12 @@
 import React from "react";
 import "./registerOption.css";
-import freelancerImg from "../../img/freelancerRegister.png";
+import freelancerImg from "../../img/freelancerRegister.webp";
 import clientImg from "../../img/clientRegister.jpg";
+import { useNavigate } from "react-router-dom";
 
-const RegisterOption = ({ setIsClient }) => {
+const RegisterOption = ({ setIsClient, isClient }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="registerOptionContainer">
       <div className=" optionContainer">
@@ -33,7 +36,21 @@ const RegisterOption = ({ setIsClient }) => {
 
           <img className="optionImg" src={clientImg} alt="freelancer"></img>
         </div>
-        <button>Choose</button>
+        <button
+          className="optionBtn"
+          onClick={() => {
+            console.log(isClient);
+            if (isClient) {
+              navigate("/client/register");
+              setIsClient(false);
+            } else {
+              navigate("/freelancer/register");
+              setIsClient(false);
+            }
+          }}
+        >
+          Join
+        </button>
       </div>
     </div>
   );

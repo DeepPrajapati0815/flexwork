@@ -1,0 +1,90 @@
+const router = require("express").Router();
+const passport = require("passport");
+const { loginFailed, loginSuccess, logout } = require("../controller/passport");
+const User = require("../models/User");
+
+const CLIENT_URL = process.env.CLIENT_URL;
+
+// Login Related Routes
+
+router.get("/login/failed", loginFailed);
+
+router.get("/login/success", loginSuccess);
+
+router.get("/logout", logout);
+
+// Google Routes
+
+router.get(
+  "/google",
+  (req, res, next) => {
+    req.session.isClient = req.query.isClient;
+    next();
+  },
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/auth/login/failed",
+    successRedirect: "http://localhost:3000",
+  })
+);
+
+// Linkedin Routes
+
+router.get(
+  "/linkedin",
+  passport.authenticate("linkedin", {
+    scope: ["r_emailaddress", "r_liteprofile"],
+  })
+);
+
+router.get(
+  "/linkedin/callback",
+  passport.authenticate("linkedin", {
+    failureRedirect: "/auth/login/failed",
+  }),
+  async (req, res) => {
+    if (req.user) {
+      const user = {
+        firstName: req.user.name.givenName,
+        lastName: req.user.name.familyName,
+        username: req.user.emails[0].value,
+        profile: req.user.photos[req.user.photos.length - 1].value,
+        email: req.user.emails[0].value,
+        authMode: "linkedin",
+        isClient: req.session.isClient === "true",
+      };
+
+      const isUserExist = await User.findOne({
+        $or: [{ email: user.email }, { username: user.email }],
+      });
+      // console.log(isUserExist);
+      // if (!isUserExist) {
+      //   const newUser = await User.create(user);
+      //   console.log(newUser);
+      // }
+    }
+
+    res.redirect("http://localhost:3000");
+  }
+);
+
+// GitHub Routes
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    successRedirect: "http://localhost:3000",
+    failureRedirect: "/auth/login/failed",
+  })
+);
+
+module.exports = router;

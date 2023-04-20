@@ -4,7 +4,6 @@ const FreelancerProfile = require("../models/FreelancerProfile");
 const createProfile = async (req, res) => {
   try {
     infoLog("createProfile entry");
-    console.log(req.user);
     const { title, description, image, rate, skills } = req.body;
 
     const user = req.user;
@@ -31,7 +30,6 @@ const createProfile = async (req, res) => {
       userId: user.id,
       skills,
     });
-    console.log(newFreelancerProfiile);
     await newFreelancerProfiile.save();
 
     successLog("Successfully Freelancer Profile created!");
