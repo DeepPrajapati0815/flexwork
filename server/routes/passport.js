@@ -39,9 +39,11 @@ router.get(
 router.get(
   "/linkedin/callback",
   passport.authenticate("linkedin", {
-    successRedirect: "http://localhost:3000",
     failureRedirect: "/auth/login/failed",
-  })
+  }),
+  (req, res) => {
+    console.log(req.user);
+  }
 );
 
 // GitHub Routes

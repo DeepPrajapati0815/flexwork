@@ -1,6 +1,7 @@
 const { infoLog, successLog } = require("../helper/logHelper");
 
 const loginFailed = (req, res) => {
+  console.log(req.user);
   infoLog("loginFailed entry");
   infoLog("loginFailed exit");
   return res.status(401).json({
@@ -12,8 +13,9 @@ const loginFailed = (req, res) => {
 const loginSuccess = (req, res) => {
   infoLog("loginSuccess entry");
 
-  console.log("session ==> ", req.session);
-  console.log("user ==> ", req.user);
+  console.log(req.user);
+  // console.log("user ==> ", req.user);
+
   if (req.isAuthenticated()) {
     infoLog("loginSuccess exit");
     return res.status(200).json({
@@ -41,7 +43,7 @@ const logout = (req, res) => {
     // callback function to handle errors, if any
     if (err) {
       console.error(err);
-      infoLog("logout exit");
+      infoLog("logout exit"); 
       return res.status(500).json({ message: "error whle logging out" });
     }
     successLog("successfully logged out");

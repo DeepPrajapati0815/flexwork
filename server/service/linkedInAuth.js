@@ -14,7 +14,9 @@ passport.use(
       state: true,
     },
     function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
+      process.nextTick(function () {
+        return done(null, profile);
+      });
     }
   )
 );

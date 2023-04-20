@@ -17,6 +17,7 @@ const app = express();
 // Use express middlewares
 app.use(express.json()); // Parse JSON requests
 app.use(cookieParser()); // Parse cookie headers
+
 app.use(
   cors({
     origin: "http://localhost:3000", // Allow requests from this origin
@@ -29,7 +30,7 @@ app.use(
   cookieSession({
     name: "session",
     keys: ["cyberwolve"],
-    maxAge: 5000, // Session expiry time (in milliseconds)
+    maxAge: 24 * 60 * 60 * 1000, // Session expiry time (in milliseconds)
   })
 );
 
@@ -47,6 +48,7 @@ app.use(function (request, response, next) {
       cb();
     };
   }
+  console.log(request.session);
   next();
 });
 

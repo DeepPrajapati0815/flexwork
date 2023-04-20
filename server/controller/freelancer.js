@@ -30,7 +30,6 @@ const createProfile = async (req, res) => {
       userId: user.id,
       skills,
     });
-    console.log(newFreelancerProfiile);
     await newFreelancerProfiile.save();
 
     successLog("Successfully Freelancer Profile created!");
