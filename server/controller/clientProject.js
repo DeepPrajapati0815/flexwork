@@ -33,7 +33,7 @@ const createProject = async (req, res) => {
       experienceType: req.body?.experienceType,
       duration,
       projectRate,
-      file: req.body?.file,
+      file: req.body?.file || null,
       totalProposals: req.body?.totalProposals,
       userId,
     });
@@ -44,6 +44,7 @@ const createProject = async (req, res) => {
     infoLog("createProject exit");
     return res.status(201).json({ isProjectCreated: true });
   } catch (error) {
+    console.log(error);
     infoLog("createProject exit");
     errorLog("Error While adding a project to client profile!");
     return res.status(500).json({ isProjectCreated: false });
@@ -60,7 +61,7 @@ const updateProject = async (req, res) => {
 
     successLog("Successfully project updated to client Profile!");
     infoLog("updateProject exit");
-    return res.status(201).json({ isProjectUpdated: true });
+    return res.status(200).json({ isProjectUpdated: true });
   } catch (error) {
     infoLog("updateProject exit");
     errorLog("Error While updating a project to client profile!");
@@ -68,17 +69,30 @@ const updateProject = async (req, res) => {
   }
 };
 
+// show only latest 5 project to freelancer but client can view all the project which he created
+
 const getProjects = async (req, res) => {
   infoLog("getProjects entry");
-  const { id: userId } = req.user;
+
+  const { id: userId } = req.query;
+  const { isClient } = req.user;
+  let projects = [];
+
   try {
-    const userProjects = await ClientProject.find({ userId });
+    // fetch all the projects
+    if (isClient) {
+      projects = await ClientProject.find({ userId }).sort({ createdAt: -1 });
+    } else {
+      projects = await ClientProject.find({ userId })
+        .sort({ createdAt: -1 })
+        .limit(5);
+    }
 
     successLog("Successfully fetched all projects!");
     infoLog("getProjects exit");
     return res
-      .status(201)
-      .json({ isProjectsFetched: true, projects: userProjects });
+      .status(200)
+      .json({ isProjectsFetched: true, projects: projects });
   } catch (error) {
     infoLog("getProjects exit");
     errorLog("Error While fetching all projects");
@@ -95,7 +109,7 @@ const getSingleProject = async (req, res) => {
     successLog("Successfully fetched single project!");
     infoLog("getSingleProject exit");
     return res
-      .status(201)
+      .status(200)
       .json({ isProjectsFetched: true, project: userProject });
   } catch (error) {
     infoLog("getSingleProject exit");
