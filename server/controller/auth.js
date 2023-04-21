@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { errorLog, successLog, infoLog } = require("../helper/logHelper");
 const { hashPassword, comparePassword } = require("../helper/bcrypt");
 const { generateToken } = require("../helper/JWT.js");
+const passport = require("passport");
 
 const registerUser = async (req, res) => {
   infoLog("registerUser entry");

@@ -11,6 +11,7 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import { ChakraProvider } from "@chakra-ui/react";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   // const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ const App = () => {
   const [isopen, setisopen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState({});
+  const [isLogin, setIsLogin] = useState(false);
 
   const [searchParams] = useSearchParams();
 
@@ -41,6 +43,10 @@ const App = () => {
   useEffect(() => {
     if (searchParams.get("isSuccess") === "true") {
       getUser();
+    }
+    const isLogin = localStorage.getItem("isLogin");
+    if (isLogin) {
+      setIsLogin(isLogin);
     }
   }, []);
 
@@ -72,6 +78,7 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
         </Routes>
+        <Footer></Footer>
       </div>
     </ChakraProvider>
   );

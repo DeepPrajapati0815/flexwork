@@ -17,7 +17,7 @@ const HomeBanner = () => {
             <Text
               as={"span"}
               position={"relative"}
-              fontSize={"3rem"}
+              fontSize={"2.4rem"}
               color={"white"}
               _after={{
                 content: "''",
@@ -33,9 +33,6 @@ const HomeBanner = () => {
               Hire the best freelancers for any job, online.
             </Text>
             <br />{" "}
-            {/* <Text color={"white"} as={"span"}>
-              Design Projects
-            </Text>{" "} */}
           </Heading>
           <Text fontSize={{ base: "md", lg: "lg" }} color={"white"}>
             Forget the old rules. You can have the best people. Right now. Right
@@ -71,7 +68,7 @@ const HomeBanner = () => {
       <Flex flex={1} justify={"center"} align={"center"}>
         <Image
           alt="banner"
-          style={{ width: "400px", height: "400px", borderRadius: "30px" }}
+          style={{ width: "60%", borderRadius: "30px" }}
           src={
             "https://img.freepik.com/free-vector/person-meditating-after-online-working_52683-74355.jpg"
           }
