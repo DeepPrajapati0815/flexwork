@@ -99,15 +99,15 @@ const Register = ({ title }) => {
             title={"Sign in with google"}
             provider={google}
           ></AuthButton>
-          <AuthButton
+          {/* <AuthButton
             icon={<FaLinkedin></FaLinkedin>}
             bg={"#0a66c2"}
             color={"white"}
             title={"Sign in with LinkedIn"}
             provider={linkedIn}
-          ></AuthButton>
+          ></AuthButton> */}
           <AuthButton
-            icon={<FaGithub></FaGithub>}
+            icon={<FaGithub style={{ fontSize: "20px" }}></FaGithub>}
             bg={"#23282c"}
             color={"white"}
             title={"Sign in with Github"}

@@ -38,6 +38,7 @@ router.get(
   "/linkedin",
   passport.authenticate("linkedin", {
     scope: ["r_emailaddress", "r_liteprofile"],
+    state: "",
   })
 );
 
@@ -45,31 +46,33 @@ router.get(
   "/linkedin/callback",
   passport.authenticate("linkedin", {
     failureRedirect: "/auth/login/failed",
-  }),
-  async (req, res) => {
-    if (req.user) {
-      const user = {
-        firstName: req.user.name.givenName,
-        lastName: req.user.name.familyName,
-        username: req.user.emails[0].value,
-        profile: req.user.photos[req.user.photos.length - 1].value,
-        email: req.user.emails[0].value,
-        authMode: "linkedin",
-        isClient: req.session.isClient === "true",
-      };
+    successRedirect: "http://localhost:3000",
+  })
+  // async (req, res) => {
+  //   if (req.user) {
+  //     const user = {
+  //       firstName: req.user.name.givenName,
+  //       lastName: req.user.name.familyName,
+  //       username: req.user.emails[0].value,
+  //       profile: req.user.photos[req.user.photos.length - 1].value,
+  //       email: req.user.emails[0].value,
+  //       authMode: "linkedin",
+  //       isClient: req.session.isClient === "true",
+  //     };
+  //     console.log("user session=======>", req.session);
+  //     const isUserExist = await User.findOne({
+  //       $or: [{ email: user.email }, { username: user.email }],
+  //     });
+  //     console.log(user);
+  //     // console.log(isUserExist);
+  //     // if (!isUserExist) {
+  //     //   const newUser = await User.create(user);
+  //     //   console.log(newUser);
+  //     // }
+  //   }
 
-      const isUserExist = await User.findOne({
-        $or: [{ email: user.email }, { username: user.email }],
-      });
-      // console.log(isUserExist);
-      // if (!isUserExist) {
-      //   const newUser = await User.create(user);
-      //   console.log(newUser);
-      // }
-    }
-
-    res.redirect("http://localhost:3000");
-  }
+  //   res.redirect("http://localhost:3000");
+  // }
 );
 
 // GitHub Routes

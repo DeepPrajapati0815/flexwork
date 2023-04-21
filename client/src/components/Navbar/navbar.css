@@ -16,11 +16,13 @@ nav {
   align-items: center;
   padding: 0 1rem;
   height: 100%;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .link:hover {
-  color: #2e4e74;
+  color: #5e9568;
+  /* color: #2e4e74; */
 }
 
 .mobile-menu-icon {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import axios from "axios";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaGithubAlt, FaLinkedin } from "react-icons/fa";
 import AuthButton from "../../components/AuthButton/AuthButton";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
@@ -76,15 +76,15 @@ const Login = () => {
             title={"Sign in with google"}
             provider={google}
           ></AuthButton>
-          <AuthButton
+          {/* <AuthButton
             icon={<FaLinkedin></FaLinkedin>}
             bg={"#0a66c2"}
             color={"white"}
             title={"Sign in with LinkedIn"}
             provider={linkedIn}
-          ></AuthButton>
+          ></AuthButton> */}
           <AuthButton
-            icon={<FaGithub></FaGithub>}
+            icon={<FaGithub style={{ fontSize: "20px" }}></FaGithub>}
             bg={"#23282c"}
             color={"white"}
             title={"Sign in with Github"}

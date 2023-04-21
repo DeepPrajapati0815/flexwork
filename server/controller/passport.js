@@ -15,6 +15,7 @@ const loginSuccess = async (req, res) => {
   infoLog("loginSuccess entry");
 
   const provider = req.user?.provider;
+  console.log("linkedin user======>", req.user);
 
   if (req.isAuthenticated()) {
     if (provider === "google") {
