@@ -1,11 +1,14 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
-const ClientProposalsReceived = require("../models/ClientProposalsReceived");
+const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 
 const getAllProposals = async (req, res) => {
   infoLog("getAllProposals entry");
+  const { id: projectId } = req.query;
   const { id: clientId } = req.user;
   try {
-    const clientAllProposals = await ClientProposalsReceived.find({ clientId });
+    const clientAllProposals = await FreelancerProposalRequest.find({
+      $and: [{ projectId: projectId }, { clientId: clientId }],
+    });
 
     successLog("Successfully fetched all proposals!");
     infoLog("getAllProposals exit");
@@ -23,7 +26,7 @@ const getSingleProposal = async (req, res) => {
   infoLog("getSingleProposal entry");
   const { proposalId } = req.params;
   try {
-    const clientProposal = await ClientProposalsReceived.findById(proposalId);
+    const clientProposal = await FreelancerProposalRequest.findById(proposalId);
 
     successLog("Successfully fetched single proposal!");
     infoLog("getSingleProposal exit");
@@ -40,7 +43,7 @@ const approveProposal = async (req, res) => {
   infoLog("approveProposal entry");
   const { proposalId } = req.params;
   try {
-    await ClientProposalsReceived.findByIdAndUpdate(proposalId, {
+    await FreelancerProposalRequest.findByIdAndUpdate(proposalId, {
       isAccepted: true,
     });
     successLog("Successfully approved single proposal!");
@@ -57,7 +60,7 @@ const rejectProposal = async (req, res) => {
   infoLog("rejectProposal entry");
   const { proposalId } = req.params;
   try {
-    await ClientProposalsReceived.findByIdAndUpdate(proposalId, {
+    await FreelancerProposalRequest.findByIdAndUpdate(proposalId, {
       isRejected: true,
     });
     successLog("Successfully rejected single proposal!");

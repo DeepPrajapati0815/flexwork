@@ -1,13 +1,20 @@
-const { infoLog, errorLog } = require("../helper/logHelper");
+const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 
 const createProposal = async (req, res) => {
-  const { projectId } = req.params;
+  const { clientId, projectId } = req.query;
   const { id: freelancerId } = req.user;
 
   const { expectedBidRate, duration, coverLetter } = req.body;
 
-  if (!expectedBidRate || !duration || !coverLetter || !projectId) {
+  if (
+    !expectedBidRate ||
+    !duration ||
+    !coverLetter ||
+    !projectId ||
+    !clientId ||
+    !freelancerId
+  ) {
     infoLog("createProposal exit");
     res.status(400).json({ isProposalCreated: false });
     return errorLog("Invalid Details");
@@ -16,6 +23,7 @@ const createProposal = async (req, res) => {
   try {
     const newFreelancerProposalRequest = new FreelancerProposalRequest({
       projectId,
+      clientId,
       freelancerId,
       expectedBidRate,
       duration,
@@ -29,6 +37,7 @@ const createProposal = async (req, res) => {
     infoLog("createProposal exit");
     return res.status(201).json({ isProposalCreated: true });
   } catch (error) {
+    console.error(error);
     infoLog("createProposal exit");
     errorLog("Error While creating a proposal to freelancer side!");
     return res.status(500).json({ isProposalCreated: false });
