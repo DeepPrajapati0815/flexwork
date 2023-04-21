@@ -13,8 +13,11 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { SmallCloseIcon } from "@chakra-ui/icons";
+import { useEffect } from "react";
 
 const EditProfile = () => {
+  useEffect(() => {}, []);
+
   return (
     <Flex
       minH={"100vh"}

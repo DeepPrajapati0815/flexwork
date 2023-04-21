@@ -60,21 +60,21 @@ const Register = ({ title }) => {
   };
 
   const google = () => {
-    localStorage.setItem("isClient", window.location.href.includes("/client"));
     window.open(
       `http://localhost:5000/auth/google?isClient=${window.location.href.includes(
         "/client"
-      )}`,
+      )}&isFirstTime=${window.location.href.includes("/register")}`,
       "_self"
     );
   };
 
-  const linkedIn = () => {
-    window.open("http://localhost:5000/auth/linkedin", "_self");
-  };
-
   const github = () => {
-    window.open("http://localhost:5000/auth/github", "_self");
+    window.open(
+      `http://localhost:5000/auth/github?isClient=${window.location.href.includes(
+        "/client"
+      )}&isFirstTime=${window.location.href.includes("/register")}`,
+      "_self"
+    );
   };
 
   return (

@@ -38,10 +38,6 @@ const Login = () => {
     window.open("http://localhost:5000/auth/google", "_self");
   };
 
-  const linkedIn = () => {
-    window.open("http://localhost:5000/auth/linkedin", "_self");
-  };
-
   const github = () => {
     window.open("http://localhost:5000/auth/github", "_self");
   };

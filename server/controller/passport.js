@@ -15,7 +15,6 @@ const loginSuccess = async (req, res) => {
   infoLog("loginSuccess entry");
 
   const provider = req.user?.provider;
-  console.log("linkedin user======>", req.user);
 
   if (req.isAuthenticated()) {
     if (provider === "google") {
@@ -30,11 +29,18 @@ const loginSuccess = async (req, res) => {
       };
 
       const isUserExist = await User.findOne({
-        $or: [{ email: user.email }, { username: user.email }],
+        $and: [{ email: user.email }, { username: user.email }],
       });
 
-      if (!isUserExist) {
-        await User.create(user);
+      if (!isUserExist && req.session.isFirstTime) {
+        const newUser = await User.create(user);
+        user._id = newUser._id;
+        return res.status(200).json({
+          success: true,
+          message: "successfully authenticated",
+          user: user,
+          redirectUrl: `/profile/edit/${user._id}`,
+        });
       }
     }
 
@@ -53,8 +59,15 @@ const loginSuccess = async (req, res) => {
         console.log(user);
         const isUserExist = await User.findOne({ username: user.username });
 
-        if (!isUserExist) {
-          await User.create(user);
+        if (!isUserExist && req.session.isFirstTime) {
+          const newUser = await User.create(user);
+          user._id = newUser._id;
+          return res.status(200).json({
+            success: true,
+            message: "successfully authenticated",
+            user: user,
+            redirectUrl: `/profile/edit/${user._id}`,
+          });
         }
       }
     }

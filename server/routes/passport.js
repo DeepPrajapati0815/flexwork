@@ -19,6 +19,9 @@ router.get(
   "/google",
   (req, res, next) => {
     req.session.isClient = req.query.isClient;
+    req.session.isFirstTime = req.query.isFirstTime;
+    console.log(req.query);
+    console.log("session================>", req.session);
     next();
   },
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -28,7 +31,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/login/failed",
-    successRedirect: "http://localhost:3000",
+    successRedirect: "http://localhost:3000?isSuccess=true",
   })
 );
 
@@ -85,7 +88,7 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", {
-    successRedirect: "http://localhost:3000",
+    successRedirect: "http://localhost:3000?isSuccess=true",
     failureRedirect: "/auth/login/failed",
   })
 );
