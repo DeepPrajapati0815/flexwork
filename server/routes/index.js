@@ -8,9 +8,13 @@ const clientProfile = require("./clientProfle");
 const clientProject = require("./clientProject");
 const clientProposalsReceived = require("./clientProposalsReceived");
 const freelancerProposalRequest = require("./freelancerProposalRequest");
+const userRouter = require("./user");
 
 // auth
 router.use("/auth", authRouter);
+
+//user
+router.use("/user", userRouter);
 
 // freelancer
 router.use("/freelancer/profile", freelancerProfileRouter);

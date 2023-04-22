@@ -7,11 +7,24 @@ const {
   rejectProposal,
 } = require("../controller/clientProposalsReceived");
 
-const { verifyTokenAndClient } = require("../middleware/verifyToken");
+const {
+  verifyTokenAndClient,
+  verifyToken,
+} = require("../middleware/verifyToken");
 
-router.get("/", verifyTokenAndClient, getAllProposals);
-router.get("/:proposalId", verifyTokenAndClient, getSingleProposal);
-router.put("/:proposalId", verifyTokenAndClient, approveProposal);
-router.delete("/:proposalId", verifyTokenAndClient, rejectProposal);
+router.get("/", verifyToken, verifyTokenAndClient, getAllProposals);
+router.get(
+  "/:proposalId",
+  verifyToken,
+  verifyTokenAndClient,
+  getSingleProposal
+);
+router.put("/:proposalId", verifyToken, verifyTokenAndClient, approveProposal);
+router.delete(
+  "/:proposalId",
+  verifyToken,
+  verifyTokenAndClient,
+  rejectProposal
+);
 
 module.exports = router;

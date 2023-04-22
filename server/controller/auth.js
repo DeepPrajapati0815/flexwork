@@ -127,9 +127,23 @@ const loginUser = async (req, res) => {
 
     successLog("Successfully LoggedIn!");
     infoLog("loginUser exit");
-    return res.status(200).json({ isLogin: true });
+    return res.status(200).json({
+      isLogin: true,
+      user: {
+        _id: isRegistered._id,
+        firstName: isRegistered.firstName,
+        lastName: isRegistered.lastName,
+        email: isRegistered.email,
+        username: isRegistered.username,
+        city: isRegistered.city,
+        state: isRegistered.state,
+        createdAt: isRegistered.createdAt,
+        isClient: isRegistered.isClient,
+        authMode: isRegistered.authMode,
+      },
+    });
   } catch (error) {
-    infoLog("loginUser exit");
+    console.log(error);
     errorLog("error while login the user");
     return res.status(500).json({ isLogin: false });
   }

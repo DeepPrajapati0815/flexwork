@@ -61,7 +61,6 @@ const HomeFeature = () => {
             src={featureVideo}
             controls
             autoPlay
-            objectFit={"cover"}
           />
         </Flex>
         <Stack spacing={4} w={"90%"}>

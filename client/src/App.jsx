@@ -1,5 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import axiosInstance from "./utils/axiosInstance";
+
+import { useContext, useEffect, useState } from "react";
 import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import "./App.css";
 
@@ -12,72 +14,122 @@ import Home from "./pages/Home/Home";
 import { ChakraProvider } from "@chakra-ui/react";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import Footer from "./components/Footer/Footer";
+import { FlexWorkContext } from "./context/ContextStore";
 
 const App = () => {
-  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [isopen, setisopen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [user, setUser] = useState({});
-  const [isLogin, setIsLogin] = useState(false);
+
+  const { user, setUser, isLogin, setIsLogin, setUserId } =
+    useContext(FlexWorkContext);
 
   const [searchParams] = useSearchParams();
 
   const getUser = async () => {
-    //
     const { data } = await axios.get(
       "http://localhost:5000/auth/login/success",
       {
         withCredentials: true,
       }
     );
-    const user = data.user;
-    setUser(user);
+
+    const id = data.userId;
     const redirectUrl = data?.redirectUrl;
-    console.log(redirectUrl);
-    if (redirectUrl) {
+
+    if (id && data.isLogin) {
+      localStorage.setItem("userId", id);
+      localStorage.setItem("isLogin", true);
+      setUserId(id);
+    }
+
+    if (redirectUrl && data.isRegistered) {
       navigate(redirectUrl);
+    } else {
+      navigate("/");
     }
   };
 
+  const getManualUser = async (userId) => {
+    try {
+      const { data } = await axiosInstance.get(`/user/${userId}`);
+      if (data.data) {
+        setUser(data.data);
+        console.log(data.data);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    if (searchParams.get("isSuccess") === "true") {
-      getUser();
-    }
-    const isLogin = localStorage.getItem("isLogin");
-    if (isLogin) {
-      setIsLogin(isLogin);
-    }
+    (async () => {
+      if (searchParams.get("isSuccess") === "true") {
+        await getUser();
+      }
+      const userId = localStorage.getItem("userId");
+      setUserId(userId);
+      await getManualUser(userId);
+
+      const isLogin = localStorage.getItem("isLogin");
+
+      if (isLogin && userId) {
+        setIsLogin(true);
+      }
+    })();
   }, []);
 
   const toggle = () => {
     setisopen(!isopen);
   };
 
+  const url = window.location.href;
+  console.log(url.includes("/login"));
+
   return (
     <ChakraProvider>
       <div className="App">
         <Navbar toggle={toggle}></Navbar>
-        <Sidebar isopen={isopen} toggle={toggle} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={isLogin ? <Home /> : <Login setUser={setUser}></Login>}
+          />
           <Route
             path="/register"
             element={
               <RegisterOption setIsClient={setIsClient} isClient={isClient} />
             }
           />
+          <Route
+            path="/client"
+            element={
+              isLogin && user?.isClient ? (
+                <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+              ) : (
+                <Login></Login>
+              )
+            }
+          />
+          <Route
+            path="/freelancer"
+            element={
+              isLogin && !user?.isClient ? (
+                <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+              ) : (
+                <Login></Login>
+              )
+            }
+          />
           <Route path="/profile/edit/:userId" element={<EditProfile />} />
           <Route
-            path="/client/register"
+            path="/register/client"
             element={<Register title={"Client"} />}
           />
           <Route
-            path="/freelancer/register"
+            path="/register/freelancer"
             element={<Register title={"Freelancer"} />}
           />
-          <Route path="/login" element={<Login />} />
-        </Routes>
+          <Route path="/login" element={<Login setUser={setUser} />} />
+        </Routes>{" "}
         <Footer></Footer>
       </div>
     </ChakraProvider>

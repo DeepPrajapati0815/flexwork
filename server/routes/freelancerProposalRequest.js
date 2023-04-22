@@ -1,4 +1,7 @@
-const { verifyTokenAndFreelancer } = require("../middleware/verifyToken");
+const {
+  verifyTokenAndFreelancer,
+  verifyToken,
+} = require("../middleware/verifyToken");
 const {
   getAllProposals,
   getSingleProposal,
@@ -7,8 +10,13 @@ const {
 
 const router = require("express").Router();
 
-router.post("/", verifyTokenAndFreelancer, createProposal);
-router.get("/", verifyTokenAndFreelancer, getAllProposals);
-router.get("/:proposalId", verifyTokenAndFreelancer, getSingleProposal);
+router.post("/", verifyToken, verifyTokenAndFreelancer, createProposal);
+router.get("/", verifyToken, verifyTokenAndFreelancer, getAllProposals);
+router.get(
+  "/:proposalId",
+  verifyToken,
+  verifyTokenAndFreelancer,
+  getSingleProposal
+);
 
 module.exports = router;
