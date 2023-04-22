@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 import navbarItems from "../../data/nav";
 import logo from "../../img/png/logo.png";
+import { Image } from "@chakra-ui/react";
 
 const Navbar = ({ toggle }) => {
   return (
     <nav>
       <Link to="/" className="link">
-        <img src={logo} alt="logo" height={"55px"} />
+        <Image src={logo} alt="logo" height={"55px"} />
       </Link>
       <div className="menu-items">
         {navbarItems.map((item, index) => (

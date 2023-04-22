@@ -15,7 +15,6 @@ const UserSchema = new Schema(
     },
     username: {
       type: String,
-      required: [true, "must provide username"],
       unique: true,
     },
     city: {

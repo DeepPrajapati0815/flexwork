@@ -32,8 +32,15 @@ const loginSuccess = async (req, res) => {
         $or: [{ email: user.email }, { username: user.email }],
       });
 
-      if (!isUserExist) {
-        await User.create(user);
+      if (!isUserExist && req.session.isFirstTime) {
+        const newUser = await User.create(user);
+        user._id = newUser._id;
+        return res.status(200).json({
+          success: true,
+          message: "successfully authenticated",
+          user: user,
+          redirectUrl: `/profile/edit/${user._id}`,
+        });
       }
     }
 
@@ -44,16 +51,25 @@ const loginSuccess = async (req, res) => {
           firstName: null,
           lastName: null,
           username: req.user.username,
-          email: null,
+          email: req.user.emails[0].value,
           profile: req.user.photos[0].value,
           authMode: "github",
           isClient: req.session.isClient === "true",
         };
         console.log(user);
-        const isUserExist = await User.findOne({ username: user.username });
+        const isUserExist = await User.findOne({
+          $or: [{ username: user.username }, { email: user.email }],
+        });
 
-        if (!isUserExist) {
-          await User.create(user);
+        if (!isUserExist && req.session.isFirstTime) {
+          const newUser = await User.create(user);
+          user._id = newUser._id;
+          return res.status(200).json({
+            success: true,
+            message: "successfully authenticated",
+            user: user,
+            redirectUrl: `/profile/edit/${user._id}`,
+          });
         }
       }
     }
