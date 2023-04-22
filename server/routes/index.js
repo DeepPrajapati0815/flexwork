@@ -17,7 +17,7 @@ router.use("/freelancer/profile", freelancerProfileRouter);
 router.use("/freelancer/experience", freelancerExperienceRouter);
 router.use("/freelancer/education", freelancerEducationRouter);
 router.use("/freelancer/portfolio", freelancerPortfolioRouter);
-router.use("/freelancer/proposalRequest", freelancerProposalRequest);
+router.use("/freelancer/proposal", freelancerProposalRequest);
 
 // client
 router.use("/client/profile", clientProfile);

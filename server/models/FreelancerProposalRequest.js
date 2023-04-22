@@ -4,12 +4,17 @@ const freelancerProposalRequestSchema = new Schema(
   {
     projectId: {
       type: String,
+      required: [true, "must provide project id"],
+    },
+
+    clientId: {
+      type: String,
       required: [true, "must provide client id"],
     },
 
     freelancerId: {
       type: String,
-      required: [true, "must provide userId"],
+      required: [true, "must provide freelancerId"],
     },
 
     expectedBidRate: {
@@ -29,6 +34,14 @@ const freelancerProposalRequestSchema = new Schema(
     coverLetter: {
       type: String,
       required: [true, "must provide cover letter"],
+    },
+    isAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    isRejected: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

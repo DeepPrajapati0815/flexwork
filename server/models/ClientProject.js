@@ -10,14 +10,13 @@ const clientProjectSchema = new Schema(
       type: String,
       required: [true, "must provide description"],
     },
-    category: {
-      type: [String],
-      required: [true, "must provide category date"],
-      unique: true,
-    },
     skills: {
       type: [String],
       required: [true, "must provide skills"],
+    },
+    category: {
+      type: [String],
+      required: [true, "must provide category date"],
     },
     scope: {
       type: String,
@@ -39,7 +38,7 @@ const clientProjectSchema = new Schema(
     },
     totalProposals: {
       type: Number,
-      defaut: 0,
+      default: 0,
     },
     userId: {
       type: String,
@@ -49,6 +48,10 @@ const clientProjectSchema = new Schema(
   { timestamps: true }
 );
 
-const ClientProject = mongoose.model("ClientProject", clientProjectSchema);
+const ClientProject = mongoose.model(
+  "ClientProjects",
+  clientProjectSchema,
+  "ClientProjects"
+);
 
 module.exports = ClientProject;
