@@ -3,7 +3,6 @@ const { errorLog } = require("../helper/logHelper");
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
-  console.log(token);
   if (!token) {
     errorLog("No Token");
     return res.status(400).json({ isToken: false });
@@ -22,7 +21,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.headers.userid || req.user.isAdmin) {
+    if (req.user.id === req.params.userId || req.user.isAdmin) {
       return next();
     }
 

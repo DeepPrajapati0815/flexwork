@@ -12,6 +12,6 @@ const router = require("express").Router();
 
 router.post("/", verifyTokenAndClient, createProfile);
 router.put("/:userId", verifyTokenAndClient, updateProfile);
-router.get("/:profileId", verifyToken, getProfile);
+router.get("/:userId", verifyToken, getProfile);
 
 module.exports = router;

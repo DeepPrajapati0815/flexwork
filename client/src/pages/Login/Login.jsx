@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { FaGithub } from "react-icons/fa";
 import AuthButton from "../../components/AuthButton/AuthButton";
+import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
@@ -13,6 +14,8 @@ const Login = () => {
     password: "",
   });
 
+  const { setUser, setUserId } = useContext(FlexWorkContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -21,6 +24,12 @@ const Login = () => {
 
         if (res.data.isLogin) {
           localStorage.setItem("isLogin", true);
+          localStorage.setItem("userId", res.data.user._id);
+          window.location.href = "/";
+          setLoginData({
+            username: "",
+            password: "",
+          });
           localStorage.setItem("userId", res.data.user._id);
           window.location.href = "/";
           setLoginData({
