@@ -81,8 +81,6 @@ const App = () => {
     setisopen(!isopen);
   };
 
-  const url = window.location.href;
-  console.log(url.includes("/login"));
 
   return (
     <ChakraProvider>

@@ -53,69 +53,74 @@ const ListHeader = ({ children }) => {
 };
 
 const Footer = () => {
+  const url = window.location.href;
+
   return (
-    <Box bg={"#171923"} color={useColorModeValue("white", "white")}>
-      <Container as={Stack} maxW={"6xl"} py={10}>
-        <SimpleGrid
-          templateColumns={{ sm: "1fr 1fr", md: "2fr 1fr 1fr 2fr" }}
-          spacing={8}
-        >
-          <Stack spacing={6}>
-            <Box>
-              <Logo color={useColorModeValue("gray.700", "white")} />
-            </Box>
-            <Text fontSize={"sm"}>© 2023 fleXwork. All rights reserved</Text>
-            <Stack direction={"row"} spacing={6}>
-              <SocialButton label={"Twitter"} href={"#"}>
-                <FaTwitter />
-              </SocialButton>
-              <SocialButton label={"YouTube"} href={"#"}>
-                <FaYoutube />
-              </SocialButton>
-              <SocialButton label={"Instagram"} href={"#"}>
-                <FaInstagram />
-              </SocialButton>
+    !url.includes("/login") &&
+    !url.includes("/register") && (
+      <Box bg={"#171923"} color={"white"}>
+        <Container as={Stack} maxW={"6xl"} py={10}>
+          <SimpleGrid
+            templateColumns={{ sm: "1fr 1fr", md: "2fr 1fr 1fr 2fr" }}
+            spacing={8}
+          >
+            <Stack spacing={6}>
+              <Box>
+                <Logo color={"gray.700"} />
+              </Box>
+              <Text fontSize={"sm"}>© 2023 fleXwork. All rights reserved</Text>
+              <Stack direction={"row"} spacing={6}>
+                <SocialButton label={"Twitter"} href={"#"}>
+                  <FaTwitter />
+                </SocialButton>
+                <SocialButton label={"YouTube"} href={"#"}>
+                  <FaYoutube />
+                </SocialButton>
+                <SocialButton label={"Instagram"} href={"#"}>
+                  <FaInstagram />
+                </SocialButton>
+              </Stack>
             </Stack>
-          </Stack>
-          <Stack align={"flex-start"}>
-            <ListHeader>Company</ListHeader>
-            <Link href={"#"}>About us</Link>
-            <Link href={"#"}>Blog</Link>
-            <Link href={"#"}>Contact us</Link>
-            <Link href={"#"}>Career</Link>
-          </Stack>
-          <Stack align={"flex-start"}>
-            <ListHeader>Support</ListHeader>
-            <Link href={"#"}>Help Center</Link>
-            <Link href={"#"}>Terms of Service</Link>
-            <Link href={"#"}>Legal</Link>
-            <Link href={"#"}>Privacy Policy</Link>
-            <Link href={"#"}>Satus</Link>
-          </Stack>
-          <Stack align={"flex-start"}>
-            <ListHeader>Stay up to date</ListHeader>
-            <Stack direction={"row"}>
-              <Input
-                placeholder={"Your email address"}
-                bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
-                _focus={{
-                  bg: "whiteAlpha.300",
-                }}
-              />
-              <IconButton
-                bg={"#2e4e74"}
-                color={useColorModeValue("white", "gray.800")}
-                _hover={{
-                  bg: "#2e4e34",
-                }}
-                aria-label="Subscribe"
-                icon={<BiMailSend />}
-              />
+            <Stack align={"flex-start"}>
+              <ListHeader>Company</ListHeader>
+              <Link href={"#"}>About us</Link>
+              <Link href={"#"}>Blog</Link>
+              <Link href={"#"}>Contact us</Link>
+              <Link href={"#"}>Career</Link>
             </Stack>
-          </Stack>
-        </SimpleGrid>
-      </Container>
-    </Box>
+            <Stack align={"flex-start"}>
+              <ListHeader>Support</ListHeader>
+              <Link href={"#"}>Help Center</Link>
+              <Link href={"#"}>Terms of Service</Link>
+              <Link href={"#"}>Legal</Link>
+              <Link href={"#"}>Privacy Policy</Link>
+              <Link href={"#"}>Satus</Link>
+            </Stack>
+            <Stack align={"flex-start"}>
+              <ListHeader>Stay up to date</ListHeader>
+              <Stack direction={"row"}>
+                <Input
+                  placeholder={"Your email address"}
+                  bg={"blackAlpha.100"}
+                  _focus={{
+                    bg: "whiteAlpha.300",
+                  }}
+                />
+                <IconButton
+                  bg={"#2e4e74"}
+                  color={"white"}
+                  _hover={{
+                    bg: "#2e4e34",
+                  }}
+                  aria-label="Subscribe"
+                  icon={<BiMailSend />}
+                />
+              </Stack>
+            </Stack>
+          </SimpleGrid>
+        </Container>
+      </Box>
+    )
   );
 };
 

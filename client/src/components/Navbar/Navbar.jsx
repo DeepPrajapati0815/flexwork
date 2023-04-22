@@ -15,7 +15,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-
 import {
   HamburgerIcon,
   CloseIcon,
@@ -28,99 +27,107 @@ import { Link } from "react-router-dom";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
-  
-  return (
-    <Box>
-      <Flex
-        bg={useColorModeValue("black")}
-        color={useColorModeValue("gray.600", "white")}
-        minH={"60px"}
-        py={{ base: 2 }}
-        justify={"center"}
-        px={{ base: 4 }}
-        align={"center"}
-      >
-        <Flex
-          flex={{ base: 1, md: "auto" }}
-          ml={{ base: -2 }}
-          display={{ base: "flex", md: "none" }}
-        >
-          <IconButton
-            onClick={onToggle}
-            icon={
-              isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
-            }
-            variant={"ghost"}
-            color={"white"}
-            aria-label={"Toggle Navigation"}
-          />
-        </Flex>
-        <Flex
-          flex={{ base: 1 }}
-          align={"center"}
-          justify={{ base: "center", md: "start" }}
-        >
-          <Image src={logo} width={"150px"} />
-          <Flex display={{ base: "none", md: "flex" }} ml={10}>
-            <DesktopNav />
-          </Flex>
-        </Flex>
+  const url = window.location.href;
 
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
+  return (
+    !url.includes("/login") &&
+    !url.includes("/register") && (
+      <Box>
+        <Flex
+          bg={"black"}
+          color={("gray.600", "white")}
+          minH={"60px"}
+          py={{ base: 2 }}
+          justify={"center"}
+          px={{ base: 4 }}
+          align={"center"}
         >
-          <Link
-            to={"/login"}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          <Flex
+            flex={{ base: 1, md: "auto" }}
+            ml={{ base: -2 }}
+            display={{ base: "flex", md: "none" }}
           >
-            <Button
-              as={"a"}
-              fontSize={"sm"}
-              color={"gray.400"}
-              fontWeight={400}
-              variant={"link"}
-              href={"#"}
-            >
-              Sign In
-            </Button>
-          </Link>
-          <Link
-            to={"/register"}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              as={"a"}
-              display={{ base: "none", md: "inline-flex" }}
-              fontSize={"sm"}
-              fontWeight={600}
+            <IconButton
+              onClick={onToggle}
+              icon={
+                isOpen ? (
+                  <CloseIcon w={3} h={3} />
+                ) : (
+                  <HamburgerIcon w={5} h={5} />
+                )
+              }
+              variant={"ghost"}
               color={"white"}
-              bg={"#2e4e34"}
-              href={"#"}
-              _hover={{
-                bg: "green.600",
+              aria-label={"Toggle Navigation"}
+            />
+          </Flex>
+          <Flex
+            flex={{ base: 1 }}
+            align={"center"}
+            justify={{ base: "center", md: "start" }}
+          >
+            <Image src={logo} width={"150px"} />
+            <Flex display={{ base: "none", md: "flex" }} ml={10}>
+              <DesktopNav />
+            </Flex>
+          </Flex>
+
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={"flex-end"}
+            direction={"row"}
+            spacing={6}
+          >
+            <Link
+              to={"/login"}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              Sign Up
-            </Button>
-          </Link>
-        </Stack>
-      </Flex>
+              <Button
+                as={"a"}
+                fontSize={"sm"}
+                color={"gray.400"}
+                fontWeight={400}
+                variant={"link"}
+                href={"#"}
+              >
+                Sign In
+              </Button>
+            </Link>
+            <Link
+              to={"/register"}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                as={"a"}
+                display={{ base: "none", md: "inline-flex" }}
+                fontSize={"sm"}
+                fontWeight={600}
+                color={"white"}
+                bg={"#2e4e34"}
+                href={"#"}
+                _hover={{
+                  bg: "green.600",
+                }}
+              >
+                Sign Up
+              </Button>
+            </Link>
+          </Stack>
+        </Flex>
 
-      <Collapse in={isOpen} animateOpacity>
-        <MobileNav />
-      </Collapse>
-    </Box>
+        <Collapse in={isOpen} animateOpacity>
+          <MobileNav />
+        </Collapse>
+      </Box>
+    )
   );
 }
 
