@@ -38,8 +38,17 @@ const loginSuccess = async (req, res) => {
         return res.status(200).json({
           success: true,
           message: "successfully authenticated",
-          user: user,
+          userId: newUser._id,
+          isRegistered: true,
+          isLogin: true,
           redirectUrl: `/profile/edit/${user._id}`,
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: "successfully authenticated",
+          userId: isUserExist._id,
+          isLogin: true,
         });
       }
     }
@@ -56,30 +65,33 @@ const loginSuccess = async (req, res) => {
           authMode: "github",
           isClient: req.session.isClient === "true",
         };
-        console.log(user);
+
         const isUserExist = await User.findOne({
           $or: [{ username: user.username }, { email: user.email }],
         });
 
         if (!isUserExist && req.session.isFirstTime) {
           const newUser = await User.create(user);
-          user._id = newUser._id;
           return res.status(200).json({
             success: true,
             message: "successfully authenticated",
-            user: user,
+            userId: newUser._id,
+            isRegistered: true,
+            isLogin: true,
             redirectUrl: `/profile/edit/${user._id}`,
+          });
+        } else {
+          return res.status(200).json({
+            success: true,
+            isLogin: true,
+            message: "successfully authenticated",
+            userId: isUserExist._id,
           });
         }
       }
     }
 
     infoLog("loginSuccess exit");
-    return res.status(200).json({
-      success: true,
-      message: "successfully authenticated",
-      user: req.user,
-    });
   } else {
     infoLog("loginSuccess exit");
     return res.status(401).json({ message: "user not authenticated" });

@@ -1,4 +1,7 @@
-const { verifyTokenAndFreelancer } = require("../middleware/verifyToken");
+const {
+  verifyTokenAndFreelancer,
+  verifyToken,
+} = require("../middleware/verifyToken");
 const {
   getAllProposals,
   getSingleProposal,

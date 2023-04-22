@@ -1,8 +1,9 @@
 .registerOptionContainer {
   display: flex;
-  height: 70vh;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  margin-bottom: 20px;
 }
 
 .optionContainer {

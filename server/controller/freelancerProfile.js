@@ -10,7 +10,7 @@ const createProfile = async (req, res) => {
 
     if (!title || !description || !image || !rate || !skills) {
       infoLog("createProfile exit");
-      res.status(400).json({ isProfileCreated: false });
+      res.status(400).json({ isProfileCreated: false, data: {} });
       return errorLog("Invalid Details");
     }
 
@@ -18,7 +18,7 @@ const createProfile = async (req, res) => {
 
     if (existProfile) {
       infoLog("createProfile exit");
-      res.status(400).json({ isProfileCreated: false });
+      res.status(400).json({ isProfileCreated: false, data: {} });
       return errorLog("Freelancer Profile already created");
     }
 
@@ -30,46 +30,45 @@ const createProfile = async (req, res) => {
       userId: user.id,
       skills,
     });
-    await newFreelancerProfiile.save();
+    const data = await newFreelancerProfiile.save();
 
     successLog("Successfully Freelancer Profile created!");
     infoLog("createProfile exit");
-    return res.status(201).json({ isProfileCreated: true });
+    return res.status(201).json({ isProfileCreated: true, data });
   } catch (error) {
     infoLog("createProfile exit");
     errorLog("Error While creating freelancer profile!");
-    return res.status(500).json({ isProfileCreated: false });
+    return res.status(500).json({ isProfileCreated: false, data: {} });
   }
 };
 
 const updateProfile = async (req, res) => {
   try {
     infoLog("updateProfile entry");
-    const data = req.body;
 
-    const user = req.user;
+    const data = req.body;
+    const { profileId } = req.params;
 
     if (!data) {
       infoLog("createProfile exit");
-      res.status(400).json({ isProfileUpdated: false });
+      res.status(400).json({ isProfileUpdated: false, data: {} });
       return errorLog("Invalid Details");
     }
 
-    const updatedProfile = await FreelancerProfile.findOneAndUpdate(
-      {
-        userId: user.id,
-      },
-      data,
-      { new: true }
+    const updatedProfile = await FreelancerProfile.findByIdAndUpdate(
+      profileId,
+      data
     );
 
     successLog("Successfully Freelancer Profile updated!");
     infoLog("updateProfile exit");
-    return res.status(201).json({ isProfileUpdated: true });
+    return res
+      .status(200)
+      .json({ isProfileUpdated: true, data: updatedProfile });
   } catch (error) {
     infoLog("updateProfile exit");
     errorLog("Error While updating freelancer profile!");
-    return res.status(500).json({ isProfileUpdated: false });
+    return res.status(500).json({ isProfileUpdated: false, data: {} });
   }
 };
 
@@ -81,12 +80,12 @@ const getProfile = async (req, res) => {
     successLog("Successfully Freelancer Profile fetched!");
     infoLog("getProfile exit");
     return res
-      .status(201)
+      .status(200)
       .json({ isProfileFetched: true, data: freelancerProfile });
   } catch (error) {
     infoLog("getProfile exit");
     errorLog("Error While fetching freelancer profile!");
-    return res.status(500).json({ isProfileFetched: false });
+    return res.status(500).json({ isProfileFetched: false, data: {} });
   }
 };
 

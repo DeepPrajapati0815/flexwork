@@ -16,7 +16,6 @@ const app = express();
 
 // Use express middlewares
 app.use(express.json()); // Parse JSON requests
-app.use(cookieParser()); // Parse cookie headers
 
 app.use(
   cors({
@@ -33,6 +32,8 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000, // Session expiry time (in milliseconds)
   })
 );
+
+app.use(cookieParser()); // Parse cookie headers
 
 // Add session-related functions to request object
 app.use(function (request, response, next) {

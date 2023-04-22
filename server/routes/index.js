@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const authRouter = require("./auth");
-const user = require("./user");
+const userRouter = require("./user");
 const freelancerProfileRouter = require("./freelancerProfile");
 const freelancerExperienceRouter = require("./freelancerExperience");
 const freelancerEducationRouter = require("./freelancerEducation");
@@ -13,6 +13,9 @@ const freelancerProposalRequest = require("./freelancerProposalRequest");
 // auth
 router.use("/auth", authRouter);
 
+//user
+router.use("/user", userRouter);
+
 // freelancer
 router.use("/freelancer/profile", freelancerProfileRouter);
 router.use("/freelancer/experience", freelancerExperienceRouter);
@@ -24,8 +27,5 @@ router.use("/freelancer/proposal", freelancerProposalRequest);
 router.use("/client/profile", clientProfile);
 router.use("/client/project", clientProject);
 router.use("/client/proposal", clientProposalsReceived);
-
-// user
-router.use("/user", user);
 
 module.exports = router;

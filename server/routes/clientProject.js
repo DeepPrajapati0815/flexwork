@@ -15,9 +15,11 @@ const {
 
 router.post("/", verifyTokenAndClient, createProject);
 router.put("/:projectId", verifyTokenAndClient, updateProject);
+
 // anyone can see project
 router.get("/", verifyToken, getProjects);
-router.get("/:projectId", verifyToken, getSingleProject);
+router.get("/:projectId", verifyTokenAndClient, getSingleProject);
+
 router.delete("/:projectId", verifyTokenAndClient, deleteProject);
 
 module.exports = router;

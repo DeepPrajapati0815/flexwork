@@ -11,7 +11,7 @@ const {
 const router = require("express").Router();
 
 router.post("/", verifyTokenAndFreelancer, createProfile);
-router.put("/:userId", verifyTokenAndFreelancer, updateProfile);
+router.put("/:profileId", verifyTokenAndFreelancer, updateProfile);
 router.get("/:profileId", verifyToken, getProfile);
 
 module.exports = router;

@@ -5,13 +5,13 @@ const FreelancerExperience = require("../models/FreelancerExperience");
 const addExperience = async (req, res) => {
   infoLog("addExperience entry");
 
-  const profileId = req.params.profileId;
+  const { profileId } = req.query;
   const { companyName, description, role, location } = req.body;
 
   try {
     if (!companyName || !description || !role) {
       infoLog("addExperience exit");
-      res.status(400).json({ isExperienceAdded: false });
+      res.status(400).json({ isExperienceAdded: false, data: {} });
       return errorLog("Invalid Details");
     }
 
@@ -23,15 +23,15 @@ const addExperience = async (req, res) => {
       profileId,
     });
 
-    await newExperience.save();
+    const data = await newExperience.save();
 
     successLog("Successfully experience added to Freelancer Profile!");
     infoLog("addEducation exit");
-    return res.status(201).json({ isExperienceAdded: true });
+    return res.status(201).json({ isExperienceAdded: true, data });
   } catch (error) {
     infoLog("addEducation exit");
     errorLog("Error While adding a experience to freelancer profile!");
-    return res.status(500).json({ isExperienceAdded: false });
+    return res.status(500).json({ isExperienceAdded: false, data: {} });
   }
 };
 
@@ -41,24 +41,30 @@ const updateExperience = async (req, res) => {
 
   const data = req.body;
 
-  try {
-    if (!data) {
-      infoLog("updateExperience exit");
-      res.status(400).json({ isExperienceUpdated: false });
-      return errorLog("Invalid Details");
-    }
+  if (!data) {
+    infoLog("updateExperience exit");
+    res.status(400).json({ isExperienceUpdated: false, data: {} });
+    return errorLog("Invalid Details");
+  }
 
-    await FreelancerExperience.findByIdAndUpdate(experienceId, data, {
-      new: true,
-    });
+  try {
+    const updatedExperience = await FreelancerExperience.findByIdAndUpdate(
+      experienceId,
+      data,
+      {
+        new: true,
+      }
+    );
 
     successLog("Successfully updated experience  to Freelancer Profile!");
     infoLog("updateExperience exit");
-    return res.status(201).json({ isExperienceUpdated: true });
+    return res
+      .status(200)
+      .json({ isExperienceUpdated: true, data: updatedExperience });
   } catch (error) {
     infoLog("updateExperience exit");
     errorLog("Error While updating a experience to freelancer profile!");
-    return res.status(500).json({ isExperienceUpdated: false });
+    return res.status(500).json({ isExperienceUpdated: false, data: {} });
   }
 };
 
@@ -68,33 +74,37 @@ const removeExperience = async (req, res) => {
   const experienceId = req.params.experienceId;
 
   try {
-    await FreelancerExperience.findByIdAndDelete(experienceId);
+    const removedExperience = await FreelancerExperience.findByIdAndDelete(
+      experienceId
+    );
 
     successLog("Successfully deleted experience  to Freelancer Profile!");
     infoLog("removeExperience exit");
-    return res.status(201).json({ isExperienceRemoved: true });
+    return res
+      .status(200)
+      .json({ isExperienceRemoved: true, data: removedExperience });
   } catch (error) {
     infoLog("removeExperience exit");
     errorLog("Error While deleting a experience to freelancer profile!");
-    return res.status(500).json({ isExperienceRemoved: false });
+    return res.status(500).json({ isExperienceRemoved: false, data: {} });
   }
 };
 
 const getExperiences = async (req, res) => {
   infoLog("getExperiences entry");
 
-  const profileId = req.params.profileId;
+  const { profileId } = req.query;
 
   try {
     const data = await FreelancerExperience.find({ profileId });
 
     successLog("Successfully fetched experiences of Freelancer Profile!");
     infoLog("getExperiences exit");
-    return res.status(201).json({ isExperiencesFetched: true, data });
+    return res.status(200).json({ isExperiencesFetched: true, data });
   } catch (error) {
     infoLog("getExperiences exit");
     errorLog("Error While fetching a experiences of freelancer profile!");
-    return res.status(500).json({ isExperiencesFetched: false });
+    return res.status(500).json({ isExperiencesFetched: false, data: {} });
   }
 };
 

@@ -16,7 +16,7 @@ const createProposal = async (req, res) => {
     !freelancerId
   ) {
     infoLog("createProposal exit");
-    res.status(400).json({ isProposalCreated: false });
+    res.status(400).json({ isProposalCreated: false, data: {} });
     return errorLog("Invalid Details");
   }
 
@@ -31,16 +31,16 @@ const createProposal = async (req, res) => {
       portfolio: req.body?.portfolio,
     });
 
-    await newFreelancerProposalRequest.save();
+    const data = await newFreelancerProposalRequest.save();
 
     successLog("Successfully proposal added to freelancer Profile!");
     infoLog("createProposal exit");
-    return res.status(201).json({ isProposalCreated: true });
+    return res.status(201).json({ isProposalCreated: true, data });
   } catch (error) {
     console.error(error);
     infoLog("createProposal exit");
     errorLog("Error While creating a proposal to freelancer side!");
-    return res.status(500).json({ isProposalCreated: false });
+    return res.status(500).json({ isProposalCreated: false, data: {} });
   }
 };
 
@@ -54,12 +54,12 @@ const getAllProposals = async (req, res) => {
     successLog("Successfully fetched proposals from freelancer Profile!");
     infoLog("getAllProposals exit");
     return res
-      .status(201)
-      .json({ isProposalsFetched: true, proposals: allProposals });
+      .status(200)
+      .json({ isProposalsFetched: true, data: allProposals });
   } catch (error) {
     infoLog("getAllProposals exit");
     errorLog("Error While fetching a proposals from freelancer side!");
-    return res.status(500).json({ isProposalsFetched: false });
+    return res.status(500).json({ isProposalsFetched: false, data: {} });
   }
 };
 
@@ -71,13 +71,11 @@ const getSingleProposal = async (req, res) => {
 
     successLog("Successfully fetched proposal from freelancer Profile!");
     infoLog("getSingleProposal exit");
-    return res
-      .status(201)
-      .json({ isProposalFetched: true, proposal: proposal });
+    return res.status(200).json({ isProposalFetched: true, data: proposal });
   } catch (error) {
     infoLog("getSingleProposal exit");
     errorLog("Error While fetching a proposal from freelancer side!");
-    return res.status(500).json({ isProposalFetched: false });
+    return res.status(500).json({ isProposalFetched: false, data: {} });
   }
 };
 
