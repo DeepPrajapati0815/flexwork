@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const authRouter = require("./auth");
+const user = require("./user");
 const freelancerProfileRouter = require("./freelancerProfile");
 const freelancerExperienceRouter = require("./freelancerExperience");
 const freelancerEducationRouter = require("./freelancerEducation");
@@ -23,5 +24,8 @@ router.use("/freelancer/proposal", freelancerProposalRequest);
 router.use("/client/profile", clientProfile);
 router.use("/client/project", clientProject);
 router.use("/client/proposal", clientProposalsReceived);
+
+// user
+router.use("/user", user);
 
 module.exports = router;

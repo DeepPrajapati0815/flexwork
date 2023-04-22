@@ -60,10 +60,21 @@ const verifyTokenAndFreelancer = (req, res, next) => {
   });
 };
 
+const verifyTokenAndUser = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.id == req.params.userId) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
 module.exports = {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
   verifyTokenAndClient,
   verifyTokenAndFreelancer,
+  verifyTokenAndUser,
 };
