@@ -1,5 +1,6 @@
 const { infoLog, successLog } = require("../helper/logHelper");
 const User = require("../models/User");
+const { generateToken } = require("../helper/JWT");
 
 const loginFailed = (req, res) => {
   // console.log(req.user);
@@ -32,22 +33,43 @@ const loginSuccess = async (req, res) => {
         $or: [{ email: user.email }, { username: user.email }],
       });
 
-      if (!isUserExist && req.session.isFirstTime) {
+      if (!isUserExist) {
         const newUser = await User.create(user);
         user._id = newUser._id;
+
+        const token = generateToken({
+          id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          isClient: newUser.isClient,
+          isAdmin: newUser.isAdmin,
+        });
+
+        res.cookie("token", token, { maxAge: 9000000 });
+
         return res.status(200).json({
           success: true,
           message: "successfully authenticated",
-          userId: newUser._id,
+          userId: newUser?._id,
           isRegistered: true,
           isLogin: true,
           redirectUrl: `/profile/edit/${user._id}`,
         });
       } else {
+        const token = generateToken({
+          id: isUserExist._id,
+          username: isUserExist.username,
+          email: isUserExist.email,
+          isClient: isUserExist.isClient,
+          isAdmin: isUserExist.isAdmin,
+        });
+
+        res.cookie("token", token, { maxAge: 9000000 });
+
         return res.status(200).json({
           success: true,
           message: "successfully authenticated",
-          userId: isUserExist._id,
+          userId: isUserExist?._id,
           isLogin: true,
         });
       }
@@ -63,7 +85,6 @@ const loginSuccess = async (req, res) => {
           email: req.user.emails[0].value,
           profile: req.user.photos[0].value,
           authMode: "github",
-          isClient: req.session.isClient === "true",
         };
 
         const isUserExist = await User.findOne({
@@ -72,20 +93,41 @@ const loginSuccess = async (req, res) => {
 
         if (!isUserExist && req.session.isFirstTime) {
           const newUser = await User.create(user);
+
+          const token = generateToken({
+            id: newUser._id,
+            username: newUser.username,
+            email: newUser.email,
+            isClient: newUser.isClient,
+            isAdmin: newUser.isAdmin,
+          });
+
+          res.cookie("token", token, { maxAge: 9000000 });
+
           return res.status(200).json({
             success: true,
             message: "successfully authenticated",
-            userId: newUser._id,
+            userId: newUser?._id,
             isRegistered: true,
             isLogin: true,
             redirectUrl: `/profile/edit/${user._id}`,
           });
         } else {
+          const token = generateToken({
+            id: isUserExist._id,
+            username: isUserExist.username,
+            email: isUserExist.email,
+            isClient: isUserExist.isClient,
+            isAdmin: isUserExist.isAdmin,
+          });
+
+          res.cookie("token", token, { maxAge: 9000000 });
+
           return res.status(200).json({
             success: true,
             isLogin: true,
             message: "successfully authenticated",
-            userId: isUserExist._id,
+            userId: isUserExist?._id,
           });
         }
       }
@@ -101,27 +143,54 @@ const loginSuccess = async (req, res) => {
 const logout = (req, res) => {
   infoLog("logout entry");
 
-  // console.log("user ==> ", req.user);
+  console.log("user ==> ", req.user);
   // console.log("cookies session ==> ", req.cookies);
 
   // if (req.user.provider === "google") {
   //   // Clear Cookie For The Google So That User Session Gets Destroyed SID OR LID
   // }
 
-  req.logout((err) => {
-    // callback function to handle errors, if any
+  // req.logout((err) => {
+  // callback function to handle errors, if any
+  //   if (err) {
+  //     console.error(err);
+  //     infoLog("logout exit");
+  //     return res.status(500).json({ message: "error whle logging out" });
+  //   }
+  //   successLog("successfully logged out");
+  //   infoLog("logout exit");
+  //   return res.status(200).json({ message: "successfuly logged out" });
+  // });
+
+  // res.clearCookie("token");
+  // console.log("user ==> ", req.user);
+  // console.log("cookies session ==> ", req.cookies);
+
+  req.logOut((err) => {
     if (err) {
       console.error(err);
       infoLog("logout exit");
       return res.status(500).json({ message: "error whle logging out" });
     }
+
     successLog("successfully logged out");
     infoLog("logout exit");
-    return res.status(200).json({ message: "successfuly logged out" });
-  });
 
-  // console.log("user ==> ", req.user);
-  // console.log("cookies session ==> ", req.cookies);
+    console.log("before cookies ==> ", req.cookies);
+
+    res.status(200).clearCookie("connect.sid", {
+      path: "/",
+    });
+
+    console.log("after cookies ==> ", req.cookies);
+
+    console.log("before session ==> ", req.session);
+    req.session = null;
+    console.log("after session ==> ", req.session);
+    res
+      .status(200)
+      .json({ isLogout: true, redirectUrl: "http://localhost:3000/login" });
+  });
 };
 
 module.exports = {

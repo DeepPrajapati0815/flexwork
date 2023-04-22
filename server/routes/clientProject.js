@@ -13,13 +13,13 @@ const {
   verifyToken,
 } = require("../middleware/verifyToken");
 
-router.post("/", verifyToken, verifyTokenAndClient, createProject);
-router.put("/:projectId", verifyToken, verifyTokenAndClient, updateProject);
+router.post("/", verifyTokenAndClient, createProject);
+router.put("/:projectId", verifyTokenAndClient, updateProject);
 
 // anyone can see project
 router.get("/", verifyToken, getProjects);
 router.get("/:projectId", verifyToken, getSingleProject);
 
-router.delete("/:projectId", verifyToken, verifyTokenAndClient, deleteProject);
+router.delete("/:projectId", verifyTokenAndClient, deleteProject);
 
 module.exports = router;

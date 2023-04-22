@@ -1,33 +1,37 @@
 import {
   Box,
-  Flex,
-  Text,
-  IconButton,
   Button,
-  Stack,
   Collapse,
+  Flex,
   Icon,
+  IconButton,
+  Image,
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
+  Stack,
+  Text,
   useColorModeValue,
   useDisclosure,
-  Image,
 } from "@chakra-ui/react";
 
 import {
-  HamburgerIcon,
-  CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  CloseIcon,
+  HamburgerIcon,
 } from "@chakra-ui/icons";
 
-import logo from "../../img/png/logo.png";
+import axios from "../../utils/axiosInstance";
+
 import { Link } from "react-router-dom";
+import logo from "../../img/png/logo.png";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const url = window.location.href;
+
+  const isLogin = localStorage.getItem("isLogin");
 
   return (
     !url.includes("/login") &&
@@ -35,7 +39,7 @@ export default function WithSubnavigation() {
       <Box>
         <Flex
           bg={"black"}
-          color={("gray.600", "white")}
+          color={"white"}
           minH={"60px"}
           py={{ base: 2 }}
           justify={"center"}
@@ -66,7 +70,9 @@ export default function WithSubnavigation() {
             align={"center"}
             justify={{ base: "center", md: "start" }}
           >
-            <Image src={logo} width={"150px"} />
+            <Link to="/">
+              <Image src={logo} width={"150px"} />
+            </Link>
             <Flex display={{ base: "none", md: "flex" }} ml={10}>
               <DesktopNav />
             </Flex>
@@ -78,33 +84,50 @@ export default function WithSubnavigation() {
             direction={"row"}
             spacing={6}
           >
-            <Link
-              to={"/login"}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                as={"a"}
-                fontSize={"sm"}
-                color={"gray.400"}
-                fontWeight={400}
-                variant={"link"}
-                href={"#"}
-              >
-                Sign In
-              </Button>
-            </Link>
-            <Link
-              to={"/register"}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            {!isLogin ? (
+              <>
+                <Link
+                  to={"/login"}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    as={"a"}
+                    fontSize={"sm"}
+                    color={"gray.400"}
+                    fontWeight={400}
+                    variant={"link"}
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link
+                  to={"/register"}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    as={"a"}
+                    display={{ base: "none", md: "inline-flex" }}
+                    fontSize={"sm"}
+                    fontWeight={600}
+                    color={"white"}
+                    bg={"#2e4e34"}
+                    _hover={{
+                      bg: "green.600",
+                    }}
+                  >
+                    Sign Up
+                  </Button>
+                </Link>{" "}
+              </>
+            ) : (
               <Button
                 as={"a"}
                 display={{ base: "none", md: "inline-flex" }}
@@ -112,14 +135,24 @@ export default function WithSubnavigation() {
                 fontWeight={600}
                 color={"white"}
                 bg={"#2e4e34"}
-                href={"#"}
+                cursor={"pointer"}
                 _hover={{
-                  bg: "green.600",
+                  bg: "green.700",
+                }}
+                onClick={async () => {
+                  try {
+                    const { data } = await axios.get("/auth/logout", {
+                      withCredentials: true,
+                    });
+                    localStorage.removeItem("isLogin");
+                    localStorage.removeItem("userId");
+                    window.location.href = data.redirectUrl;
+                  } catch {}
                 }}
               >
-                Sign Up
+                Logout
               </Button>
-            </Link>
+            )}
           </Stack>
         </Flex>
 
@@ -144,13 +177,18 @@ const DesktopNav = () => {
             <PopoverTrigger>
               <Link
                 p={2}
-                href={navItem.href ?? "#"}
-                fontSize={"sm"}
-                fontWeight={500}
-                color={linkColor}
-                _hover={{
-                  textDecoration: "none",
-                  color: linkHoverColor,
+                to={navItem.href}
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "500",
+                  color: linkColor,
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.textDecoration = "none";
+                  e.target.style.color = linkHoverColor;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = "white";
                 }}
               >
                 {navItem.label}
@@ -183,7 +221,7 @@ const DesktopNav = () => {
 const DesktopSubNav = ({ label, href, subLabel }) => {
   return (
     <Link
-      href={href}
+      to={href}
       role={"group"}
       display={"block"}
       p={2}
@@ -194,12 +232,15 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
         <Box>
           <Text
             transition={"all .3s ease"}
+            color={"black"}
             _groupHover={{ color: "#2e4e39" }}
             fontWeight={600}
           >
             {label}
           </Text>
-          <Text fontSize={"sm"}>{subLabel}</Text>
+          <Text color={"black"} fontSize={"sm"}>
+            {subLabel}
+          </Text>
         </Box>
         <Flex
           transition={"all .3s ease"}
@@ -272,10 +313,9 @@ const MobileNavItem = ({ label, children, href }) => {
           {children &&
             children.map((child) => (
               <Link
-                color={"gray.500"}
+                style={{ color: "gray", padding: "2px 0px" }}
                 key={child.label}
-                py={2}
-                href={child.href}
+                to={child.href}
               >
                 {child.label}
               </Link>
@@ -288,11 +328,11 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
   {
-    label: "Inspiration",
+    label: "Hire Freelancers",
     children: [
       {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
+        label: "Post a job and hire a pro",
+        subLabel: "Explore Trending talents in your field",
         href: "#",
       },
       {
@@ -311,18 +351,14 @@ const NAV_ITEMS = [
         href: "/freelancer",
       },
       {
-        label: "Freelance Projects",
-        subLabel: "An exclusive list for contract work",
+        label: "Find Work for your skills ",
+        subLabel: "Explore the kind of work available in your field",
         href: "/freelancer/projects",
       },
     ],
   },
   {
-    label: "Learn Design",
+    label: "Explore",
     href: "#",
-  },
-  {
-    label: "Hire Freelancers",
-    href: "/client",
   },
 ];

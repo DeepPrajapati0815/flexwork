@@ -12,19 +12,9 @@ const {
   verifyToken,
 } = require("../middleware/verifyToken");
 
-router.get("/", verifyToken, verifyTokenAndClient, getAllProposals);
-router.get(
-  "/:proposalId",
-  verifyToken,
-  verifyTokenAndClient,
-  getSingleProposal
-);
-router.put("/:proposalId", verifyToken, verifyTokenAndClient, approveProposal);
-router.delete(
-  "/:proposalId",
-  verifyToken,
-  verifyTokenAndClient,
-  rejectProposal
-);
+router.get("/", verifyTokenAndClient, getAllProposals);
+router.get("/:proposalId", verifyTokenAndClient, getSingleProposal);
+router.put("/:proposalId", verifyTokenAndClient, approveProposal);
+router.delete("/:proposalId", verifyTokenAndClient, rejectProposal);
 
 module.exports = router;

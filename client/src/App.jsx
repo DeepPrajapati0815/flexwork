@@ -1,46 +1,46 @@
-import axios from "axios";
-import axiosInstance from "./utils/axiosInstance";
+import axios from "./utils/axiosInstance";
 
-import { useContext, useEffect, useState } from "react";
-import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import "./App.css";
 
+import { ChakraProvider } from "@chakra-ui/react";
+import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
-import RegisterOption from "./pages/RegisterOption/RegisterOption";
-import Sidebar from "./components/Sidebar/Sidebar";
+import { FlexWorkContext } from "./context/ContextStore";
+import EditProfile from "./pages/EditProfile/EditProfile";
+import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import Home from "./pages/Home/Home";
-import { ChakraProvider } from "@chakra-ui/react";
-import EditProfile from "./pages/EditProfile/EditProfile";
-import Footer from "./components/Footer/Footer";
-import { FlexWorkContext } from "./context/ContextStore";
+import RegisterOption from "./pages/RegisterOption/RegisterOption";
 
 const App = () => {
   const navigate = useNavigate();
   const [isopen, setisopen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  const { user, setUser, isLogin, setIsLogin, setUserId } =
-    useContext(FlexWorkContext);
+  const { user, setUser } = useContext(FlexWorkContext);
 
   const [searchParams] = useSearchParams();
 
-  const getUser = async () => {
-    const { data } = await axios.get(
-      "http://localhost:5000/auth/login/success",
-      {
-        withCredentials: true,
-      }
-    );
+  const isLogin = localStorage.getItem("isLogin") === "true";
 
+  const getUser = useCallback(async () => {
+    const { data } = await axios.get("/auth/login/success", {
+      withCredentials: true,
+    });
     const id = data.userId;
     const redirectUrl = data?.redirectUrl;
 
     if (id && data.isLogin) {
       localStorage.setItem("userId", id);
       localStorage.setItem("isLogin", true);
-      setUserId(id);
     }
 
     if (redirectUrl && data.isRegistered) {
@@ -48,17 +48,24 @@ const App = () => {
     } else {
       navigate("/");
     }
-  };
+  }, []);
 
-  const getManualUser = async (userId) => {
+  const getManualUser = useCallback(async (userId) => {
     try {
-      const { data } = await axiosInstance.get(`/user/${userId}`);
+      const { data } = await axios.get(`/api/v1/user/${userId}`, {
+        withCredentials: true,
+      });
       if (data.data) {
         setUser(data.data);
-        console.log(data.data);
+        if (searchParams.get("isClient") === "true" && data.data.isClient) {
+          navigate("/client");
+        }
+        if (searchParams.get("isClient") === "true" && !data.data.isClient) {
+          navigate("/freelancer");
+        }
       }
     } catch (error) {}
-  };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -66,21 +73,14 @@ const App = () => {
         await getUser();
       }
       const userId = localStorage.getItem("userId");
-      setUserId(userId);
+
       await getManualUser(userId);
-
-      const isLogin = localStorage.getItem("isLogin");
-
-      if (isLogin && userId) {
-        setIsLogin(true);
-      }
     })();
   }, []);
 
   const toggle = () => {
     setisopen(!isopen);
   };
-
 
   return (
     <ChakraProvider>
@@ -89,7 +89,7 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={isLogin ? <Home /> : <Login setUser={setUser}></Login>}
+            element={isLogin ? <Home /> : <Navigate to="/login" />}
           />
           <Route
             path="/register"
@@ -103,7 +103,7 @@ const App = () => {
               isLogin && user?.isClient ? (
                 <RegisterOption setIsClient={setIsClient} isClient={isClient} />
               ) : (
-                <Login></Login>
+                <Navigate to="/login" />
               )
             }
           />
@@ -113,11 +113,20 @@ const App = () => {
               isLogin && !user?.isClient ? (
                 <RegisterOption setIsClient={setIsClient} isClient={isClient} />
               ) : (
-                <Login></Login>
+                <Navigate to="/login" />
               )
             }
           />
-          <Route path="/profile/edit/:userId" element={<EditProfile />} />
+          <Route
+            path="/profile/edit/:userId"
+            element={
+              isLogin && !user?.isClient ? (
+                <EditProfile />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
           <Route
             path="/register/client"
             element={<Register title={"Client"} />}

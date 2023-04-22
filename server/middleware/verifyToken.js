@@ -3,6 +3,7 @@ const { errorLog } = require("../helper/logHelper");
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
+  console.log(token);
   if (!token) {
     errorLog("No Token");
     return res.status(400).json({ isToken: false });

@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import { FaGithub } from "react-icons/fa";
 import AuthButton from "../../components/AuthButton/AuthButton";
-import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
@@ -14,13 +13,11 @@ const Login = () => {
     password: "",
   });
 
-  const { setUser, setUserId } = useContext(FlexWorkContext);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (loginData.username && loginData.password) {
-        const res = await axios.post("/auth/login", loginData);
+        const res = await axios.post("/api/v1/auth/login", loginData);
 
         if (res.data.isLogin) {
           localStorage.setItem("isLogin", true);
@@ -47,17 +44,6 @@ const Login = () => {
 
   const github = () => {
     window.open("http://localhost:5000/auth/github", "_self");
-  };
-
-  const logout = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/auth/logout", {
-        withCredentials: true,
-      });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (

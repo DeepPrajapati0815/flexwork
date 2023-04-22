@@ -1,26 +1,17 @@
 import {
   Container,
-  SimpleGrid,
-  Image,
   Flex,
   Heading,
-  Text,
+  Icon,
+  SimpleGrid,
   Stack,
   StackDivider,
-  Icon,
+  Text,
   useColorModeValue,
-  Mark,
 } from "@chakra-ui/react";
-import {
-  IoAnalyticsSharp,
-  IoLogoBitcoin,
-  IoSearchSharp,
-  IoTicket,
-} from "react-icons/io5";
 
-import featureVideo from "../../video/homeFeature.mp4";
-import { FaMarker } from "react-icons/fa";
 import { CheckIcon } from "@chakra-ui/icons";
+import featureVideo from "../../../video/homeFeature.mp4";
 
 const Feature = ({ text, icon, iconBg }) => {
   return (

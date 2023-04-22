@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import logo from "../../img/png/logo.png";
 import "./register.css";
 
+import { FaGithub } from "react-icons/fa";
+import AuthButton from "../../components/AuthButton/AuthButton";
 import googleIcon from "../../img/google.ico";
 import axios from "../../utils/axiosInstance";
-import AuthButton from "../../components/AuthButton/AuthButton";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Register = ({ title }) => {
   const [registerData, setRegisterData] = useState({
@@ -40,7 +40,7 @@ const Register = ({ title }) => {
           registerData.isClient = false;
         }
 
-        await axios.post("/auth/register", registerData, {
+        await axios.post("/api/v1/auth/register", registerData, {
           headers: { "Content-Type": "application/json" },
         });
       } catch (error) {}
@@ -96,7 +96,7 @@ const Register = ({ title }) => {
             }
             bg={"white"}
             color={"grey"}
-            title={"Sign in with google"}
+            title={"Sign up with google"}
             provider={google}
           ></AuthButton>
           {/* <AuthButton
@@ -110,7 +110,7 @@ const Register = ({ title }) => {
             icon={<FaGithub style={{ fontSize: "20px" }}></FaGithub>}
             bg={"#23282c"}
             color={"white"}
-            title={"Sign in with Github"}
+            title={"Sign up with Github"}
             provider={github}
           ></AuthButton>
         </div>

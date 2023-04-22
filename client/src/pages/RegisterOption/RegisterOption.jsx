@@ -41,10 +41,10 @@ const RegisterOption = ({ setIsClient, isClient }) => {
           onClick={() => {
             console.log(isClient);
             if (isClient) {
-              navigate("/client/register");
+              navigate("/register/client");
               setIsClient(false);
             } else {
-              navigate("/freelancer/register");
+              navigate("/register/freelancer");
               setIsClient(false);
             }
           }}

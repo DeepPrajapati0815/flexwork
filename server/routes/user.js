@@ -12,8 +12,8 @@ const {
 
 const router = require("express").Router();
 
-router.put("/:userId", verifyToken, verifyTokenAndAuthorization, updateUser);
-router.delete("/:userId", verifyToken, verifyTokenAndAuthorization, removeUser);
+router.put("/:userId", verifyTokenAndAuthorization, updateUser);
+router.delete("/:userId", verifyTokenAndAuthorization, removeUser);
 router.get("/:userId", verifyToken, getUser);
 router.get("/", verifyToken, getUsers);
 

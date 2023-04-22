@@ -1,14 +1,14 @@
 import { Box, Flex, Image, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 
-import videoAnimation from "../../img/svg/VideoAnimation.svg";
-import business from "../../img/svg/business.svg";
-import graphicDesign from "../../img/svg/graphics-design.91dfe44.svg";
-import lifestyle from "../../img/svg/lifestyle.svg";
-import musicAudio from "../../img/svg/musicAudio.svg";
-import onlineMarketing from "../../img/svg/onlineMarketing.svg";
-import photography from "../../img/svg/photography.svg";
-import programming from "../../img/svg/programming.svg";
+import videoAnimation from "../../../img/svg/VideoAnimation.svg";
+import business from "../../../img/svg/business.svg";
+import graphicDesign from "../../../img/svg/graphics-design.91dfe44.svg";
+import lifestyle from "../../../img/svg/lifestyle.svg";
+import musicAudio from "../../../img/svg/musicAudio.svg";
+import onlineMarketing from "../../../img/svg/onlineMarketing.svg";
+import photography from "../../../img/svg/photography.svg";
+import programming from "../../../img/svg/programming.svg";
 
 const Feature = ({ title, text, icon }) => {
   const [spread, setSpread] = useState(false);

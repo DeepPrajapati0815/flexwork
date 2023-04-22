@@ -10,13 +10,8 @@ const {
 
 const router = require("express").Router();
 
-router.post("/", verifyToken, verifyTokenAndFreelancer, createProposal);
-router.get("/", verifyToken, verifyTokenAndFreelancer, getAllProposals);
-router.get(
-  "/:proposalId",
-  verifyToken,
-  verifyTokenAndFreelancer,
-  getSingleProposal
-);
+router.post("/", verifyTokenAndFreelancer, createProposal);
+router.get("/", verifyTokenAndFreelancer, getAllProposals);
+router.get("/:proposalId", verifyTokenAndFreelancer, getSingleProposal);
 
 module.exports = router;
