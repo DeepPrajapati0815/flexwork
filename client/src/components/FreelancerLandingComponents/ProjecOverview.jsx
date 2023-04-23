@@ -60,7 +60,7 @@ const ProjecOverview = () => {
               key={size}
               borderRadius="full"
               variant="solid"
-              color={"gray.800"}
+              color={"gray.300"}
               colorScheme="whiteAlpha"
             >
               <TagLabel>Blockchain</TagLabel>
@@ -75,7 +75,7 @@ const ProjecOverview = () => {
               key={size}
               borderRadius="full"
               variant="solid"
-              color={"gray.800"}
+              color={"gray.300"}
               colorScheme="whiteAlpha"
             >
               <TagLabel>Javascript</TagLabel>
@@ -90,7 +90,7 @@ const ProjecOverview = () => {
               key={size}
               borderRadius="full"
               variant="solid"
-              color={"gray.800"}
+              color={"gray.300"}
               colorScheme="whiteAlpha"
             >
               <TagLabel>React</TagLabel>
