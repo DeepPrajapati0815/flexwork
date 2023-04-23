@@ -134,7 +134,7 @@ export default function WithSubnavigation() {
                 fontSize={"sm"}
                 fontWeight={600}
                 color={"white"}
-                bg={"#2e4e34"}
+                bg={"#2e4e74"}
                 cursor={"pointer"}
                 _hover={{
                   bg: "green.700",
@@ -166,7 +166,7 @@ export default function WithSubnavigation() {
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue("gray.200", "gray.200");
-  const linkHoverColor = useColorModeValue("#2e4e34");
+  const linkHoverColor = useColorModeValue("#2e4e74");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
   return (
@@ -328,16 +328,26 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
   {
-    label: "Hire Freelancers",
+    label: window.location.href.includes("/freelancer")
+      ? "My Jobs"
+      : "Hire Freelancers",
     children: [
       {
-        label: "Post a job and hire a pro",
-        subLabel: "Explore Trending talents in your field",
+        label: window.location.href.includes("/freelancer")
+          ? "My work"
+          : "Post a job and hire a pro",
+        subLabel: window.location.href.includes("/freelancer")
+          ? "View your work"
+          : "Explore Trending talents in your field",
         href: "#",
       },
       {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
+        label: window.location.href.includes("/freelancer")
+          ? "My Proposals"
+          : "New & Noteworthy",
+        subLabel: window.location.href.includes("/freelancer")
+          ? "View your proposals"
+          : "Up-and-coming Designers",
         href: "#",
       },
     ],

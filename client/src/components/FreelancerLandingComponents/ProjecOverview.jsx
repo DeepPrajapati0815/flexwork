@@ -9,18 +9,19 @@ import {
   Flex,
   HStack,
   Heading,
+  Icon,
   Tag,
-  TagCloseButton,
   TagLabel,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
-import { BiHeart } from "react-icons/bi";
+import React, { useState } from "react";
+import { AiFillHeart } from "react-icons/ai";
 
 const ProjecOverview = () => {
+  const [isProjectLiked, setIsProjectLiked] = useState(false);
+
   return (
     <Card
-      width={"60vw"}
       bg={"#1a202c"}
       color={"white"}
       borderBottom={"1px solid gray"}
@@ -51,7 +52,7 @@ const ProjecOverview = () => {
         </Text>
       </CardBody>
 
-      <Flex marginLeft={5} gap={3}>
+      <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
         <HStack spacing={4}>
           {["md"].map((size) => (
             <Tag
@@ -63,7 +64,6 @@ const ProjecOverview = () => {
               colorScheme="whiteAlpha"
             >
               <TagLabel>Blockchain</TagLabel>
-              <TagCloseButton color={"gray.800"} />
             </Tag>
           ))}
         </HStack>
@@ -79,7 +79,6 @@ const ProjecOverview = () => {
               colorScheme="whiteAlpha"
             >
               <TagLabel>Javascript</TagLabel>
-              <TagCloseButton color={"gray.800"} />
             </Tag>
           ))}
         </HStack>
@@ -95,7 +94,6 @@ const ProjecOverview = () => {
               colorScheme="whiteAlpha"
             >
               <TagLabel>React</TagLabel>
-              <TagCloseButton color={"gray.800"} />
             </Tag>
           ))}
         </HStack>
@@ -107,18 +105,42 @@ const ProjecOverview = () => {
       <CardFooter
         justify="space-between"
         flexWrap="wrap"
-        alignItems={"center"}
+        w={"100%"}
         sx={{
           "& > button": {
             minW: "136px",
           },
         }}
       >
-        <Button flex="1" variant="unstyled" leftIcon={<BiHeart />}>
+        <Button
+          flex="2"
+          display={"flex"}
+          justifyContent={"center"}
+          gap={2}
+          alignItems={"center"}
+          variant="unstyled"
+          colorScheme="pink"
+          onClick={(e) => setIsProjectLiked(!isProjectLiked)}
+        >
+          {isProjectLiked ? (
+            <AiFillHeart color="#E90064" />
+          ) : (
+            <AiFillHeart color="white" />
+          )}{" "}
           Like
         </Button>
-        <Button flex="1" variant="ghost" leftIcon={<ViewIcon />}>
-          View
+        <Button
+          flex="1"
+          style={{ background: "#394867" }}
+          onMouseOver={(e) => {
+            e.target.style.background = "#212A3E";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = "#394867";
+          }}
+          colorScheme="blue"
+        >
+          Apply Now
         </Button>
       </CardFooter>
     </Card>

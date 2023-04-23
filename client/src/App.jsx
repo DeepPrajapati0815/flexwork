@@ -22,6 +22,7 @@ import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
 import NotFound from "./pages/404Page/NotFound";
 import FreelancerLandingPage from "./pages/FreelancerLandingPage/FreelancerLandingPage";
+import FreelancerProfilePage from "./pages/FreelancerProfilePage/FreelancerProfilePage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const App = () => {
 
   const isLogin = localStorage.getItem("isLogin") === "true";
   const isUserClient = localStorage.getItem("isClient") === "true";
+  console.log(isUserClient);
 
   const getUser = useCallback(async () => {
     const { data } = await axios.get("/auth/login/success", {
@@ -92,12 +94,7 @@ const App = () => {
       <div className="App">
         <Navbar toggle={toggle}></Navbar>
         <Routes>
-          <Route
-            path="/"
-            element={
-              isLogin && isUserClient ? <Home /> : <Navigate to="/login" />
-            }
-          />
+          <Route path="/" element={!isLogin && <Home />} />
           <Route
             path="/register"
             element={
@@ -124,6 +121,17 @@ const App = () => {
               )
             }
           />
+          <Route
+            path="/freelancer/profile"
+            element={
+              isLogin && !isUserClient ? (
+                <FreelancerProfilePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
           <Route
             path="/client/profile/edit/:userId"
             element={

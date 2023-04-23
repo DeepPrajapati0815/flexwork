@@ -16,8 +16,8 @@ const FreelancerLandingProfile = () => {
   return (
     <Center>
       <Box
-        w={"25vw"}
-        bg={useColorModeValue("white", "gray.900")}
+        w={"100%"}
+        bg={useColorModeValue("#F1F6F9")}
         boxShadow={"2xl"}
         rounded={"lg"}
         p={6}
@@ -68,26 +68,27 @@ const FreelancerLandingProfile = () => {
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
+            bg={useColorModeValue("gray.300", "gray.800")}
             fontWeight={"400"}
           >
-            #Web Development
+            Web Development
           </Badge>
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
+            bg={useColorModeValue("gray.300", "gray.800")}
             fontWeight={"400"}
           >
-            #photography
+            photography
           </Badge>
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue("gray.50", "gray.800")}
+            rounded={"full"}
+            bg={useColorModeValue("gray.300", "gray.800")}
             fontWeight={"400"}
           >
-            #Blockchain Development
+            Blockchain Development
           </Badge>
         </Stack>
 
@@ -96,29 +97,32 @@ const FreelancerLandingProfile = () => {
             flex={1}
             fontSize={"sm"}
             rounded={"full"}
+            color={"#2e4e74"}
+            bg="white"
+            border={"1px solid #2e4e74"}
             _focus={{
               bg: "gray.200",
             }}
           >
-            Message
+            View Profile
           </Button>
           <Button
             flex={1}
             fontSize={"sm"}
             rounded={"full"}
-            bg={"blue.400"}
+            bg={"#2e4e74"}
             color={"white"}
             boxShadow={
               "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
             }
             _hover={{
-              bg: "blue.500",
+              bg: "blue.700",
             }}
             _focus={{
               bg: "blue.500",
             }}
           >
-            Follow
+            Edit Profile
           </Button>
         </Stack>
       </Box>

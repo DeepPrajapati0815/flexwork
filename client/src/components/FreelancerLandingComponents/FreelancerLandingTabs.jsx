@@ -20,17 +20,7 @@ const FreelancerLandingTabs = () => {
         <Tab>Saved Jobs</Tab>
       </TabList>
 
-      <TabPanels>
-        <TabPanel>
-          <p>one!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>two!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>three!</p>
-        </TabPanel>
-      </TabPanels>
+      <TabPanels></TabPanels>
     </Tabs>
   );
 };

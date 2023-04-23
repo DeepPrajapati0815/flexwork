@@ -109,6 +109,7 @@ const loginSuccess = async (req, res) => {
             message: "successfully authenticated",
             userId: newUser?._id,
             isRegistered: true,
+            isClient: newUser?.isClient,
             isLogin: true,
             redirectUrl: `/profile/edit/${user._id}`,
           });
@@ -126,6 +127,7 @@ const loginSuccess = async (req, res) => {
           return res.status(200).json({
             success: true,
             isLogin: true,
+            isClient: isUserExist?.isClient,
             message: "successfully authenticated",
             userId: isUserExist?._id,
           });
