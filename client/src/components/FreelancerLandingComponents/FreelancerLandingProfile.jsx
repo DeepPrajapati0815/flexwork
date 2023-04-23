@@ -6,11 +6,11 @@ import {
   Text,
   Stack,
   Button,
-  Link,
   Badge,
   useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const FreelancerLandingProfile = () => {
   return (
@@ -93,37 +93,27 @@ const FreelancerLandingProfile = () => {
         </Stack>
 
         <Stack mt={8} direction={"row"} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            color={"#2e4e74"}
-            bg="white"
-            border={"1px solid #2e4e74"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            View Profile
-          </Button>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"#2e4e74"}
-            color={"white"}
-            boxShadow={
-              "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-            }
-            _hover={{
-              bg: "blue.700",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
-          >
-            Edit Profile
-          </Button>
+          <Link to="/freelancer/profile" style={{ width: "100%" }}>
+            <Button
+              w={"100%"}
+              flex={1}
+              fontSize={"sm"}
+              rounded={"full"}
+              bg={"#2e4e74"}
+              color={"white"}
+              boxShadow={
+                "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
+              }
+              _hover={{
+                bg: "blue.700",
+              }}
+              _focus={{
+                bg: "blue.500",
+              }}
+            >
+              View Profile
+            </Button>
+          </Link>
         </Stack>
       </Box>
     </Center>
