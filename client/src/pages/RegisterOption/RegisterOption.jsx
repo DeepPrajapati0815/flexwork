@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./registerOption.css";
 import freelancerImg from "../../img/freelancerRegister.webp";
 import clientImg from "../../img/clientRegister.jpg";
 import { useNavigate } from "react-router-dom";
+import { FlexWorkContext } from "../../context/ContextStore";
 
 const RegisterOption = ({ setIsClient, isClient }) => {
   const navigate = useNavigate();

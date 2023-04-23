@@ -1,4 +1,5 @@
 import axios from "./utils/axiosInstance";
+import Cookies from "js-cookie";
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
@@ -19,17 +20,20 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
+import NotFound from "./pages/404Page/NotFound";
+import FreelancerLandingPage from "./pages/FreelancerLandingPage/FreelancerLandingPage";
 
 const App = () => {
   const navigate = useNavigate();
   const [isopen, setisopen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  const { user, setUser } = useContext(FlexWorkContext);
+  const { setUser } = useContext(FlexWorkContext);
 
   const [searchParams] = useSearchParams();
 
   const isLogin = localStorage.getItem("isLogin") === "true";
+  const isUserClient = localStorage.getItem("isClient") === "true";
 
   const getUser = useCallback(async () => {
     const { data } = await axios.get("/auth/login/success", {
@@ -55,6 +59,7 @@ const App = () => {
       const { data } = await axios.get(`/api/v1/user/${userId}`, {
         withCredentials: true,
       });
+      localStorage.setItem("isClient", data.data.isClient);
       if (data.data) {
         setUser(data.data);
         if (searchParams.get("isClient") === "true" && data.data.isClient) {
@@ -89,7 +94,9 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={isLogin ? <Home /> : <Navigate to="/login" />}
+            element={
+              isLogin && isUserClient ? <Home /> : <Navigate to="/login" />
+            }
           />
           <Route
             path="/register"
@@ -100,7 +107,7 @@ const App = () => {
           <Route
             path="/client"
             element={
-              isLogin && user?.isClient ? (
+              isLogin && isUserClient ? (
                 <RegisterOption setIsClient={setIsClient} isClient={isClient} />
               ) : (
                 <Navigate to="/login" />
@@ -110,17 +117,27 @@ const App = () => {
           <Route
             path="/freelancer"
             element={
-              isLogin && !user?.isClient ? (
-                <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+              isLogin && !isUserClient ? (
+                <FreelancerLandingPage />
               ) : (
                 <Navigate to="/login" />
               )
             }
           />
           <Route
-            path="/profile/edit/:userId"
+            path="/client/profile/edit/:userId"
             element={
-              isLogin && !user?.isClient ? (
+              isLogin && isUserClient ? (
+                <EditProfile />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/freelancer/profile/edit/:userId"
+            element={
+              isLogin && !isUserClient ? (
                 <EditProfile />
               ) : (
                 <Navigate to="/login" />
@@ -136,6 +153,8 @@ const App = () => {
             element={<Register title={"Freelancer"} />}
           />
           <Route path="/login" element={<Login setUser={setUser} />} />
+
+          <Route path="/*" element={<NotFound />} />
         </Routes>{" "}
         <Footer></Footer>
       </div>
