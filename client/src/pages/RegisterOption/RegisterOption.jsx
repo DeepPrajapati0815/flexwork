@@ -1,14 +1,13 @@
-import React, { useContext } from "react";
-import "./registerOption.css";
-import freelancerImg from "../../img/freelancerRegister.webp";
+import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import clientImg from "../../img/clientRegister.jpg";
-import { useNavigate } from "react-router-dom";
-import { FlexWorkContext } from "../../context/ContextStore";
+import freelancerImg from "../../img/freelancerRegister.webp";
+import "./registerOption.css";
 
-const RegisterOption = ({ setIsClient, isClient }) => {
+const RegisterOption = ({ isUserClient, isLogin, setIsClient, isClient }) => {
   const navigate = useNavigate();
 
-  return (
+  return !isLogin ? (
     <div className="registerOptionContainer">
       <div className=" optionContainer">
         <div className="radioBox">
@@ -54,6 +53,10 @@ const RegisterOption = ({ setIsClient, isClient }) => {
         </button>
       </div>
     </div>
+  ) : isUserClient ? (
+    <Navigate to={"/client"}></Navigate>
+  ) : (
+    <Navigate to={"/freelancer"}></Navigate>
   );
 };
 

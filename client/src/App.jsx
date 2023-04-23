@@ -35,7 +35,6 @@ const App = () => {
 
   const isLogin = localStorage.getItem("isLogin") === "true";
   const isUserClient = localStorage.getItem("isClient") === "true";
-  console.log(isUserClient);
 
   const getUser = useCallback(async () => {
     const { data } = await axios.get("/auth/login/success", {
@@ -94,11 +93,19 @@ const App = () => {
       <div className="App">
         <Navbar toggle={toggle}></Navbar>
         <Routes>
-          <Route path="/" element={!isLogin && <Home />} />
+          <Route
+            path="/"
+            element={<Home isLogin={isLogin} isUserClient={isUserClient} />}
+          />
           <Route
             path="/register"
             element={
-              <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+              <RegisterOption
+                isLogin={isLogin}
+                isUserClient={isUserClient}
+                setIsClient={setIsClient}
+                isClient={isClient}
+              />
             }
           />
           <Route
@@ -154,15 +161,36 @@ const App = () => {
           />
           <Route
             path="/register/client"
-            element={<Register title={"Client"} />}
+            element={
+              <Register
+                isLogin={isLogin}
+                isUserClient={isUserClient}
+                title={"Client"}
+              />
+            }
           />
           <Route
             path="/register/freelancer"
-            element={<Register title={"Freelancer"} />}
+            element={
+              <Register
+                isLogin={isLogin}
+                isUserClient={isUserClient}
+                title={"Freelancer"}
+              />
+            }
           />
-          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route
+            path="/login"
+            element={
+              <Login
+                isLogin={isLogin}
+                isUserClient={isUserClient}
+                setUser={setUser}
+              />
+            }
+          />
 
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/*" element={<Navigate to={"/login"} />} />
         </Routes>{" "}
         <Footer></Footer>
       </div>

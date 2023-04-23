@@ -7,8 +7,9 @@ import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
 import "./login.css";
+import { Navigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -55,7 +56,7 @@ const Login = () => {
     window.open("http://localhost:5000/auth/github", "_self");
   };
 
-  return (
+  return !isLogin ? (
     <>
       <div className="registerContainer loginContainer">
         <div className="registerLeftContainer ">
@@ -113,6 +114,10 @@ const Login = () => {
         </form>
       </div>
     </>
+  ) : isUserClient ? (
+    <Navigate to={"/client"}></Navigate>
+  ) : (
+    <Navigate to={"/freelancer"}></Navigate>
   );
 };
 

@@ -6,8 +6,9 @@ import { FaGithub } from "react-icons/fa";
 import AuthButton from "../../components/AuthButton/AuthButton";
 import googleIcon from "../../img/google.ico";
 import axios from "../../utils/axiosInstance";
+import { Navigate } from "react-router-dom";
 
-const Register = ({ title }) => {
+const Register = ({ isUserClient, isLogin, title }) => {
   const [registerData, setRegisterData] = useState({
     firstName: "",
     lastName: "",
@@ -77,7 +78,7 @@ const Register = ({ title }) => {
     );
   };
 
-  return (
+  return !isLogin ? (
     <>
       <div className="registerContainer">
         <div className="registerLeftContainer">
@@ -206,6 +207,10 @@ const Register = ({ title }) => {
         </form>
       </div>
     </>
+  ) : isUserClient ? (
+    <Navigate to={"/client"}></Navigate>
+  ) : (
+    <Navigate to={"/freelancer"}></Navigate>
   );
 };
 

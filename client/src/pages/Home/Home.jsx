@@ -4,9 +4,10 @@ import HomeFeature from "../../components/Home/HomeFeature/HomeFeature";
 import HomeService from "../../components/Home/HomeService/HomeService";
 import HomeClientTestimonial from "../../components/Home/HomeClientTestimonial/HomeClientTestimonial";
 import HomeGreateWork from "../../components/Home/HomeGreatWork/HomeGreatWork";
+import { Navigate } from "react-router-dom";
 
-const Home = () => {
-  return (
+const Home = ({ isLogin, isUserClient }) => {
+  return !isLogin ? (
     <>
       <HomeBanner />
       <HomeFeature />
@@ -14,6 +15,10 @@ const Home = () => {
       <HomeClientTestimonial />
       <HomeGreateWork />
     </>
+  ) : isUserClient ? (
+    <Navigate to={"/client"}></Navigate>
+  ) : (
+    <Navigate to={"/freelancer"}></Navigate>
   );
 };
 
