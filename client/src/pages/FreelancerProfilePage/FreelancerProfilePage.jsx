@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -6,29 +5,27 @@ import {
   CardHeader,
   Divider,
   Flex,
-  HStack,
   Heading,
   Stack,
-  Tag,
-  TagLabel,
   Text,
+  useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { GoLocation } from "react-icons/go";
-import {
-  MdCastForEducation,
-  MdModeEdit,
-  MdWorkHistory,
-  MdWorkOutline,
-} from "react-icons/md";
+import { MdModeEdit, MdWorkHistory } from "react-icons/md";
 
-import { BsClockHistory } from "react-icons/bs";
+import FreelancerEducationSection from "../../components/FreelancerProfileComponents/FreelancerEducation/FreelancerEducationSection";
+import FreelancerExperienceSection from "../../components/FreelancerProfileComponents/FreelancerExperience/FreelancerExperienceSection";
+import FreelancerPortfolioSection from "../../components/FreelancerProfileComponents/FreelancerPortfolio/FreelancerPortfolioSection";
+import FreelancerSkill from "../../components/FreelancerProfileComponents/FreelnacerSkill/FreelancerSkill";
+import FreelancerProfileTitleModal from "../../components/FreelancerProfileComponents/FreelancerProfileSection/FreelancerProfileTitleModal";
 
 const FreelancerProfilePage = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       w={"90vw"}
@@ -109,8 +106,8 @@ const FreelancerProfilePage = () => {
             >
               Full Stack Software Developer
             </Text>
-
             <MdModeEdit
+              onClick={onOpen}
               style={{
                 borderRadius: "50%",
                 padding: "2px",
@@ -121,6 +118,11 @@ const FreelancerProfilePage = () => {
               }}
               color={"white"}
             ></MdModeEdit>
+
+            <FreelancerProfileTitleModal
+              isOpen={isOpen}
+              onClose={onClose}
+            ></FreelancerProfileTitleModal>
           </Stack>
           <Stack direction={"row"} justify={"center"} align={"center"}>
             <Text
@@ -180,118 +182,10 @@ const FreelancerProfilePage = () => {
       </Box>
 
       <Divider />
-
-      <Box color={"white"} w={"95%"} p={5}>
-        <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
-          <Stack direction={"row"} justify={"center"} align={"center"}>
-            <Heading size={isMobile ? "sm" : "md"}>Portfolio</Heading>
-
-            <AddIcon
-              style={{
-                borderRadius: "50%",
-                padding: "2px",
-                background: "#e2e9e2",
-                color: "#2e4e74",
-                cursor: "pointer",
-                fontSize: "1.6rem",
-              }}
-              color={"white"}
-            ></AddIcon>
-          </Stack>
-        </Flex>
-        <Stack justify={"center"} align={"center"}>
-          <MdWorkOutline
-            fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}
-          ></MdWorkOutline>
-          <Text fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-            Talent who add portfolios to their profile are more likely to win
-            work. (+20%)
-          </Text>
-          <Text
-            fontSize={isMobile ? "0.5rem" : "0.8rem"}
-            color={"blue"}
-            textDecoration={"underline"}
-            cursor={"pointer"}
-          >
-            Add a Portfolio
-          </Text>
-        </Stack>
-      </Box>
+      <FreelancerPortfolioSection></FreelancerPortfolioSection>
 
       <Divider />
-
-      <Box color={"white"} w={"95%"} p={5}>
-        <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
-          <Stack direction={"row"} justify={"center"} align={"center"}>
-            <Heading size={isMobile ? "sm" : "md"}>Skills</Heading>
-
-            <AddIcon
-              style={{
-                borderRadius: "50%",
-                padding: "2px",
-                background: "#e2e9e2",
-                color: "#2e4e74",
-                cursor: "pointer",
-                fontSize: "1.6rem",
-              }}
-              color={"white"}
-            ></AddIcon>
-          </Stack>
-        </Flex>
-        <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
-          <HStack spacing={4}>
-            {["md"].map((size) => (
-              <Tag
-                size={size}
-                key={size}
-                borderRadius="full"
-                variant="solid"
-                color={"gray.800"}
-                colorScheme="whiteAlpha"
-              >
-                <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-                  Blockchain
-                </TagLabel>
-              </Tag>
-            ))}
-          </HStack>
-
-          <HStack spacing={4}>
-            {["md"].map((size) => (
-              <Tag
-                size={size}
-                key={size}
-                borderRadius="full"
-                variant="solid"
-                color={"gray.800"}
-                colorScheme="whiteAlpha"
-              >
-                <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-                  Javascript
-                </TagLabel>
-              </Tag>
-            ))}
-          </HStack>
-
-          <HStack spacing={4}>
-            {["md"].map((size) => (
-              <Tag
-                size={size}
-                key={size}
-                borderRadius="full"
-                variant="solid"
-                color={"gray.800"}
-                colorScheme="whiteAlpha"
-              >
-                <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-                  React
-                </TagLabel>
-              </Tag>
-            ))}
-          </HStack>
-        </Flex>
-      </Box>
-
+      <FreelancerSkill></FreelancerSkill>
       <Divider />
 
       <Box color={"white"} w={"95%"} p={5}>
@@ -313,82 +207,9 @@ const FreelancerProfilePage = () => {
       </Box>
 
       <Divider />
-
-      <Box color={"white"} w={"95%"} p={5}>
-        <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
-          <Stack direction={"row"} justify={"center"} align={"center"}>
-            <Heading size={isMobile ? "sm" : "md"}>Education Details</Heading>
-            <AddIcon
-              style={{
-                borderRadius: "50%",
-                padding: "2px",
-                background: "#e2e9e2",
-                color: "#2e4e74",
-                cursor: "pointer",
-                fontSize: "1.6rem",
-              }}
-              color={"white"}
-            ></AddIcon>
-          </Stack>
-        </Flex>
-        <Stack justify={"center"} align={"center"}>
-          <MdCastForEducation
-            fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}
-          ></MdCastForEducation>
-          <Text fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-            Highlighting relevant educations can boost your visibility in our
-            search results. (+10%)
-          </Text>
-          <Text
-            fontSize={isMobile ? "0.5rem" : "0.8rem"}
-            color={"blue"}
-            textDecoration={"underline"}
-            cursor={"pointer"}
-          >
-            Add Your Education
-          </Text>
-        </Stack>
-      </Box>
+      <FreelancerEducationSection></FreelancerEducationSection>
       <Divider />
-
-      <Box color={"white"} w={"95%"} p={5}>
-        <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
-          <Stack direction={"row"} justify={"center"} align={"center"}>
-            <Heading size={isMobile ? "sm" : "md"}>
-              Employment History | Other Experiences
-            </Heading>
-
-            <AddIcon
-              style={{
-                borderRadius: "50%",
-                padding: "2px",
-                background: "#e2e9e2",
-                color: "#2e4e74",
-                cursor: "pointer",
-                fontSize: "1.6rem",
-              }}
-              color={"white"}
-            ></AddIcon>
-          </Stack>
-        </Flex>
-        <Stack justify={"center"} align={"center"}>
-          <BsClockHistory
-            fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}
-          ></BsClockHistory>
-          <Text fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-            Highlighting relevant experiences can boost your visibility in our
-            search results. (+5%)
-          </Text>
-          <Text
-            fontSize={isMobile ? "0.5rem" : "0.8rem"}
-            color={"blue"}
-            textDecoration={"underline"}
-            cursor={"pointer"}
-          >
-            Add Your Experience
-          </Text>
-        </Stack>
-      </Box>
+      <FreelancerExperienceSection></FreelancerExperienceSection>
     </Box>
   );
 };
