@@ -8,15 +8,39 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsClockHistory } from "react-icons/bs";
 import ExperienceModal from "./ExperienceModal";
+
+import { FlexWorkContext } from "../../../context/ContextStore";
 
 const FreelancerExperienceSection = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
+  const [freelancerExperienceDetails, setFreelancerExperienceDetails] =
+    useState({
+      companyName: "",
+      role: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      location: "",
+      profileId: "",
+    });
+
+  const { freelancerProfile } = useContext(FlexWorkContext);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (freelancerProfile._id !== "") {
+      setFreelancerExperienceDetails({
+        ...freelancerExperienceDetails,
+        profileId: freelancerProfile._id,
+      });
+    }
+  }, [freelancerProfile._id]);
 
   return (
     <Box color={"white"} w={"95%"} p={5}>
@@ -38,7 +62,12 @@ const FreelancerExperienceSection = () => {
             }}
             color={"white"}
           ></AddIcon>
-          <ExperienceModal isOpen={isOpen} onClose={onClose}></ExperienceModal>
+          <ExperienceModal
+            freelancerExperienceDetails={freelancerExperienceDetails}
+            setFreelancerExperienceDetails={setFreelancerExperienceDetails}
+            isOpen={isOpen}
+            onClose={onClose}
+          ></ExperienceModal>
         </Stack>
       </Flex>
       <Stack justify={"center"} align={"center"}>

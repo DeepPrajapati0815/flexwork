@@ -8,15 +8,40 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
-import PortfolioModal from "./PortfolioModal";
+import React, { useState } from "react";
 import { MdWorkOutline } from "react-icons/md";
+import PortfolioModal from "./PortfolioModal";
+import { useContext } from "react";
+import { FlexWorkContext } from "../../../context/ContextStore";
+import { useEffect } from "react";
+
+import axios from "../../../utils/axiosInstance";
 
 const FreelancerPortfolioSection = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { freelancerProfile } = useContext(FlexWorkContext);
+
+  const [freelancerPortfolios, setFreelancerPortfolios] = useState([]);
+
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
+
+  const getPortfolios = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/freelancer/portfolio/${freelancerProfile?._id}`
+      );
+
+      setFreelancerPortfolios(data.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (freelancerProfile._id != "") {
+      getPortfolios();
+    }
+  }, [freelancerProfile._id]);
 
   return (
     <Box color={"white"} w={"95%"} p={5}>
@@ -36,7 +61,11 @@ const FreelancerPortfolioSection = () => {
             }}
             color={"white"}
           ></AddIcon>
-          <PortfolioModal isOpen={isOpen} onClose={onClose}></PortfolioModal>
+          <PortfolioModal
+            freelancerProfile={freelancerProfile}
+            isOpen={isOpen}
+            onClose={onClose}
+          ></PortfolioModal>
         </Stack>
       </Flex>
       <Stack justify={"center"} align={"center"}>

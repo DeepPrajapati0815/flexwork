@@ -8,13 +8,49 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdCastForEducation } from "react-icons/md";
 import EducationModal from "./EducationModal";
+import { FlexWorkContext } from "../../../context/ContextStore";
+
+import axios from "../../../utils/axiosInstance";
 
 const FreelancerEducationSection = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
+
+  const [educations, setEducations] = useState([]);
+
+  const [educationDetails, setEducationDetails] = useState({
+    universityName: "",
+    completionDate: "",
+    course: "",
+    degree: "",
+    profileId: "",
+    description: "",
+  });
+
+  const { freelancerProfile } = useContext(FlexWorkContext);
+
+  const getFreelancerEducations = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/freelancer/education/${freelancerProfile._id}`
+      );
+      setEducations(data.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (freelancerProfile._id !== "") {
+      setEducationDetails({
+        ...educationDetails,
+        profileId: freelancerProfile._id,
+      });
+
+      getFreelancerEducations();
+    }
+  }, [freelancerProfile._id]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -35,7 +71,12 @@ const FreelancerEducationSection = () => {
             }}
             color={"white"}
           ></AddIcon>
-          <EducationModal isOpen={isOpen} onClose={onClose}></EducationModal>
+          <EducationModal
+            educationDetails={educationDetails}
+            setEducationDetails={setEducationDetails}
+            isOpen={isOpen}
+            onClose={onClose}
+          ></EducationModal>
         </Stack>
       </Flex>
       <Stack justify={"center"} align={"center"}>

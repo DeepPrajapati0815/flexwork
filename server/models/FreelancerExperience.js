@@ -14,6 +14,12 @@ const freelancerExperienceSchema = new Schema(
       type: String,
       required: [true, "must provide description of the role"],
     },
+    startDate: {
+      type: String,
+    },
+    endDate: {
+      type: String,
+    },
     location: {
       type: String,
       default: null,

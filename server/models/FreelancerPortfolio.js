@@ -6,6 +6,16 @@ const freelancerPortfolioSchema = new Schema(
       type: String,
       required: [true, "must provide title"],
     },
+    role: {
+      type: String,
+      required: [true, "must provide role"],
+    },
+    projectChallange: {
+      type: String,
+    },
+    projectSolution: {
+      type: String,
+    },
     file: {
       type: String,
       required: [true, "must provide portfolio file"],

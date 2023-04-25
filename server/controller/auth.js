@@ -123,7 +123,7 @@ const loginUser = async (req, res) => {
       isAdmin: isRegistered.isAdmin,
     });
 
-    res.cookie("token", token, { maxAge: 9000000 });
+    res.cookie("token", token, { maxAge: 60 * 60 * 24 * 1000 });
 
     successLog("Successfully LoggedIn!");
     infoLog("loginUser exit");

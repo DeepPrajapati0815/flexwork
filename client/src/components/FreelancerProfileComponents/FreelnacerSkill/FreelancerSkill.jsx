@@ -2,7 +2,6 @@ import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
-  HStack,
   Heading,
   Stack,
   Tag,
@@ -10,14 +9,15 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SkillModal from "./SkillModal";
+import { FlexWorkContext } from "../../../context/ContextStore";
 
 const FreelancerSkill = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
-  const [isTab] = useMediaQuery("(max-width: 950px)");
 
-  const [skills, setSkills] = useState(new Set([]));
+  const { freelancerProfile, setFreelancerProfile } =
+    useContext(FlexWorkContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -40,31 +40,28 @@ const FreelancerSkill = () => {
             color={"white"}
           ></AddIcon>
           <SkillModal
-            skills={skills}
-            setSkills={setSkills}
+            freelancerProfile={freelancerProfile}
+            setFreelancerProfile={setFreelancerProfile}
             isOpen={isOpen}
             onClose={onClose}
           ></SkillModal>
         </Stack>
       </Flex>
       <Flex gap={3} flexWrap={"wrap"}>
-        {Array.from(skills).map(
-          (skill, i) =>
-            skill !== "" && (
-              <Tag
-                size={"md"}
-                key={i}
-                borderRadius="full"
-                variant="solid"
-                color={"gray.800"}
-                colorScheme="whiteAlpha"
-              >
-                <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-                  {skill}
-                </TagLabel>
-              </Tag>
-            )
-        )}
+        {freelancerProfile?.skills?.map((skill, i) => (
+          <Tag
+            size={"md"}
+            key={i}
+            borderRadius="full"
+            variant="solid"
+            color={"gray.800"}
+            colorScheme="whiteAlpha"
+          >
+            <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
+              {skill}
+            </TagLabel>
+          </Tag>
+        ))}
       </Flex>
     </Box>
   );

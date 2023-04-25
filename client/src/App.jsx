@@ -1,5 +1,4 @@
 import axios from "./utils/axiosInstance";
-import Cookies from "js-cookie";
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
@@ -16,13 +15,12 @@ import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import { FlexWorkContext } from "./context/ContextStore";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import FreelancerLandingPage from "./pages/FreelancerLandingPage/FreelancerLandingPage";
+import FreelancerProfilePage from "./pages/FreelancerProfilePage/FreelancerProfilePage";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
-import NotFound from "./pages/404Page/NotFound";
-import FreelancerLandingPage from "./pages/FreelancerLandingPage/FreelancerLandingPage";
-import FreelancerProfilePage from "./pages/FreelancerProfilePage/FreelancerProfilePage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -41,17 +39,14 @@ const App = () => {
       withCredentials: true,
     });
     const id = data.userId;
-    const redirectUrl = data?.redirectUrl;
 
     if (id && data.isLogin) {
       localStorage.setItem("userId", id);
       localStorage.setItem("isLogin", true);
     }
 
-    if (redirectUrl && data.isRegistered) {
-      navigate(redirectUrl);
-    } else {
-      navigate("/");
+    if (data.isRegistered) {
+      sessionStorage.setItem("isRegistered", true);
     }
   }, []);
 
@@ -60,14 +55,28 @@ const App = () => {
       const { data } = await axios.get(`/api/v1/user/${userId}`, {
         withCredentials: true,
       });
+
       localStorage.setItem("isClient", data.data.isClient);
+
       if (data.data) {
         setUser(data.data);
         if (searchParams.get("isClient") === "true" && data.data.isClient) {
-          navigate("/client");
+          if (sessionStorage.getItem("isRegistered") === "true") {
+            navigate("/client/profile");
+            sessionStorage.removeItem("isRegistered");
+          } else {
+            navigate("/client");
+          }
         }
+
         if (searchParams.get("isClient") === "true" && !data.data.isClient) {
-          navigate("/freelancer");
+          if (sessionStorage.getItem("isRegistered") === "true") {
+            console.log("navigating....");
+            navigate("/freelancer/profile");
+            sessionStorage.removeItem("isRegistered");
+          } else {
+            navigate("/freelancer");
+          }
         }
       }
     } catch (error) {}
@@ -79,7 +88,6 @@ const App = () => {
         await getUser();
       }
       const userId = localStorage.getItem("userId");
-
       await getManualUser(userId);
     })();
   }, []);
@@ -140,25 +148,16 @@ const App = () => {
           />
 
           <Route
-            path="/client/profile/edit/:userId"
+            path="/client/profile"
             element={
               isLogin && isUserClient ? (
-                <EditProfile />
+                <FreelancerProfilePage />
               ) : (
                 <Navigate to="/login" />
               )
             }
           />
-          <Route
-            path="/freelancer/profile/edit/:userId"
-            element={
-              isLogin && !isUserClient ? (
-                <EditProfile />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+
           <Route
             path="/register/client"
             element={

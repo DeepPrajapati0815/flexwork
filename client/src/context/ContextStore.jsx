@@ -4,12 +4,23 @@ export const FlexWorkContext = createContext();
 
 const FlexWorkContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const [isLogin, setIsLogin] = useState(false);
-  const [userId, setUserId] = useState("");
+
+  const [freelancerProfile, setFreelancerProfile] = useState({
+    _id: "",
+    title: "",
+    description: "",
+    skills: [],
+    userId: "",
+  });
 
   return (
     <FlexWorkContext.Provider
-      value={{ user, setUser, isLogin, setIsLogin, userId, setUserId }}
+      value={{
+        user,
+        setUser,
+        freelancerProfile,
+        setFreelancerProfile,
+      }}
     >
       {children}
     </FlexWorkContext.Provider>

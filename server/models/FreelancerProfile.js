@@ -10,15 +10,6 @@ const freelancerProfileSchema = new Schema(
       type: String,
       required: [true, "must provide description"],
     },
-    image: {
-      type: String,
-      required: [true, "must provide image"],
-      unique: true,
-    },
-    rate: {
-      type: Number,
-      required: [true, "must provide rate in hours"],
-    },
     userId: {
       type: String,
       unique: true,
@@ -26,7 +17,6 @@ const freelancerProfileSchema = new Schema(
     },
     skills: {
       type: [String],
-      required: [true, "must provide skills"],
     },
   },
   { timestamps: true }

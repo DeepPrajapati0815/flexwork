@@ -2,22 +2,29 @@ const { Schema, default: mongoose } = require("mongoose");
 
 const freelancerEducationSchema = new Schema(
   {
+    profileId: {
+      type: String,
+      required: [true, "must provide freelancer profileId"],
+    },
     universityName: {
       type: String,
       required: [true, "must provide university name"],
+    },
+    degree: {
+      type: String,
+      required: [true, "must provide course name"],
     },
     course: {
       type: String,
       required: [true, "must provide course name"],
     },
+    description: {
+      type: String,
+    },
     completionDate: {
-      type: Date,
+      type: String,
       required: [true, "must provide completion date"],
       unique: true,
-    },
-    profileId: {
-      type: String,
-      required: [true, "must provide freelancer profileId"],
     },
   },
   { timestamps: true }

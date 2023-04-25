@@ -4,11 +4,18 @@ const FreelancerEducation = require("../models/FreelancerEducation");
 
 const addEducation = async (req, res) => {
   infoLog("addEducation entry");
-  const { profileId } = req.query;
-  const { universityName, course, completionDate } = req.body;
+  const { profileId } = req.params;
+  const { universityName, course, completionDate, degree, description } =
+    req.body;
 
   try {
-    if (!universityName || !course || !profileId || !completionDate) {
+    if (
+      !universityName ||
+      !course ||
+      !profileId ||
+      !completionDate ||
+      !degree
+    ) {
       infoLog("addEducation exit");
       res.status(400).json({ isEducationAdded: false, data: {} });
       return errorLog("Invalid Details");
@@ -17,6 +24,8 @@ const addEducation = async (req, res) => {
     const newEducation = new FreelancerEducation({
       universityName,
       course,
+      degree,
+      description,
       completionDate,
       profileId,
     });
@@ -27,6 +36,7 @@ const addEducation = async (req, res) => {
     infoLog("addEducation exit");
     return res.status(201).json({ isEducationAdded: true, data });
   } catch (error) {
+    console.log(error);
     infoLog("addEducation exit");
     errorLog("Error While adding a Education to freelancer profile!");
     return res.status(500).json({ isEducationAdded: false, data: {} });
@@ -90,7 +100,7 @@ const removeEducation = async (req, res) => {
 const getEducations = async (req, res) => {
   infoLog("getEducations entry");
 
-  const { profileId } = req.query;
+  const { profileId } = req.params;
 
   try {
     const data = await FreelancerEducation.find({ profileId });

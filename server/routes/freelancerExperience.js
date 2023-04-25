@@ -12,9 +12,9 @@ const {
 
 const router = require("express").Router();
 
-router.post("/", verifyTokenAndFreelancer, addExperience);
+router.post("/:profileId", verifyTokenAndFreelancer, addExperience);
 router.put("/:experienceId", verifyTokenAndFreelancer, updateExperience);
 router.delete("/:experienceId", verifyTokenAndFreelancer, removeExperience);
-router.get("/", verifyToken, getExperiences);
+router.get("/:profileId", verifyToken, getExperiences);
 
 module.exports = router;

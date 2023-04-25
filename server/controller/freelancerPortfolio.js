@@ -4,11 +4,29 @@ const FreelancerPortfolio = require("../models/FreelancerPortfolio");
 
 const addPortfolio = async (req, res) => {
   infoLog("addPortfolio entry");
-  const { profileId } = req.query;
-  const { title, file, completionDate } = req.body;
+
+  const { profileId } = req.params;
+
+  const {
+    title,
+    file,
+    completionDate,
+    role,
+    projectChallange,
+    projectSolution,
+  } = req.body;
 
   try {
-    if (!title || !file || !completionDate) {
+    if (
+      !title ||
+      !file ||
+      !completionDate ||
+      !role ||
+      !profileId ||
+      !projectChallange ||
+      !projectSolution
+    ) {
+      console.log(req.body);
       infoLog("addPortfolio exit");
       res.status(400).json({ isPortfolioAdded: false, data: {} });
       return errorLog("Invalid Details");
@@ -16,8 +34,11 @@ const addPortfolio = async (req, res) => {
 
     const newPortfolio = new FreelancerPortfolio({
       title,
+      role,
       file,
       completionDate,
+      projectChallange,
+      projectSolution,
       profileId,
     });
 
@@ -27,6 +48,7 @@ const addPortfolio = async (req, res) => {
     infoLog("addEducation exit");
     return res.status(201).json({ isPortfolioAdded: true, data });
   } catch (error) {
+    console.log(error);
     infoLog("addEducation exit");
     errorLog("Error While adding a portfolio to freelancer profile!");
     return res.status(500).json({ isPortfolioAdded: false, data: {} });
@@ -91,7 +113,7 @@ const removePortfolio = async (req, res) => {
 const getPortfolios = async (req, res) => {
   infoLog("getPortfolios entry");
 
-  const { profileId } = req.query;
+  const { profileId } = req.params;
 
   try {
     const data = await FreelancerPortfolio.find({ profileId });

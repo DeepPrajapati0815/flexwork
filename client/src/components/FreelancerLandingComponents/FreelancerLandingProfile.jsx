@@ -1,18 +1,21 @@
 import {
-  Heading,
   Avatar,
-  Box,
-  Center,
-  Text,
-  Stack,
-  Button,
   Badge,
+  Box,
+  Button,
+  Center,
+  Heading,
+  Stack,
+  Text,
   useColorModeValue,
-  Flex,
 } from "@chakra-ui/react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { FlexWorkContext } from "../../context/ContextStore";
 
 const FreelancerLandingProfile = () => {
+  const { user } = useContext(FlexWorkContext);
+
   return (
     <Center>
       <Box
@@ -42,7 +45,7 @@ const FreelancerLandingProfile = () => {
           }}
         />
         <Heading fontSize={"2xl"} fontFamily={"body"}>
-          Deep Prajapati
+          {user.firstName + " " + user.lastName}
         </Heading>
         <Text fontWeight={600} color={"gray.500"} mb={4}>
           Full Stack Software Developer

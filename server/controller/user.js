@@ -6,6 +6,7 @@ const updateUser = async (req, res) => {
     infoLog("updateUser entry");
     const data = req.body;
     const { userId } = req.params;
+    console.log(data);
 
     if (!data) {
       infoLog("updateUser exit");
@@ -31,7 +32,7 @@ const getUser = async (req, res) => {
   try {
     const user = await User.findById(
       userId,
-      "_id firstName lastName email username city state isClient authMode createdAt"
+      "_id firstName lastName email profileImg username city state isClient authMode createdAt"
     );
     successLog("Successfully user fetched!");
     infoLog("getUser exit");
@@ -48,7 +49,7 @@ const getUsers = async (req, res) => {
   try {
     const users = await User.find(
       {},
-      "_id firstName lastName email username city state isClient createdAt authMode"
+      "_id firstName lastName email profileImg username city state isClient createdAt authMode"
     );
     successLog("Successfully users fetched!");
     infoLog("getUsers exit");

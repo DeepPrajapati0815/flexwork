@@ -4,7 +4,7 @@ const { errorLog } = require("./logHelper");
 const generateToken = (payload) => {
   try {
     const token = jwt.sign(payload, process.env.SECRET_JWT, {
-      expiresIn: "1h",
+      expiresIn: "2d",
     });
     return token;
   } catch (error) {

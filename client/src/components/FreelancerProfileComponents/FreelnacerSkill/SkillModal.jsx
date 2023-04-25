@@ -1,9 +1,7 @@
 import {
   Button,
   Flex,
-  FormControl,
   FormLabel,
-  HStack,
   Input,
   Modal,
   ModalBody,
@@ -19,24 +17,36 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const SkillModal = ({ isOpen, onClose, skills, setSkills }) => {
+import axios from "../../../utils/axiosInstance";
+
+const SkillModal = ({
+  freelancerProfile,
+  setFreelancerProfile,
+  isOpen,
+  onClose,
+}) => {
   const [skill, setSkill] = useState("");
 
   const initialRef = React.useRef(null);
-  console.log(skills);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!freelancerProfile.skills.includes(skill)) {
+      setFreelancerProfile({
+        ...freelancerProfile,
+        skills: [...freelancerProfile.skills, skill],
+      });
+      setSkill("");
+    }
+    setSkill("");
+  };
+
   return (
     <>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSkills(new Set([...skills, skill]));
-            console.log(skills);
-            setSkill("");
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <ModalContent bg={"#1a202c"} color={"white"}>
             <ModalHeader>Edit Skills</ModalHeader>
 
@@ -45,32 +55,30 @@ const SkillModal = ({ isOpen, onClose, skills, setSkills }) => {
               <Flex direction={"column"} gap={3}>
                 <FormLabel>Skills</FormLabel>
                 <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
-                  {Array.from(skills).map(
-                    (skill, i) =>
-                      skill !== "" && (
-                        <Tag
-                          w={"fit-content"}
-                          key={i}
-                          size={"md"}
-                          borderRadius="full"
-                          variant="solid"
-                          colorScheme="whatsapp"
-                        >
-                          <TagLabel>{skill}</TagLabel>
-                          <TagCloseButton
-                            onClick={() => {
-                              setSkills((prev) => {
-                                const next = new Set(prev);
-
-                                next.delete(skill);
-
-                                return next;
-                              });
-                            }}
-                          />
-                        </Tag>
-                      )
-                  )}
+                  {freelancerProfile.skills.map((skill, i) => (
+                    <Tag
+                      w={"fit-content"}
+                      key={i}
+                      size={"md"}
+                      borderRadius="full"
+                      variant="solid"
+                      colorScheme="whatsapp"
+                    >
+                      <TagLabel>{skill}</TagLabel>
+                      <TagCloseButton
+                        onClick={() => {
+                          const removed = freelancerProfile?.skills?.filter(
+                            (s) => s !== skill
+                          );
+                          console.log(removed);
+                          setFreelancerProfile({
+                            ...freelancerProfile,
+                            skills: removed,
+                          });
+                        }}
+                      />
+                    </Tag>
+                  ))}
                   <Input
                     type="text"
                     style={{
@@ -91,7 +99,18 @@ const SkillModal = ({ isOpen, onClose, skills, setSkills }) => {
 
             <ModalFooter>
               <Button
-                onClick={onClose}
+                onClick={() => {
+                  (async () => {
+                    try {
+                      const res = await axios.put(
+                        `/api/v1/freelancer/profile/${freelancerProfile.userId}`,
+                        freelancerProfile
+                      );
+                      console.log(res);
+                    } catch (error) {}
+                  })();
+                  onClose();
+                }}
                 style={{ background: "#2e4e74" }}
                 mr={3}
               >

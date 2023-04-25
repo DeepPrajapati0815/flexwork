@@ -20,8 +20,6 @@ router.get(
   (req, res, next) => {
     req.session.isClient = req.query.isClient;
     req.session.isFirstTime = req.query.isFirstTime;
-    console.log(req.query);
-    console.log("session================>", req.session);
     next();
   },
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -39,6 +37,11 @@ router.get(
 
 router.get(
   "/github",
+  (req, res, next) => {
+    req.session.isClient = req.query.isClient;
+    req.session.isFirstTime = req.query.isFirstTime;
+    next();
+  },
   passport.authenticate("github", { scope: ["user:email"] })
 );
 

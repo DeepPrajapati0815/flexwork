@@ -5,11 +5,20 @@ const FreelancerExperience = require("../models/FreelancerExperience");
 const addExperience = async (req, res) => {
   infoLog("addExperience entry");
 
-  const { profileId } = req.query;
-  const { companyName, description, role, location } = req.body;
+  const { profileId } = req.params;
+  const { companyName, description, role, location, startDate, endDate } =
+    req.body;
 
   try {
-    if (!companyName || !description || !role) {
+    if (
+      !companyName ||
+      !description ||
+      !profileId ||
+      !role ||
+      !location ||
+      !startDate ||
+      !endDate
+    ) {
       infoLog("addExperience exit");
       res.status(400).json({ isExperienceAdded: false, data: {} });
       return errorLog("Invalid Details");
@@ -18,6 +27,8 @@ const addExperience = async (req, res) => {
     const newExperience = new FreelancerExperience({
       companyName,
       role,
+      startDate,
+      endDate,
       description,
       location,
       profileId,
