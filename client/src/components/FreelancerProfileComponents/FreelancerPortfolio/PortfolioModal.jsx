@@ -17,7 +17,16 @@ import React, { useEffect, useState } from "react";
 
 import axios from "../../../utils/axiosInstance";
 
-const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
+const PortfolioModal = ({
+  refresh,
+  setRefresh,
+  freelancerProfile,
+  isOpen,
+  onClose,
+  isUpdate,
+  updatePortfolio,
+  setUpdatePortfolio,
+}) => {
   const initialRef = React.useRef(null);
 
   const [freelancerPortfolio, setFreelancerPortfolio] = useState({
@@ -37,29 +46,47 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
         profileId: freelancerProfile._id,
       });
     }
-  }, [freelancerProfile]);
+  }, [freelancerProfile, refresh]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (
-        freelancerPortfolio.profileId !== "" &&
-        freelancerPortfolio.title !== "" &&
-        freelancerPortfolio.role !== "" &&
-        freelancerPortfolio.completionDate !== "" &&
-        freelancerPortfolio.file !== "" &&
-        freelancerPortfolio.projectChallange !== "" &&
-        freelancerPortfolio.projectSolution
-      ) {
-        const res = await axios.post(
-          `/api/v1/freelancer/portfolio/${freelancerPortfolio.profileId}`,
-          freelancerPortfolio
+      if (isUpdate && updatePortfolio._id) {
+        const res = await axios.put(
+          `/api/v1/freelancer/portfolio/${updatePortfolio._id}`,
+          updatePortfolio
         );
-        console.log();
+        setUpdatePortfolio({});
+        setRefresh(Math.random() * 6000000);
+        onClose();
+      } else {
+        if (
+          freelancerPortfolio.profileId !== "" &&
+          freelancerPortfolio.title !== "" &&
+          freelancerPortfolio.role !== "" &&
+          freelancerPortfolio.completionDate !== "" &&
+          freelancerPortfolio.file !== "" &&
+          freelancerPortfolio.projectChallange !== "" &&
+          freelancerPortfolio.projectSolution
+        ) {
+          const res = await axios.post(
+            `/api/v1/freelancer/portfolio/${freelancerPortfolio.profileId}`,
+            freelancerPortfolio
+          );
+          setFreelancerPortfolio({
+            title: "",
+            role: "",
+            projectChallange: "",
+            projectSolution: "",
+            file: "",
+            completionDate: "",
+          });
+          setRefresh(Math.random() * 6000000);
+          onClose();
+        }
       }
     } catch (error) {}
   };
-
   return (
     <>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -74,12 +101,21 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
                   <FormLabel>Project Title</FormLabel>
                   <Input
                     type="text"
-                    value={freelancerPortfolio.title}
+                    value={
+                      updatePortfolio
+                        ? updatePortfolio.title
+                        : freelancerPortfolio.title
+                    }
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        title: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            title: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            title: e.target.value,
+                          })
                     }
                     required
                     ref={initialRef}
@@ -90,12 +126,21 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
                   <FormLabel>Role</FormLabel>
                   <Input
                     type="text"
-                    value={freelancerPortfolio.role}
+                    value={
+                      updatePortfolio
+                        ? updatePortfolio.role
+                        : freelancerPortfolio.role
+                    }
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        role: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            role: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            role: e.target.value,
+                          })
                     }
                     required
                     ref={initialRef}
@@ -106,12 +151,21 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
                   <FormLabel>Completion Date</FormLabel>
                   <Input
                     type="date"
-                    value={freelancerPortfolio.completionDate}
+                    value={
+                      updatePortfolio
+                        ? updatePortfolio.completionDate?.split("T0")[0]
+                        : freelancerPortfolio.completionDate
+                    }
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        completionDate: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            completionDate: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            completionDate: e.target.value,
+                          })
                     }
                     required
                     colorScheme="whiteAlpha"
@@ -121,31 +175,49 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
                 </FormControl>
                 <FormControl>
                   <FormLabel>Project Task/Challenge</FormLabel>
-                  <Textarea
+                  <Input
                     type="text"
                     ref={initialRef}
-                    value={freelancerPortfolio.projectChallange}
+                    value={
+                      updatePortfolio
+                        ? updatePortfolio.projectChallange
+                        : freelancerPortfolio.projectChallange
+                    }
                     required
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        projectChallange: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            projectChallange: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            projectChallange: e.target.value,
+                          })
                     }
-                    placeholder="Describe the problem or opportunity you addressed in your project"
+                    placeholder={"Describe Project Challenge"}
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel>Project Solution</FormLabel>
                   <Textarea
                     type="text"
-                    value={freelancerPortfolio.projectSolution}
+                    value={
+                      updatePortfolio
+                        ? updatePortfolio.projectSolution
+                        : freelancerPortfolio.projectSolution
+                    }
                     required
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        projectSolution: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            projectSolution: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            projectSolution: e.target.value,
+                          })
                     }
                     ref={initialRef}
                     placeholder="Describe your solution to the problem you outlined above"
@@ -155,13 +227,17 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
                   <FormLabel>Attach File</FormLabel>
                   <Input
                     type="file"
-                    value={freelancerPortfolio.file}
-                    required
+                    value={updatePortfolio ? "" : freelancerPortfolio.file}
                     onChange={(e) =>
-                      setFreelancerPortfolio({
-                        ...freelancerPortfolio,
-                        file: e.target.value,
-                      })
+                      updatePortfolio
+                        ? setUpdatePortfolio({
+                            ...updatePortfolio,
+                            file: e.target.value,
+                          })
+                        : setFreelancerPortfolio({
+                            ...freelancerPortfolio,
+                            file: e.target.value,
+                          })
                     }
                     style={{ cursor: "pointer" }}
                     border={"none"}
@@ -173,7 +249,7 @@ const PortfolioModal = ({ freelancerProfile, isOpen, onClose }) => {
 
             <ModalFooter>
               <Button type="submit" style={{ background: "#2e4e74" }} mr={3}>
-                Save
+                {isUpdate ? "update" : "save"}
               </Button>
               <Button colorScheme="red" onClick={onClose}>
                 Cancel

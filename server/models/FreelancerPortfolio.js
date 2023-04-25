@@ -23,7 +23,6 @@ const freelancerPortfolioSchema = new Schema(
     completionDate: {
       type: Date,
       required: [true, "must provide completion date"],
-      unique: true,
     },
     profileId: {
       type: String,

@@ -8,14 +8,17 @@ import {
   TagLabel,
   useDisclosure,
   useMediaQuery,
+  Text,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import SkillModal from "./SkillModal";
 import { FlexWorkContext } from "../../../context/ContextStore";
+import { GiSkills } from "react-icons/gi";
 
 const FreelancerSkill = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
 
+  const [isTab] = useMediaQuery("(max-width: 950px)");
   const { freelancerProfile, setFreelancerProfile } =
     useContext(FlexWorkContext);
 
@@ -47,22 +50,42 @@ const FreelancerSkill = () => {
           ></SkillModal>
         </Stack>
       </Flex>
-      <Flex gap={3} flexWrap={"wrap"}>
-        {freelancerProfile?.skills?.map((skill, i) => (
-          <Tag
-            size={"md"}
-            key={i}
-            borderRadius="full"
-            variant="solid"
-            color={"gray.800"}
-            colorScheme="whiteAlpha"
+      {freelancerProfile?.skills?.length > 0 ? (
+        <Flex gap={3} flexWrap={"wrap"}>
+          {freelancerProfile?.skills?.map((skill, i) => (
+            <Tag
+              size={"md"}
+              key={i}
+              borderRadius="full"
+              variant="solid"
+              color={"white.800"}
+              colorScheme="whiteAlpha"
+            >
+              <TagLabel fontSize={isMobile ? "0.5rem" : "1rem"}>
+                {skill}
+              </TagLabel>
+            </Tag>
+          ))}
+        </Flex>
+      ) : (
+        <Stack justify={"center"} align={"center"}>
+          <GiSkills
+            fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}
+          ></GiSkills>
+          <Text fontSize={isMobile ? "0.5rem" : "0.8rem"}>
+            Add Your Skills To Showcase Your Talent{" "}
+          </Text>
+          <Text
+            fontSize={isMobile ? "0.5rem" : "1rem"}
+            color={"blue"}
+            textDecoration={"underline"}
+            cursor={"pointer"}
+            onClick={onOpen}
           >
-            <TagLabel fontSize={isMobile ? "0.5rem" : "0.8rem"}>
-              {skill}
-            </TagLabel>
-          </Tag>
-        ))}
-      </Flex>
+            Add Skills
+          </Text>
+        </Stack>
+      )}
     </Box>
   );
 };

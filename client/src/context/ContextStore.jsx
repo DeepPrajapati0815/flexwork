@@ -13,6 +13,8 @@ const FlexWorkContextProvider = ({ children }) => {
     userId: "",
   });
 
+  const [refresh, setRefresh] = useState(0);
+
   return (
     <FlexWorkContext.Provider
       value={{
@@ -20,6 +22,8 @@ const FlexWorkContextProvider = ({ children }) => {
         setUser,
         freelancerProfile,
         setFreelancerProfile,
+        refresh,
+        setRefresh,
       }}
     >
       {children}

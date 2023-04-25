@@ -24,6 +24,7 @@ const SkillModal = ({
   setFreelancerProfile,
   isOpen,
   onClose,
+  
 }) => {
   const [skill, setSkill] = useState("");
 
@@ -36,7 +37,6 @@ const SkillModal = ({
         ...freelancerProfile,
         skills: [...freelancerProfile.skills, skill],
       });
-      setSkill("");
     }
     setSkill("");
   };
