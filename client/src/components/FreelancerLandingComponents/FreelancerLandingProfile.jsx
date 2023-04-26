@@ -14,21 +14,24 @@ import { Link } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
 const FreelancerLandingProfile = () => {
-  const { user } = useContext(FlexWorkContext);
+  const { user, freelancerProfile } = useContext(FlexWorkContext);
+
+  console.log(freelancerProfile);
 
   return (
-    <Center>
+    <Center minWidth={"25vw"}>
       <Box
         w={"100%"}
-        bg={useColorModeValue("#F1F6F9")}
+        bg={useColorModeValue("rgb(26,32,44)")}
         boxShadow={"2xl"}
         rounded={"lg"}
         p={6}
         textAlign={"center"}
+        color={"white"}
       >
         <Avatar
           size={"xl"}
-          src={"https://avatars.githubusercontent.com/u/88894883?v=4"}
+          src={user?.profileImg}
           alt={"Avatar Alt"}
           mb={4}
           pos={"relative"}
@@ -48,17 +51,15 @@ const FreelancerLandingProfile = () => {
           {user.firstName + " " + user.lastName}
         </Heading>
         <Text fontWeight={600} color={"gray.500"} mb={4}>
-          Full Stack Software Developer
+          {freelancerProfile.title}
         </Text>
         <Text
           textAlign={"center"}
           fontSize={"0.8rem"}
-          color={useColorModeValue("gray.700", "gray.400")}
+          color={"gray.400"}
           px={3}
         >
-          Software Developer Trainee @ Lucent Innovation | Blockchain Developer
-          |Persuing IMSCIT in silver Oak university | let's grow together and
-          learn something new everyday
+          {freelancerProfile?.description}
         </Text>
         <Stack
           align={"center"}
@@ -68,31 +69,21 @@ const FreelancerLandingProfile = () => {
           mt={6}
           gap={2}
         >
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue("gray.300", "gray.800")}
-            fontWeight={"400"}
-          >
-            Web Development
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue("gray.300", "gray.800")}
-            fontWeight={"400"}
-          >
-            photography
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            rounded={"full"}
-            bg={useColorModeValue("gray.300", "gray.800")}
-            fontWeight={"400"}
-          >
-            Blockchain Development
-          </Badge>
+          {freelancerProfile?.skills?.map((item, index) => {
+            return (
+              <Badge
+                borderRadius={"12px"}
+                px={2}
+                py={1}
+                bg={"gray.600"}
+                color={"white"}
+                fontWeight={"bolder"}
+                key={index}
+              >
+                {item}
+              </Badge>
+            );
+          })}
         </Stack>
 
         <Stack mt={8} direction={"row"} spacing={4}>
@@ -104,9 +95,6 @@ const FreelancerLandingProfile = () => {
               rounded={"full"}
               bg={"#2e4e74"}
               color={"white"}
-              boxShadow={
-                "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-              }
               _hover={{
                 bg: "blue.700",
               }}

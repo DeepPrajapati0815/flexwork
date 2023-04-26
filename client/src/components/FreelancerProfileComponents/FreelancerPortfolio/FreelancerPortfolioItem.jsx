@@ -30,7 +30,6 @@ const FreelancerPortfolioItem = ({
   setUpdatePortfolio,
 }) => {
   const [downloadFlag, setDownloadFlag] = useState(false);
-  console.log(portfolio);
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
@@ -59,16 +58,18 @@ const FreelancerPortfolioItem = ({
               </Text>
             </Box>
             <Flex direction={"row"} gap={"2"} pt={"2"}>
-              <DownloadIcon
-                onClick={() => setDownloadFlag(false)}
-                bg={"blue.500"}
-                _hover={{ bg: "blue.400" }}
-                rounded={"full"}
-                color={"white"}
-                cursor={"pointer"}
-                fontSize="2rem"
-                p={"5px"}
-              ></DownloadIcon>
+              <Box title="download">
+                <DownloadIcon
+                  onClick={() => setDownloadFlag(false)}
+                  bg={"blue.500"}
+                  _hover={{ bg: "blue.400" }}
+                  rounded={"full"}
+                  color={"white"}
+                  cursor={"pointer"}
+                  fontSize="2rem"
+                  p={"5px"}
+                ></DownloadIcon>
+              </Box>
               <EditIcon
                 bg={"green.500"}
                 _hover={{ bg: "green.400" }}

@@ -6,7 +6,6 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
 import { MdWorkHistory } from "react-icons/md";
 
 const FreelancerProfileCatalog = () => {
@@ -17,9 +16,10 @@ const FreelancerProfileCatalog = () => {
     <Box color={"white"} w={"95%"} p={5}>
       <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
         <Stack direction={"row"} justify={"center"} align={"center"}>
-          <Heading size={isMobile ? "sm" : "md"}>Your Project Catalog </Heading>
+          <Heading size={isMobile ? "sm" : "md"}>Project Catalog </Heading>
         </Stack>
       </Flex>
+      {}
       <Stack justify={"center"} align={"center"}>
         <MdWorkHistory
           fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}

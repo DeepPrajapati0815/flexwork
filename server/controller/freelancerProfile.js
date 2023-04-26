@@ -17,13 +17,17 @@ const updateProfile = async (req, res) => {
     const exist = await FreelancerProfile.findOne({ userId });
 
     if (exist) {
+      const { title, description, skills } = data;
+
       const updatedData = await FreelancerProfile.findOneAndUpdate(
         { userId: userId },
-        data,
+        { title, description, skills },
         {
           new: true,
         }
       );
+
+      console.log(updatedData);
 
       successLog("Successfully Freelancer Profile updated!");
       infoLog("updateProfile exit");

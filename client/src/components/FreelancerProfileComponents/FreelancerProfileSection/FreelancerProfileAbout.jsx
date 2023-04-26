@@ -6,40 +6,17 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { MdModeEdit } from "react-icons/md";
 import { FlexWorkContext } from "../../../context/ContextStore";
-import axios from "../../../utils/axiosInstance";
 import FreelancerProfileTitleModal from "./FreelancerProfileTitleModal";
 
 const FreelancerProfileAbout = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
-  const { user, freelancerProfile, setFreelancerProfile } =
+  const { freelancerProfile, setFreelancerProfile } =
     useContext(FlexWorkContext);
-
-  const getProfileData = async () => {
-    try {
-      const { data } = await axios.get(
-        `/api/v1/freelancer/profile/${user._id}`
-      );
-      const { _id, title, description, skills } = data.data;
-      setFreelancerProfile({
-        ...freelancerProfile,
-        skills,
-        _id,
-        title,
-        description,
-        userId: user._id,
-      });
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    setFreelancerProfile({ ...freelancerProfile, userId: user._id });
-    getProfileData();
-  }, [user]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

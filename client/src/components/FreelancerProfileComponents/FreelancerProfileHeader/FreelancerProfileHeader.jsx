@@ -45,7 +45,7 @@ const FreelancerProfileHeader = () => {
           <Box pos={"relative"}>
             <Avatar
               size={"xl"}
-              src={user?.profileImg}
+              src={user.profileImg}
               alt={"Avatar Alt"}
               mb={4}
               pos={"relative"}
@@ -93,6 +93,8 @@ const FreelancerProfileHeader = () => {
                   color: "#2e4e74",
                   cursor: "pointer",
                   fontSize: "1.4rem",
+                  position: "relative",
+                  top: "2px",
                 }}
                 color={"white"}
               ></MdModeEdit>

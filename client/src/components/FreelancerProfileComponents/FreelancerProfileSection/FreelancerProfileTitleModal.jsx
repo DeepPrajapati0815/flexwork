@@ -15,6 +15,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import axios from "../../../utils/axiosInstance";
 
 const FreelancerProfileTitleModal = ({
@@ -28,12 +29,26 @@ const FreelancerProfileTitleModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
+      const { data } = await axios.put(
         `/api/v1/freelancer/profile/${freelancerDetails.userId}`,
         freelancerDetails
       );
-      console.log(res);
-    } catch (error) {}
+      if (data.isProfileUpdated) {
+        toast.success("Updated!", {
+          style: {
+            padding: "16px",
+            animationDuration: "2s",
+          },
+        });
+      }
+    } catch (error) {
+      toast.error("Could Not Update!.", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+    }
   };
 
   return (

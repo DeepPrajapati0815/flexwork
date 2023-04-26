@@ -13,6 +13,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import React from "react";
+import { toast } from "react-hot-toast";
 
 import axios from "../../../utils/axiosInstance";
 
@@ -28,12 +29,26 @@ const FreelancerHeaderModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
+      const { data } = await axios.put(
         `/api/v1/user/${userId}`,
         freelancerPersonalDetails
       );
-      console.log(res);
-    } catch (error) {}
+      if (data.isUserUpdated) {
+        toast.success("Updated Profile!", {
+          style: {
+            padding: "16px",
+            animationDuration: "2s",
+          },
+        });
+      }
+    } catch (error) {
+      toast.error("Could Not Update!.", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+    }
   };
 
   return (
