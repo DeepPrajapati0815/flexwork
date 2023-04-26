@@ -79,7 +79,15 @@ const App = () => {
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.data.isToken === false) {
+        localStorage.removeItem("isLogin");
+        localStorage.removeItem("isClient");
+        localStorage.removeItem("userId");
+
+        navigate("/login");
+      }
+    }
   }, []);
 
   useEffect(() => {

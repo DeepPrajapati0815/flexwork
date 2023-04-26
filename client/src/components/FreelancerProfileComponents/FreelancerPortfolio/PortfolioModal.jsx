@@ -87,6 +87,9 @@ const PortfolioModal = ({
       }
     } catch (error) {}
   };
+
+  console.log("portfolio===>", freelancerPortfolio);
+
   return (
     <>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -102,12 +105,12 @@ const PortfolioModal = ({
                   <Input
                     type="text"
                     value={
-                      updatePortfolio
+                      isUpdate
                         ? updatePortfolio.title
                         : freelancerPortfolio.title
                     }
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             title: e.target.value,
@@ -127,12 +130,10 @@ const PortfolioModal = ({
                   <Input
                     type="text"
                     value={
-                      updatePortfolio
-                        ? updatePortfolio.role
-                        : freelancerPortfolio.role
+                      isUpdate ? updatePortfolio.role : freelancerPortfolio.role
                     }
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             role: e.target.value,
@@ -152,12 +153,12 @@ const PortfolioModal = ({
                   <Input
                     type="date"
                     value={
-                      updatePortfolio
+                      isUpdate
                         ? updatePortfolio.completionDate?.split("T0")[0]
                         : freelancerPortfolio.completionDate
                     }
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             completionDate: e.target.value,
@@ -179,13 +180,13 @@ const PortfolioModal = ({
                     type="text"
                     ref={initialRef}
                     value={
-                      updatePortfolio
+                      isUpdate
                         ? updatePortfolio.projectChallange
                         : freelancerPortfolio.projectChallange
                     }
                     required
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             projectChallange: e.target.value,
@@ -203,13 +204,13 @@ const PortfolioModal = ({
                   <Textarea
                     type="text"
                     value={
-                      updatePortfolio
+                      isUpdate
                         ? updatePortfolio.projectSolution
                         : freelancerPortfolio.projectSolution
                     }
                     required
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             projectSolution: e.target.value,
@@ -227,9 +228,9 @@ const PortfolioModal = ({
                   <FormLabel>Attach File</FormLabel>
                   <Input
                     type="file"
-                    value={updatePortfolio ? "" : freelancerPortfolio.file}
+                    value={isUpdate ? "" : freelancerPortfolio.file}
                     onChange={(e) =>
-                      updatePortfolio
+                      isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
                             file: e.target.value,
