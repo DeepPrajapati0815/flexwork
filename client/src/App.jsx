@@ -22,6 +22,8 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
 import ClientProfilePage from "./pages/ClientProfilePage/ClientProfilePage";
+import ClientLandingPage from "./pages/ClientLandingpage/ClientLandingPage";
+import ClientJobPostPage from "./pages/ClientJobPostPage/ClientJobPostPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -129,7 +131,7 @@ const App = () => {
             path="/client"
             element={
               isLogin && isUserClient ? (
-                <RegisterOption setIsClient={setIsClient} isClient={isClient} />
+                <ClientLandingPage />
               ) : (
                 <Navigate to="/login" />
               )
@@ -161,6 +163,17 @@ const App = () => {
             element={
               isLogin && isUserClient ? (
                 <ClientProfilePage />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/client/post"
+            element={
+              isLogin && isUserClient ? (
+                <ClientJobPostPage />
               ) : (
                 <Navigate to="/login" />
               )
