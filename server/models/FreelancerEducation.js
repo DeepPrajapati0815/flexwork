@@ -24,7 +24,6 @@ const freelancerEducationSchema = new Schema(
     completionDate: {
       type: String,
       required: [true, "must provide completion date"],
-      unique: true,
     },
   },
   { timestamps: true }

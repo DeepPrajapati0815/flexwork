@@ -104,7 +104,7 @@ const removeExperience = async (req, res) => {
 const getExperiences = async (req, res) => {
   infoLog("getExperiences entry");
 
-  const { profileId } = req.query;
+  const { profileId } = req.params;
 
   try {
     const data = await FreelancerExperience.find({ profileId });

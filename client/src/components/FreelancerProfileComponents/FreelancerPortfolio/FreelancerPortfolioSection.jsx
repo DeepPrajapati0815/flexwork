@@ -17,6 +17,7 @@ import { useEffect } from "react";
 
 import axios from "../../../utils/axiosInstance";
 import FreelancerPortfolioItem from "./FreelancerPortfolioItem";
+import { toast } from "react-hot-toast";
 
 const FreelancerPortfolioSection = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,20 +54,34 @@ const FreelancerPortfolioSection = () => {
   };
 
   const deletePortfolio = async (portfolioId) => {
-    const { data } = await axios.delete(
-      `/api/v1/freelancer/portfolio/${portfolioId}`
-    );
-    setFreelancerPortfolios((prev) => {
-      return prev.filter((item, index) => {
-        return item._id != portfolioId;
+    try {
+      const { data } = await axios.delete(
+        `/api/v1/freelancer/portfolio/${portfolioId}`
+      );
+      setFreelancerPortfolios((prev) => {
+        return prev.filter((item, index) => {
+          return item._id !== portfolioId;
+        });
       });
-    });
-    setRefresh(Math.random() * 6000000);
-    console.log(data);
+      setRefresh(Math.random() * 6000000);
+      toast.success("Deleted Portfolio!", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+    } catch (error) {
+      toast.error("Could Not Delete!.", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+    }
   };
 
   useEffect(() => {
-    if (freelancerProfile._id != "") {
+    if (freelancerProfile._id !== "") {
       getPortfolios();
     }
   }, [freelancerProfile._id, refresh]);

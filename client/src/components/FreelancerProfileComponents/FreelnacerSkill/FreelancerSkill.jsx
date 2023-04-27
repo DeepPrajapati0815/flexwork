@@ -38,7 +38,7 @@ const FreelancerSkill = () => {
               background: "#e2e9e2",
               color: "#2e4e74",
               cursor: "pointer",
-              fontSize: "1.6rem",
+              fontSize: "1.4rem",
             }}
             color={"white"}
           ></AddIcon>

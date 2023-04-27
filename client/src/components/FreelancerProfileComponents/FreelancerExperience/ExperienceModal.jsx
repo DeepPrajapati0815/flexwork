@@ -13,7 +13,8 @@ import {
   ModalOverlay,
   Textarea,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import axios from "../../../utils/axiosInstance";
 
 const ExperienceModal = ({
@@ -21,46 +22,125 @@ const ExperienceModal = ({
   setFreelancerExperienceDetails,
   isOpen,
   onClose,
+  isUpdate,
+  updateExperience,
+  setUpdateExperience,
+  setRefresh,
 }) => {
   const initialRef = React.useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sd = Number(
-      new Date(freelancerExperienceDetails.startDate).getTime()
-    );
-    const ed = Number(new Date(freelancerExperienceDetails.endDate).getTime());
 
-    if (
-      !freelancerExperienceDetails.companyName ||
-      !freelancerExperienceDetails.role ||
-      !freelancerExperienceDetails.description ||
-      !freelancerExperienceDetails.profileId ||
-      !freelancerExperienceDetails.startDate ||
-      !freelancerExperienceDetails.endDate ||
-      !freelancerExperienceDetails.location
-    ) {
-      console.log("Missing fields");
-    } else {
-      if (sd < ed) {
-        try {
-          const res = await axios.post(
-            `/api/v1/freelancer/experience/${freelancerExperienceDetails.profileId}`,
-            freelancerExperienceDetails
+    if (isUpdate && updateExperience._id) {
+      const sd = Number(new Date(updateExperience.startDate).getTime());
+      const ed = Number(new Date(updateExperience.endDate).getTime());
+      try {
+        if (sd < ed) {
+          setIsLoading(true);
+          const { data } = await axios.put(
+            `/api/v1/freelancer/experience/${updateExperience._id}`,
+            updateExperience
           );
+          setIsLoading(false);
+          setUpdateExperience({});
+          setRefresh(Math.random() * 6000000);
 
-          setFreelancerExperienceDetails({
-            companyName: "",
-            role: "",
-            description: "",
-            startDate: "",
-            endDate: "",
-            location: "",
+          toast.success("Updated Experience!", {
+            style: {
+              padding: "16px",
+              animationDuration: "2s",
+            },
           });
-          onClose();
-        } catch (error) {}
+          return onClose();
+        } else {
+          return toast.error("Start date must be less than end date!.", {
+            style: {
+              border: "1px solid #713200",
+              padding: "16px",
+              color: "#713200",
+            },
+            iconTheme: {
+              primary: "#713200",
+              secondary: "#FFFAEE",
+            },
+          });
+        }
+      } catch (error) {
+        return toast.error("Could Not Update!.", {
+          style: {
+            padding: "16px",
+          },
+        });
+      }
+    } else {
+      if (
+        !freelancerExperienceDetails.companyName ||
+        !freelancerExperienceDetails.role ||
+        !freelancerExperienceDetails.description ||
+        !freelancerExperienceDetails.profileId ||
+        !freelancerExperienceDetails.startDate ||
+        !freelancerExperienceDetails.endDate ||
+        !freelancerExperienceDetails.location
+      ) {
+        return toast.error("Missing Fields!.", {
+          style: {
+            padding: "16px",
+          },
+        });
       } else {
-        console.log("start date must be less than end date");
+        const sd = Number(
+          new Date(freelancerExperienceDetails.startDate).getTime()
+        );
+        const ed = Number(
+          new Date(freelancerExperienceDetails.endDate).getTime()
+        );
+        if (sd < ed) {
+          try {
+            setIsLoading(true);
+            const res = await axios.post(
+              `/api/v1/freelancer/experience/${freelancerExperienceDetails.profileId}`,
+              freelancerExperienceDetails
+            );
+            setIsLoading(false);
+            setFreelancerExperienceDetails({
+              companyName: "",
+              role: "",
+              description: "",
+              startDate: "",
+              endDate: "",
+              location: "",
+            });
+            setRefresh(Math.random() * 6000000);
+            toast.success("Added Experience!", {
+              style: {
+                padding: "16px",
+                animationDuration: "2s",
+              },
+            });
+            onClose();
+          } catch (error) {
+            setIsLoading(false);
+            return toast.error("Could Not Add!", {
+              style: {
+                padding: "16px",
+              },
+            });
+          }
+        } else {
+          return toast.error("Start date must be less than end date!.", {
+            style: {
+              border: "1px solid #713200",
+              padding: "16px",
+              color: "#713200",
+            },
+            iconTheme: {
+              primary: "#713200",
+              secondary: "#FFFAEE",
+            },
+          });
+        }
       }
     }
   };
@@ -80,14 +160,23 @@ const ExperienceModal = ({
                   <Input
                     type="text"
                     ref={initialRef}
+                    value={
+                      isUpdate
+                        ? updateExperience.companyName
+                        : freelancerExperienceDetails.universityName
+                    }
                     onChange={(e) =>
-                      setFreelancerExperienceDetails({
-                        ...freelancerExperienceDetails,
-                        companyName: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateExperience({
+                            ...updateExperience,
+                            companyName: e.target.value,
+                          })
+                        : setFreelancerExperienceDetails({
+                            ...freelancerExperienceDetails,
+                            companyName: e.target.value,
+                          })
                     }
                     required
-                    value={freelancerExperienceDetails.companyName}
                     placeholder="Ex: Flexwork"
                   />
                 </FormControl>
@@ -96,13 +185,22 @@ const ExperienceModal = ({
                   <FormLabel>Role</FormLabel>
                   <Input
                     type="text"
-                    onChange={(e) =>
-                      setFreelancerExperienceDetails({
-                        ...freelancerExperienceDetails,
-                        role: e.target.value,
-                      })
+                    value={
+                      isUpdate
+                        ? updateExperience.role
+                        : freelancerExperienceDetails.role
                     }
-                    value={freelancerExperienceDetails.role}
+                    onChange={(e) =>
+                      isUpdate
+                        ? setUpdateExperience({
+                            ...updateExperience,
+                            role: e.target.value,
+                          })
+                        : setFreelancerExperienceDetails({
+                            ...freelancerExperienceDetails,
+                            role: e.target.value,
+                          })
+                    }
                     ref={initialRef}
                     required
                     placeholder="Ex: Senior Software Engineer"
@@ -112,14 +210,23 @@ const ExperienceModal = ({
                   <FormLabel>Location</FormLabel>
                   <Input
                     type="text"
+                    value={
+                      isUpdate
+                        ? updateExperience.location
+                        : freelancerExperienceDetails.location
+                    }
                     onChange={(e) =>
-                      setFreelancerExperienceDetails({
-                        ...freelancerExperienceDetails,
-                        location: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateExperience({
+                            ...updateExperience,
+                            location: e.target.value,
+                          })
+                        : setFreelancerExperienceDetails({
+                            ...freelancerExperienceDetails,
+                            location: e.target.value,
+                          })
                     }
                     required
-                    value={freelancerExperienceDetails.location}
                     ref={initialRef}
                     placeholder="City"
                   />
@@ -130,14 +237,22 @@ const ExperienceModal = ({
                     <FormLabel>Starting Date</FormLabel>
                     <Input
                       type="date"
-                      onChange={(e) =>
-                        setFreelancerExperienceDetails({
-                          ...freelancerExperienceDetails,
-                          startDate: e.target.value,
-                        })
+                      value={
+                        isUpdate
+                          ? updateExperience.startDate
+                          : freelancerExperienceDetails.startDate
                       }
-                      required
-                      value={freelancerExperienceDetails.startDate}
+                      onChange={(e) =>
+                        isUpdate
+                          ? setUpdateExperience({
+                              ...updateExperience,
+                              startDate: e.target.value,
+                            })
+                          : setFreelancerExperienceDetails({
+                              ...freelancerExperienceDetails,
+                              startDate: e.target.value,
+                            })
+                      }
                       colorScheme="whiteAlpha"
                       focusBorderColor="white"
                       placeholder="mm/dd/yy"
@@ -150,14 +265,23 @@ const ExperienceModal = ({
                       type="date"
                       colorScheme="whiteAlpha"
                       focusBorderColor="white"
+                      value={
+                        isUpdate
+                          ? updateExperience.endDate
+                          : freelancerExperienceDetails.endDate
+                      }
                       onChange={(e) =>
-                        setFreelancerExperienceDetails({
-                          ...freelancerExperienceDetails,
-                          endDate: e.target.value,
-                        })
+                        isUpdate
+                          ? setUpdateExperience({
+                              ...updateExperience,
+                              endDate: e.target.value,
+                            })
+                          : setFreelancerExperienceDetails({
+                              ...freelancerExperienceDetails,
+                              endDate: e.target.value,
+                            })
                       }
                       required
-                      value={freelancerExperienceDetails.endDate}
                       placeholder="mm/dd/yy"
                     />
                   </FormControl>
@@ -167,14 +291,23 @@ const ExperienceModal = ({
                   <FormLabel>Description</FormLabel>
                   <Textarea
                     type="text"
+                    value={
+                      isUpdate
+                        ? updateExperience.description
+                        : freelancerExperienceDetails.description
+                    }
                     onChange={(e) =>
-                      setFreelancerExperienceDetails({
-                        ...freelancerExperienceDetails,
-                        description: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateExperience({
+                            ...updateExperience,
+                            description: e.target.value,
+                          })
+                        : setFreelancerExperienceDetails({
+                            ...freelancerExperienceDetails,
+                            description: e.target.value,
+                          })
                     }
                     required
-                    value={freelancerExperienceDetails.description}
                     ref={initialRef}
                     placeholder="Describe your experience in company"
                   />
@@ -183,8 +316,13 @@ const ExperienceModal = ({
             </ModalBody>
 
             <ModalFooter>
-              <Button type="submit" style={{ background: "#2e4e74" }} mr={3}>
-                Save
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                style={{ background: "#2e4e74" }}
+                mr={3}
+              >
+                {isUpdate ? "update" : "save"}
               </Button>
               <Button colorScheme="red" onClick={onClose}>
                 Cancel

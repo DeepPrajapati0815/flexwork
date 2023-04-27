@@ -93,6 +93,8 @@ const FreelancerProfileHeader = () => {
                   color: "#2e4e74",
                   cursor: "pointer",
                   fontSize: "1.4rem",
+                  position: "relative",
+                  top: "2px",
                 }}
                 color={"white"}
               ></MdModeEdit>

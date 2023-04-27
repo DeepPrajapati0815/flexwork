@@ -14,6 +14,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 import axios from "../../../utils/axiosInstance";
 
@@ -28,6 +29,8 @@ const PortfolioModal = ({
   setUpdatePortfolio,
 }) => {
   const initialRef = React.useRef(null);
+
+  const [isLoading, setisLoading] = useState(false);
 
   const [freelancerPortfolio, setFreelancerPortfolio] = useState({
     title: "",
@@ -52,13 +55,31 @@ const PortfolioModal = ({
     e.preventDefault();
     try {
       if (isUpdate && updatePortfolio._id) {
-        const res = await axios.put(
-          `/api/v1/freelancer/portfolio/${updatePortfolio._id}`,
-          updatePortfolio
-        );
-        setUpdatePortfolio({});
-        setRefresh(Math.random() * 6000000);
-        onClose();
+        try {
+          setisLoading(true);
+          const { data } = await axios.put(
+            `/api/v1/freelancer/portfolio/${updatePortfolio._id}`,
+            updatePortfolio
+          );
+          setisLoading(false);
+          setUpdatePortfolio({});
+          setRefresh(Math.random() * 6000000);
+
+          toast.success("Updated Portfolio!", {
+            style: {
+              padding: "16px",
+              animationDuration: "2s",
+            },
+          });
+          return onClose();
+        } catch (error) {
+          setisLoading(false);
+          return toast.error("Could Not Update!.", {
+            style: {
+              padding: "16px",
+            },
+          });
+        }
       } else {
         if (
           freelancerPortfolio.profileId !== "" &&
@@ -69,10 +90,12 @@ const PortfolioModal = ({
           freelancerPortfolio.projectChallange !== "" &&
           freelancerPortfolio.projectSolution
         ) {
-          const res = await axios.post(
+          setisLoading(true);
+          const { data } = await axios.post(
             `/api/v1/freelancer/portfolio/${freelancerPortfolio.profileId}`,
             freelancerPortfolio
           );
+          setisLoading(false);
           setFreelancerPortfolio({
             title: "",
             role: "",
@@ -82,10 +105,24 @@ const PortfolioModal = ({
             completionDate: "",
           });
           setRefresh(Math.random() * 6000000);
-          onClose();
+          toast.success("Added Portfolio!", {
+            style: {
+              padding: "16px",
+              animationDuration: "2s",
+            },
+          });
+          return onClose();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      setisLoading(false);
+      return toast.error("Could Not Add!.", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+    }
   };
 
   console.log("portfolio===>", freelancerPortfolio);
@@ -249,7 +286,12 @@ const PortfolioModal = ({
             </ModalBody>
 
             <ModalFooter>
-              <Button type="submit" style={{ background: "#2e4e74" }} mr={3}>
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                style={{ background: "#2e4e74" }}
+                mr={3}
+              >
                 {isUpdate ? "update" : "save"}
               </Button>
               <Button colorScheme="red" onClick={onClose}>

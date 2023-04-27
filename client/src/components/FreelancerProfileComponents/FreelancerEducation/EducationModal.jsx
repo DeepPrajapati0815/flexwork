@@ -13,7 +13,8 @@ import {
   ModalOverlay,
   Textarea,
 } from "@chakra-ui/react";
-import React from "react";
+import { toast } from "react-hot-toast";
+import React, { useState } from "react";
 import axios from "../../../utils/axiosInstance";
 
 const EducationModal = ({
@@ -21,25 +22,54 @@ const EducationModal = ({
   onClose,
   educationDetails,
   setEducationDetails,
+  isUpdate,
+  updateEducation,
+  setUpdateEducation,
+  setRefresh,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
+    if (isUpdate && updateEducation._id) {
+      try {
+        setIsLoading(true);
+        const { data } = await axios.put(
+          `/api/v1/freelancer/education/${updateEducation._id}`,
+          updateEducation
+        );
+        setIsLoading(false);
+        setUpdateEducation({});
+        setRefresh(Math.random() * 6000000);
+
+        toast.success("Updated Education!", {
+          style: {
+            padding: "16px",
+            animationDuration: "2s",
+          },
+        });
+        return onClose();
+      } catch (error) {
+        return toast.error("Could Not Update!.", {
+          style: {
+            padding: "16px",
+          },
+        });
+      }
+    } else {
       if (
-        !educationDetails.universityName ||
-        !educationDetails.completionDate ||
-        !educationDetails.course ||
-        !educationDetails.degree ||
-        !educationDetails.profileId
+        educationDetails.profileId !== "" &&
+        educationDetails.universityName !== "" &&
+        educationDetails.degree !== "" &&
+        educationDetails.course !== "" &&
+        educationDetails.description !== "" &&
+        educationDetails.completionDate !== ""
       ) {
-        console.log("invalid details");
-      } else {
-        const res = await axios.post(
+        const { data } = await axios.post(
           `/api/v1/freelancer/education/${educationDetails.profileId}`,
           educationDetails
         );
-        console.log(res);
         setEducationDetails({
           universityName: "",
           completionDate: "",
@@ -47,9 +77,16 @@ const EducationModal = ({
           degree: "",
           description: "",
         });
-        onClose();
+        setRefresh(Math.random() * 6000000);
+        toast.success("Added Education!", {
+          style: {
+            padding: "16px",
+            animationDuration: "2s",
+          },
+        });
+        return onClose();
       }
-    } catch (error) {}
+    }
   };
 
   const initialRef = React.useRef(null);
@@ -68,12 +105,21 @@ const EducationModal = ({
                   <FormLabel>University</FormLabel>
                   <Input
                     type="text"
-                    value={educationDetails.university}
+                    value={
+                      isUpdate
+                        ? updateEducation.universityName
+                        : educationDetails.universityName
+                    }
                     onChange={(e) =>
-                      setEducationDetails({
-                        ...educationDetails,
-                        universityName: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateEducation({
+                            ...updateEducation,
+                            universityName: e.target.value,
+                          })
+                        : setEducationDetails({
+                            ...educationDetails,
+                            universityName: e.target.value,
+                          })
                     }
                     required
                     ref={initialRef}
@@ -85,12 +131,21 @@ const EducationModal = ({
                   <Input
                     type="date"
                     colorScheme="whiteAlpha"
-                    value={educationDetails.completionDate}
+                    value={
+                      isUpdate
+                        ? updateEducation.completionDate
+                        : educationDetails.completionDate
+                    }
                     onChange={(e) =>
-                      setEducationDetails({
-                        ...educationDetails,
-                        completionDate: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateEducation({
+                            ...updateEducation,
+                            completionDate: e.target.value,
+                          })
+                        : setEducationDetails({
+                            ...educationDetails,
+                            completionDate: e.target.value,
+                          })
                     }
                     required
                     focusBorderColor="white"
@@ -102,14 +157,23 @@ const EducationModal = ({
                   <Input
                     type="text"
                     ref={initialRef}
-                    value={educationDetails.degree}
-                    required
-                    onChange={(e) =>
-                      setEducationDetails({
-                        ...educationDetails,
-                        degree: e.target.value,
-                      })
+                    value={
+                      isUpdate
+                        ? updateEducation.degree
+                        : educationDetails.degree
                     }
+                    onChange={(e) =>
+                      isUpdate
+                        ? setUpdateEducation({
+                            ...updateEducation,
+                            degree: e.target.value,
+                          })
+                        : setEducationDetails({
+                            ...educationDetails,
+                            degree: e.target.value,
+                          })
+                    }
+                    required
                     placeholder="Ex: Gujrat University"
                   />
                 </FormControl>
@@ -119,13 +183,22 @@ const EducationModal = ({
                   <Input
                     type="text"
                     ref={initialRef}
-                    value={educationDetails.course}
                     required
+                    value={
+                      isUpdate
+                        ? updateEducation.course
+                        : educationDetails.course
+                    }
                     onChange={(e) =>
-                      setEducationDetails({
-                        ...educationDetails,
-                        course: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateEducation({
+                            ...updateEducation,
+                            course: e.target.value,
+                          })
+                        : setEducationDetails({
+                            ...educationDetails,
+                            course: e.target.value,
+                          })
                     }
                     placeholder="Ex: Gujrat University"
                   />
@@ -134,12 +207,21 @@ const EducationModal = ({
                   <FormLabel>Description</FormLabel>
                   <Textarea
                     type="text"
-                    value={educationDetails.description}
+                    value={
+                      isUpdate
+                        ? updateEducation.description
+                        : educationDetails.description
+                    }
                     onChange={(e) =>
-                      setEducationDetails({
-                        ...educationDetails,
-                        description: e.target.value,
-                      })
+                      isUpdate
+                        ? setUpdateEducation({
+                            ...updateEducation,
+                            description: e.target.value,
+                          })
+                        : setEducationDetails({
+                            ...educationDetails,
+                            description: e.target.value,
+                          })
                     }
                     ref={initialRef}
                     placeholder="Describe the problem or opportunity you addressed in your project"
@@ -149,8 +231,13 @@ const EducationModal = ({
             </ModalBody>
 
             <ModalFooter>
-              <Button type="submit" style={{ background: "#2e4e74" }} mr={3}>
-                Save
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                style={{ background: "#2e4e74" }}
+                mr={3}
+              >
+                {isUpdate ? "update" : "save"}
               </Button>
               <Button colorScheme="red" onClick={onClose}>
                 Cancel

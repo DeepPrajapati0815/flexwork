@@ -33,8 +33,6 @@ const loginSuccess = async (req, res) => {
         $or: [{ email: user.email }, { username: user.email }],
       });
 
-      console.log("exist=======>", isUserExist);
-
       if (!isUserExist) {
         const newUser = await User.create(user);
         user._id = newUser._id;

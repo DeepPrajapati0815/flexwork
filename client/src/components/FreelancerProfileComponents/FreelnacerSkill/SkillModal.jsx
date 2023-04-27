@@ -16,6 +16,7 @@ import {
   TagLabel,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import axios from "../../../utils/axiosInstance";
 
@@ -24,7 +25,6 @@ const SkillModal = ({
   setFreelancerProfile,
   isOpen,
   onClose,
-  
 }) => {
   const [skill, setSkill] = useState("");
 
@@ -102,12 +102,24 @@ const SkillModal = ({
                 onClick={() => {
                   (async () => {
                     try {
-                      const res = await axios.put(
+                      const { data } = await axios.put(
                         `/api/v1/freelancer/profile/${freelancerProfile.userId}`,
                         freelancerProfile
                       );
-                      console.log(res);
-                    } catch (error) {}
+                      return toast.success("Added Skills!", {
+                        style: {
+                          padding: "16px",
+                          animationDuration: "2s",
+                        },
+                      });
+                    } catch (error) {
+                      return toast.error("Could Not Add!.", {
+                        style: {
+                          padding: "16px",
+                          animationDuration: "2s",
+                        },
+                      });
+                    }
                   })();
                   onClose();
                 }}

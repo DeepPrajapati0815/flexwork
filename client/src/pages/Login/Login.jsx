@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 
 import { FaGithub } from "react-icons/fa";
+import { Navigate } from "react-router-dom";
 import AuthButton from "../../components/AuthButton/AuthButton";
 import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
 import "./login.css";
-import { Navigate } from "react-router-dom";
 
 const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
   const [loginData, setLoginData] = useState({
