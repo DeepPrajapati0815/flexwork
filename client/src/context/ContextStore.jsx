@@ -21,6 +21,19 @@ const FlexWorkContextProvider = ({ children }) => {
     userId: "",
   });
 
+  const [clientProjectPostDetails, setClientProjectPostDetails] = useState({
+    title: "",
+    description: "",
+    category: "",
+    skills: [],
+    scope: "small",
+    duration: "1 month",
+    experienceType: "fresher",
+    projectRate: "",
+    file: "",
+    userId: "",
+  });
+
   const [refresh, setRefresh] = useState(0);
 
   return (
@@ -34,6 +47,8 @@ const FlexWorkContextProvider = ({ children }) => {
         setRefresh,
         clientProfile,
         setClientProfile,
+        clientProjectPostDetails,
+        setClientProjectPostDetails,
       }}
     >
       {children}

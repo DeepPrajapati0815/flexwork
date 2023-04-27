@@ -4,8 +4,17 @@ const ClientProject = require("../models/ClientProject");
 const createProject = async (req, res) => {
   infoLog("createProject entry");
 
-  const { title, description, category, skills, scope, duration, projectRate } =
-    req.body;
+  const {
+    title,
+    description,
+    category,
+    skills,
+    scope,
+    duration,
+    experienceType,
+    projectRate,
+    file,
+  } = req.body;
 
   const { id: userId } = req.user;
 
@@ -15,6 +24,9 @@ const createProject = async (req, res) => {
     !category ||
     !skills ||
     !scope ||
+    !experienceType ||
+    !file ||
+    !userId ||
     !duration ||
     !projectRate
   ) {
@@ -30,11 +42,10 @@ const createProject = async (req, res) => {
       category,
       skills,
       scope,
-      experienceType: req.body?.experienceType,
+      experienceType,
       duration,
-      projectRate,
-      file: req.body?.file || null,
-      totalProposals: req.body?.totalProposals,
+      projectRate: Number(projectRate),
+      file,
       userId,
     });
 
@@ -97,7 +108,7 @@ const getProjects = async (req, res) => {
     if (isClient) {
       projects = await ClientProject.find({ userId }).sort({ createdAt: -1 });
     } else {
-      projects = await ClientProject.find({ userId })
+      projects = await ClientProject.find({ userId, isPublished: true })
         .sort({ createdAt: -1 })
         .limit(5);
     }
