@@ -6,8 +6,8 @@ import FreelancerExperienceSection from "../../components/FreelancerProfileCompo
 import FreelancerPortfolioSection from "../../components/FreelancerProfileComponents/FreelancerPortfolio/FreelancerPortfolioSection";
 import FreelancerProfileHeader from "../../components/FreelancerProfileComponents/FreelancerProfileHeader/FreelancerProfileHeader";
 import FreelancerProfileAbout from "../../components/FreelancerProfileComponents/FreelancerProfileSection/FreelancerProfileAbout";
-import FreelancerProfileCatalog from "../../components/FreelancerProfileComponents/FreelancerProjectCatalog/FreelancerProfileCatalog";
 import FreelancerSkill from "../../components/FreelancerProfileComponents/FreelnacerSkill/FreelancerSkill";
+import FreelancerProjectCatalog from "../../components/FreelancerProfileComponents/FreelancerProjectCatalog/FreelancerProjectCatalog";
 
 const FreelancerProfilePage = () => {
   return (
@@ -28,7 +28,7 @@ const FreelancerProfilePage = () => {
       <Divider />
       <FreelancerSkill></FreelancerSkill>
       <Divider />
-      <FreelancerProfileCatalog />
+      <FreelancerProjectCatalog />
       <Divider />
       <FreelancerEducationSection />
       <Divider />

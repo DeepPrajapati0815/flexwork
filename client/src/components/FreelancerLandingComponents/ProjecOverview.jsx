@@ -14,12 +14,13 @@ import {
   TagLabel,
   Text,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
+import { FlexWorkContext } from "../../context/ContextStore";
 
 const ProjecOverview = () => {
   const [isProjectLiked, setIsProjectLiked] = useState(false);
-
+  const { user } = useContext(FlexWorkContext);
   return (
     <Card
       bg={"#1a202c"}
@@ -42,14 +43,23 @@ const ProjecOverview = () => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Text>
-          Looking for Web3 native freelancers in all types of markets &
-          positions to help us with a research project about crypto payments and
-          wallets ! We're looking for people with experience using wallets and
-          making payments in the crypto space. We're interested in hearing your
-          personal experiences and insights! All you need to do is fill out the
-          quick sign-up form
-        </Text>
+        {user.isClient ? (
+          <Text>
+            {" "}
+            Looking for Web3 native freelancers in all types of markets &
+            positions to help us with a research project about crypto payments
+            and wallets{" "}
+          </Text>
+        ) : (
+          <Text>
+            Looking for Web3 native freelancers in all types of markets &
+            positions to help us with a research project about crypto payments
+            and wallets ! We're looking for people with experience using wallets
+            and making payments in the crypto space. We're interested in hearing
+            your personal experiences and insights! All you need to do is fill
+            out the quick sign-up form
+          </Text>
+        )}
       </CardBody>
 
       <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
@@ -98,51 +108,53 @@ const ProjecOverview = () => {
           ))}
         </HStack>
       </Flex>
-      <Text marginLeft={5} marginTop={3} color={"gray.400"}>
+      <Text marginLeft={5} mb={3} marginTop={3} color={"gray.400"}>
         Proposals: 5 to 10
       </Text>
 
-      <CardFooter
-        justify="space-between"
-        flexWrap="wrap"
-        w={"100%"}
-        sx={{
-          "& > button": {
-            minW: "136px",
-          },
-        }}
-      >
-        <Button
-          flex="2"
-          display={"flex"}
-          justifyContent={"center"}
-          gap={2}
-          alignItems={"center"}
-          variant="unstyled"
-          colorScheme="pink"
-          onClick={(e) => setIsProjectLiked(!isProjectLiked)}
-        >
-          {isProjectLiked ? (
-            <AiFillHeart color="#E90064" />
-          ) : (
-            <AiFillHeart color="white" />
-          )}{" "}
-          Like
-        </Button>
-        <Button
-          flex="1"
-          style={{ background: "#394867" }}
-          onMouseOver={(e) => {
-            e.target.style.background = "#212A3E";
+      {!user.isClient && (
+        <CardFooter
+          justify="space-between"
+          flexWrap="wrap"
+          w={"100%"}
+          sx={{
+            "& > button": {
+              minW: "136px",
+            },
           }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "#394867";
-          }}
-          colorScheme="blue"
         >
-          Apply Now
-        </Button>
-      </CardFooter>
+          <Button
+            flex="2"
+            display={"flex"}
+            justifyContent={"center"}
+            gap={2}
+            alignItems={"center"}
+            variant="unstyled"
+            colorScheme="pink"
+            onClick={(e) => setIsProjectLiked(!isProjectLiked)}
+          >
+            {isProjectLiked ? (
+              <AiFillHeart color="#E90064" />
+            ) : (
+              <AiFillHeart color="white" />
+            )}{" "}
+            Like
+          </Button>
+          <Button
+            flex="1"
+            style={{ background: "#394867" }}
+            onMouseOver={(e) => {
+              e.target.style.background = "#212A3E";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#394867";
+            }}
+            colorScheme="blue"
+          >
+            Apply Now
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };

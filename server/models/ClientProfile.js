@@ -10,11 +10,6 @@ const clientProfileSchema = new Schema(
       type: String,
       required: [true, "must provide description"],
     },
-    image: {
-      type: String,
-      required: [true, "must provide image"],
-      unique: true,
-    },
     isVerified: {
       type: Boolean,
       default: false,

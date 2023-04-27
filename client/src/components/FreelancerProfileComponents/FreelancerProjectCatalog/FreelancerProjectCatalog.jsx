@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { MdWorkHistory } from "react-icons/md";
 
-const FreelancerProfileCatalog = () => {
+const FreelancerProjectCatalog = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
@@ -32,4 +32,4 @@ const FreelancerProfileCatalog = () => {
   );
 };
 
-export default FreelancerProfileCatalog;
+export default FreelancerProjectCatalog;

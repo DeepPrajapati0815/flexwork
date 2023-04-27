@@ -45,7 +45,7 @@ const FreelancerProfileHeader = () => {
           <Box pos={"relative"}>
             <Avatar
               size={"xl"}
-              src={user?.profileImg}
+              src={user.profileImg}
               alt={"Avatar Alt"}
               mb={4}
               pos={"relative"}

@@ -21,6 +21,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
+import ClientProfilePage from "./pages/ClientProfilePage/ClientProfilePage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -159,7 +160,7 @@ const App = () => {
             path="/client/profile"
             element={
               isLogin && isUserClient ? (
-                <FreelancerProfilePage />
+                <ClientProfilePage />
               ) : (
                 <Navigate to="/login" />
               )

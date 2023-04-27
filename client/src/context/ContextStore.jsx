@@ -13,6 +13,14 @@ const FlexWorkContextProvider = ({ children }) => {
     userId: "",
   });
 
+  const [clientProfile, setClientProfile] = useState({
+    _id: "",
+    companyName: "",
+    description: "",
+    isVerified: false,
+    userId: "",
+  });
+
   const [refresh, setRefresh] = useState(0);
 
   return (
@@ -24,6 +32,8 @@ const FlexWorkContextProvider = ({ children }) => {
         setFreelancerProfile,
         refresh,
         setRefresh,
+        clientProfile,
+        setClientProfile,
       }}
     >
       {children}
