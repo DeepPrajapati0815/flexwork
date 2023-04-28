@@ -80,8 +80,11 @@ const FreelancerProfileHeader = () => {
           <Box>
             <Stack direction={"row"}>
               <Heading fontWeight={"semibold"} size="lg">
-                {user.firstName && user?.lastName
-                  ? user.firstName + " " + user.lastName
+                {freelancerPersonalDetails.firstName ||
+                freelancerPersonalDetails?.lastName
+                  ? freelancerPersonalDetails.firstName +
+                    " " +
+                    freelancerPersonalDetails.lastName
                   : "Edit your name"}
               </Heading>
               <MdModeEdit

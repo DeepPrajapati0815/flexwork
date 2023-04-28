@@ -34,7 +34,7 @@ const FreelancerProfileAbout = () => {
             fontWeight={"bold"}
             fontSize={isMobile ? "0.8rem" : isTab ? "1.4rem " : "1.8rem"}
           >
-            {freelancerProfile.title}
+            {freelancerProfile.title || "Add Bio"}
           </Text>
           <MdModeEdit
             onClick={onOpen}
