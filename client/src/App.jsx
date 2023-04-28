@@ -14,16 +14,15 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import { FlexWorkContext } from "./context/ContextStore";
-import EditProfile from "./pages/EditProfile/EditProfile";
+import ClientJobPostPage from "./pages/ClientJobPostPage/ClientJobPostPage";
+import ClientLandingPage from "./pages/ClientLandingpage/ClientLandingPage";
+import ClientProfilePage from "./pages/ClientProfilePage/ClientProfilePage";
 import FreelancerLandingPage from "./pages/FreelancerLandingPage/FreelancerLandingPage";
 import FreelancerProfilePage from "./pages/FreelancerProfilePage/FreelancerProfilePage";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
-import ClientProfilePage from "./pages/ClientProfilePage/ClientProfilePage";
-import ClientLandingPage from "./pages/ClientLandingpage/ClientLandingPage";
-import ClientJobPostPage from "./pages/ClientJobPostPage/ClientJobPostPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -84,11 +83,16 @@ const App = () => {
       }
     } catch (error) {
       if (error.response.data.isToken === false) {
-        localStorage.removeItem("isLogin");
+        localStorage.setItem("isLogin", false);
         localStorage.removeItem("isClient");
         localStorage.removeItem("userId");
-
-        navigate("/login");
+        if (window.location.href.includes("/register")) {
+          navigate("/register");
+        } else if (window.location.href === "http://localhost:3000/") {
+          navigate("/");
+        } else {
+          navigate("/login");
+        }
       }
     }
   }, []);

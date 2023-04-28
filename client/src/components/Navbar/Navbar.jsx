@@ -31,7 +31,7 @@ export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const url = window.location.href;
 
-  const isLogin = localStorage.getItem("isLogin");
+  const isLogin = localStorage.getItem("isLogin") === "true";
 
   return (
     !url.includes("/login") &&
