@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { FaGithub } from "react-icons/fa";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthButton/AuthButton";
 import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
@@ -16,6 +16,8 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
   });
 
   const { setUser, setUserId } = useContext(FlexWorkContext);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,6 +112,14 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
           ></input>
           <button type="submit" className="registerBtn">
             Login
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="registerBtn"
+            style={{ marginTop: "10px" }}
+          >
+            Register
           </button>
         </form>
       </div>

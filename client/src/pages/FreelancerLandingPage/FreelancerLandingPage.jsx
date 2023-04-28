@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import FreelancerLandingTabs from "../../components/FreelancerLandingComponents/FreelancerLandingTabs";
 import ProjecOverview from "../../components/FreelancerLandingComponents/ProjecOverview";
@@ -11,6 +11,7 @@ import axios from "../../utils/axiosInstance";
 const FreelancerLandingPage = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
+  const [projects, setProjects] = useState([]);
 
   const { setFreelancerProfile, user, freelancerProfile } =
     useContext(FlexWorkContext);
@@ -32,9 +33,21 @@ const FreelancerLandingPage = () => {
     } catch (error) {}
   };
 
+  // get all the projects
+  const getAllClientProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/project");
+      setProjects(data.data);
+      console.log("projects", projects);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();
+    getAllClientProjects();
   }, [user]);
 
   return (
@@ -53,12 +66,9 @@ const FreelancerLandingPage = () => {
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>
-          <ProjecOverview></ProjecOverview>
-          <ProjecOverview></ProjecOverview>
-          <ProjecOverview></ProjecOverview>
-          <ProjecOverview></ProjecOverview>
-          <ProjecOverview></ProjecOverview>
-          <ProjecOverview></ProjecOverview>
+          {projects.map((project, index) => {
+            return <ProjecOverview key={index} project={project} />;
+          })}
         </Box>
         <Box
           flex={1}

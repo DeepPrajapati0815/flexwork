@@ -6,6 +6,7 @@ const generateToken = (payload) => {
     const token = jwt.sign(payload, process.env.SECRET_JWT, {
       expiresIn: "2d",
     });
+    console.log(token );
     return token;
   } catch (error) {
     return errorLog("Error While Generating Token");

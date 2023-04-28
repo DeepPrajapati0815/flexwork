@@ -80,7 +80,10 @@ const Register = ({ isUserClient, isLogin, title }) => {
 
   return !isLogin ? (
     <>
-      <div className="registerContainer">
+      <div
+        className="registerContainer"
+        style={{ display: "flex", alignItems: "center", height: "100vh" }}
+      >
         <div className="registerLeftContainer">
           <img src={logo} alt="logo" />
           <h1 className="formHeading" style={{ marginBottom: "20px" }}>

@@ -23,6 +23,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
+import ClientProjectPage from "./pages/ClientProjectPage/ClientProjectPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -182,6 +183,11 @@ const App = () => {
                 <Navigate to="/login" />
               )
             }
+          />
+
+          <Route
+            path="/client/project/:id"
+            element={isLogin ? <ClientProjectPage /> : <Navigate to="/login" />}
           />
 
           <Route

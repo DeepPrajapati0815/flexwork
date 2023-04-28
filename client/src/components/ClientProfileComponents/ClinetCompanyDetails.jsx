@@ -42,22 +42,10 @@ const ClientCompanyDetails = () => {
 
   return (
     <Box color={"white"} w={"95%"} p={5}>
-      <Text fontSize={"0.8rem"} fontWeight={"bold"}>
-        Client Company Details
-      </Text>
-      <Flex
-        mb={4}
-        direction={isTab ? "column" : "row"}
-        align={"flex-start"}
-        justify={"space-between"}
-      >
-        <Stack direction={"row"} align={"center"} justify={"center"}>
-          <Text
-            width={"fit-content"}
-            fontWeight={"bold"}
-            fontSize={isMobile ? "0.8rem" : isTab ? "1.4rem " : "1.7rem"}
-          >
-            {clientProfile.companyName}
+      <Flex mb={4} direction="column" align={"flex-start"}>
+        <Box style={{ display: "flex" }}>
+          <Text fontSize={"1rem"} mr={2} fontWeight={"bold"}>
+            Client Company Details
           </Text>
           <MdModeEdit
             onClick={onOpen}
@@ -67,27 +55,34 @@ const ClientCompanyDetails = () => {
               background: "#e2e9e2",
               color: "#2e4e74",
               cursor: "pointer",
-              fontSize: "1.4rem",
+              fontSize: "1.2rem",
             }}
             color={"white"}
           ></MdModeEdit>
+        </Box>
 
-          <ClientComapnyDetailsModal
-            clientProfile={clientProfile}
-            setClientProfile={setClientProfile}
-            isOpen={isOpen}
-            onClose={onClose}
-          ></ClientComapnyDetailsModal>
-        </Stack>
-      </Flex>
-      <Stack direction={"row"} justify={"space-between"}>
+        <Text
+          width={"fit-content"}
+          fontWeight={"bold"}
+          fontSize={isMobile ? "0.8rem" : isTab ? "1.4rem " : "1.7rem"}
+        >
+          {clientProfile.companyName}
+        </Text>
+
         <Text
           w={isMobile ? "100%" : "85%"}
           fontSize={isMobile ? "0.5rem" : "1rem"}
         >
           {clientProfile.description}
         </Text>
-      </Stack>
+
+        <ClientComapnyDetailsModal
+          clientProfile={clientProfile}
+          setClientProfile={setClientProfile}
+          isOpen={isOpen}
+          onClose={onClose}
+        ></ClientComapnyDetailsModal>
+      </Flex>
     </Box>
   );
 };

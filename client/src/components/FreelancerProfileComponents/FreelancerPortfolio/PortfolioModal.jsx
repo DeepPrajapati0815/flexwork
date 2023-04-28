@@ -166,6 +166,7 @@ const PortfolioModal = ({
                   <FormLabel>Role</FormLabel>
                   <Input
                     type="text"
+                    
                     value={
                       isUpdate ? updatePortfolio.role : freelancerPortfolio.role
                     }
@@ -189,6 +190,7 @@ const PortfolioModal = ({
                   <FormLabel>Completion Date</FormLabel>
                   <Input
                     type="date"
+                    color={"white"}
                     value={
                       isUpdate
                         ? updatePortfolio.completionDate?.split("T0")[0]
@@ -206,7 +208,6 @@ const PortfolioModal = ({
                           })
                     }
                     required
-                    colorScheme="whiteAlpha"
                     focusBorderColor="white"
                     placeholder="mm/dd/yy"
                   />

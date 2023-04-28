@@ -7,8 +7,10 @@ import {
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const HomeBanner = () => {
+  const navigate = useNavigate();
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -47,6 +49,7 @@ const HomeBanner = () => {
                 bg: "#2e4e34",
               }}
               outline="none"
+              onClick={() => navigate("/register/client")}
             >
               Hire a Freelancer
             </Button>
@@ -59,6 +62,7 @@ const HomeBanner = () => {
               }}
               border="1px solid white"
               outline="none"
+              onClick={() => navigate("/register/freelancer")}
             >
               Find Work
             </Button>

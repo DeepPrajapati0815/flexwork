@@ -16,11 +16,19 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
-const ProjecOverview = () => {
+const ProjecOverview = ({ project }) => {
   const [isProjectLiked, setIsProjectLiked] = useState(false);
   const { user } = useContext(FlexWorkContext);
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/client/project/${project._id}`);
+  };
+
   return (
     <Card
       bg={"#1a202c"}
@@ -32,84 +40,42 @@ const ProjecOverview = () => {
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
-              <Heading size="sm">
-                Make my Blockchain Dapp A Chrome Extension
-              </Heading>
+              <Heading size="md">{project.title}</Heading>
               <Text color={"gray.400"}>
-                Fixed-price - Expert - Est. Budget: $200 - Posted 48 minutes ago
+                Published At {project.createdAt.split("T")[0]} On{" "}
+                {project.createdAt.split("T")[1].split(".")[0]}
               </Text>
             </Box>
           </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
-        {user.isClient ? (
-          <Text>
-            {" "}
-            Looking for Web3 native freelancers in all types of markets &
-            positions to help us with a research project about crypto payments
-            and wallets{" "}
-          </Text>
-        ) : (
-          <Text>
-            Looking for Web3 native freelancers in all types of markets &
-            positions to help us with a research project about crypto payments
-            and wallets ! We're looking for people with experience using wallets
-            and making payments in the crypto space. We're interested in hearing
-            your personal experiences and insights! All you need to do is fill
-            out the quick sign-up form
-          </Text>
-        )}
+        <Text>{project.description}</Text>
       </CardBody>
 
       <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
-        <HStack spacing={4}>
-          {["md"].map((size) => (
-            <Tag
-              size={size}
-              key={size}
-              borderRadius="full"
-              variant="solid"
-              color={"gray.300"}
-              colorScheme="whiteAlpha"
-            >
-              <TagLabel>Blockchain</TagLabel>
-            </Tag>
-          ))}
-        </HStack>
-
-        <HStack spacing={4}>
-          {["md"].map((size) => (
-            <Tag
-              size={size}
-              key={size}
-              borderRadius="full"
-              variant="solid"
-              color={"gray.300"}
-              colorScheme="whiteAlpha"
-            >
-              <TagLabel>Javascript</TagLabel>
-            </Tag>
-          ))}
-        </HStack>
-
-        <HStack spacing={4}>
-          {["md"].map((size) => (
-            <Tag
-              size={size}
-              key={size}
-              borderRadius="full"
-              variant="solid"
-              color={"gray.300"}
-              colorScheme="whiteAlpha"
-            >
-              <TagLabel>React</TagLabel>
-            </Tag>
-          ))}
-        </HStack>
+        Skills required :
+        {project.skills.map((skill, index) => {
+          return (
+            <HStack key={index} spacing={4}>
+              {["md"].map((size) => (
+                <Tag
+                  size={size}
+                  key={size}
+                  borderRadius="full"
+                  variant="solid"
+                  color={"gray.300"}
+                  colorScheme="whiteAlpha"
+                >
+                  <TagLabel>{skill}</TagLabel>
+                </Tag>
+              ))}
+            </HStack>
+          );
+        })}
       </Flex>
       <Text marginLeft={5} mb={3} marginTop={3} color={"gray.400"}>
-        Proposals: 5 to 10
+        {project.totalProposals}
       </Text>
 
       {!user.isClient && (
@@ -150,6 +116,7 @@ const ProjecOverview = () => {
               e.target.style.background = "#394867";
             }}
             colorScheme="blue"
+            onClick={handleClick}
           >
             Apply Now
           </Button>

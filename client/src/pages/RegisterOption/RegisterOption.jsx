@@ -17,10 +17,15 @@ const RegisterOption = ({ isUserClient, isLogin, setIsClient, isClient }) => {
 
       <Flex align={"center"} justify={"center"}>
         <div className=" optionContainer">
-          <div className="radioBox">
+          <div
+            className="radioBox"
+            style={{ cursor: "pointer" }}
+            onClick={(e) => setIsClient(false)}
+          >
             <input
               type="radio"
               name="role"
+              checked={isClient ? false : true}
               defaultChecked
               onChange={(e) => setIsClient(false)}
               className="radioInput"
@@ -35,14 +40,22 @@ const RegisterOption = ({ isUserClient, isLogin, setIsClient, isClient }) => {
             ></img>
           </div>
 
-          <div className="radioBox">
+          <div
+            className="radioBox"
+            onClick={(e) => setIsClient(true)}
+            style={{ cursor: "pointer" }}
+          >
             <input
               type="radio"
+              checked={isClient ? true : false}
               name="role"
               className="radioInput"
-              onChange={(e) => setIsClient(true)}
+              onChange={(e) => {
+                setIsClient(true);
+              }}
               value={"client"}
             />
+
             <label className="radioLabel">Looking to Hire ?</label>
 
             <img className="optionImg" src={clientImg} alt="freelancer"></img>

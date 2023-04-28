@@ -33,6 +33,14 @@ const ClientLandingPage = () => {
     } catch (error) {}
   };
 
+  const getClientProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/projects");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();

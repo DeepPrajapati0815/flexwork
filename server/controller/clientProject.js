@@ -97,26 +97,39 @@ const updateProject = async (req, res) => {
 const getProjects = async (req, res) => {
   infoLog("getProjects entry");
 
-  const { id: userId } = req.query;
+  const { userId } = req.query;
 
   const { isClient } = req.user;
+  const { draft, published, isProfile } = req.query;
+
+  console.log(isClient);
 
   let projects = [];
 
   try {
-    // fetch all the projects
-    if (isClient) {
-      projects = await ClientProject.find({ userId }).sort({ createdAt: -1 });
-    } else {
+    if (isClient && draft == "true") {
+      projects = await ClientProject.find({ userId: userId });
+    } else if (isClient && published == "true") {
+      projects = await ClientProject.find({ userId, isPublished: true });
+    } else if (isClient) {
+      projects = await ClientProject.find({ userId });
+    } else if (!isClient) {
+      projects = await ClientProject.find();
+    } else if (isProfile) {
       projects = await ClientProject.find({ userId, isPublished: true })
         .sort({ createdAt: -1 })
         .limit(5);
+    } else {
+      projects = await ClientProject.find();
     }
+
+    // projects = await ClientProject.find({ userId }).sort({ createdAt: -1 });
 
     successLog("Successfully fetched all projects!");
     infoLog("getProjects exit");
     return res.status(200).json({ isProjectsFetched: true, data: projects });
   } catch (error) {
+    console.log(error);
     infoLog("getProjects exit");
     errorLog("Error While fetching all projects");
     return res.status(500).json({ isProjectsFetched: false, data: {} });

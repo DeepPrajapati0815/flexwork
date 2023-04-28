@@ -14,9 +14,10 @@ import { Link } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
 const FreelancerLandingProfile = () => {
-  const { user, freelancerProfile } = useContext(FlexWorkContext);
+  const { user, freelancerProfile, clientProfile } =
+    useContext(FlexWorkContext);
 
-  console.log(freelancerProfile);
+  console.log("testing ==> ", user);
 
   return (
     <Center minWidth={"25vw"}>
@@ -51,7 +52,7 @@ const FreelancerLandingProfile = () => {
           {user.firstName + " " + user.lastName}
         </Heading>
         <Text fontWeight={600} color={"gray.500"} mb={4}>
-          {freelancerProfile.title}
+          {user.isClient ? clientProfile.companyName : freelancerProfile?.title}
         </Text>
         <Text
           textAlign={"center"}
@@ -59,7 +60,7 @@ const FreelancerLandingProfile = () => {
           color={"gray.400"}
           px={3}
         >
-          {freelancerProfile?.description}
+          {!user.isClient && freelancerProfile?.description}
         </Text>
         <Stack
           align={"center"}
@@ -69,25 +70,29 @@ const FreelancerLandingProfile = () => {
           mt={6}
           gap={2}
         >
-          {freelancerProfile?.skills?.map((item, index) => {
-            return (
-              <Badge
-                borderRadius={"12px"}
-                px={2}
-                py={1}
-                bg={"gray.600"}
-                color={"white"}
-                fontWeight={"bolder"}
-                key={index}
-              >
-                {item}
-              </Badge>
-            );
-          })}
+          {!user.isClient &&
+            freelancerProfile?.skills?.map((item, index) => {
+              return (
+                <Badge
+                  borderRadius={"12px"}
+                  px={2}
+                  py={1}
+                  bg={"gray.600"}
+                  color={"white"}
+                  fontWeight={"bolder"}
+                  key={index}
+                >
+                  {item}
+                </Badge>
+              );
+            })}
         </Stack>
 
         <Stack mt={8} direction={"row"} spacing={4}>
-          <Link to="/freelancer/profile" style={{ width: "100%" }}>
+          <Link
+            to={user.isClient ? "/client/profile" : "/freelancer/profile"}
+            style={{ width: "100%" }}
+          >
             <Button
               w={"100%"}
               flex={1}
