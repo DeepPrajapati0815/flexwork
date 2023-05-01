@@ -28,6 +28,8 @@ const FreelancerProfileHeader = () => {
     state: "",
   });
 
+  console.log(user);
+
   useEffect(() => {
     setFreelancerPersonalDetails({
       firstName: user?.firstName ? user.firstName : "",
@@ -45,7 +47,8 @@ const FreelancerProfileHeader = () => {
           <Box pos={"relative"}>
             <Avatar
               size={"xl"}
-              src={user.profileImg}
+              src={user?.profileImg}
+              referrerpolicy="no-referrer"
               alt={"Avatar Alt"}
               mb={4}
               pos={"relative"}

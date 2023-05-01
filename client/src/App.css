@@ -23,3 +23,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+.scrollbar {
+  overflow-y: scroll;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #2e4e74;
+  border-radius: 10px;
+}

@@ -1,5 +1,6 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const ClientProject = require("../models/ClientProject");
+const FreelancerProfile = require("../models/FreelancerProfile");
 
 const createProject = async (req, res) => {
   infoLog("createProject entry");
@@ -97,31 +98,43 @@ const updateProject = async (req, res) => {
 const getProjects = async (req, res) => {
   infoLog("getProjects entry");
 
-  const { userId } = req.query;
-
   const { isClient } = req.user;
-  const { draft, published, isProfile } = req.query;
+  const { draft, published, isProfile, userId, bestmatch, recent, saved } =
+    req.query;
+
+  const { id } = req.user;
 
   let projects = [];
 
   try {
     if (isClient && draft == "true") {
-      projects = await ClientProject.find({ userId: userId });
+      projects = await ClientProject.find({
+        $and: [{ userId: userId }, { isPublished: false }],
+      });
     } else if (isClient && published == "true") {
-      projects = await ClientProject.find({ userId, isPublished: true });
-    } else if (isProfile) {
-      projects = await ClientProject.find({ userId, isPublished: true })
+      projects = await ClientProject.find({
+        $and: [{ userId: userId }, { isPublished: true }],
+      });
+    } else if (isProfile == "true") {
+      projects = await ClientProject.find({
+        $and: [{ userId: userId }, { isPublished: true }],
+      })
         .sort({ createdAt: -1 })
         .limit(5);
     } else if (isClient) {
       projects = await ClientProject.find({ userId });
-    } else if (!isClient) {
-      projects = await ClientProject.find();
-    } else {
-      projects = await ClientProject.find();
+    } else if (bestmatch == "true") {
+      const { skills } = await FreelancerProfile.findOne({ userId: id });
+      projects = await ClientProject.find({
+        $and: [{ skills: { $in: skills } }, { isPublished: true }],
+      }).sort({ createdAt: -1 });
+    } else if (recent == "true") {
+      projects = await ClientProject.find({
+        isPublished: true,
+      }).sort({ createdAt: -1 });
+    } else if (saved == "true") {
+      // do it later
     }
-
-    // projects = await ClientProject.find({ userId }).sort({ createdAt: -1 });
 
     successLog("Successfully fetched all projects!");
     infoLog("getProjects exit");

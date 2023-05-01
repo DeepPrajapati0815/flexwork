@@ -17,7 +17,7 @@ const FreelancerLandingProfile = () => {
   const { user, freelancerProfile, clientProfile } =
     useContext(FlexWorkContext);
 
-  console.log("testing ==> ", user);
+  console.log(clientProfile);
 
   return (
     <Center minWidth={"25vw"}>
@@ -71,7 +71,7 @@ const FreelancerLandingProfile = () => {
           gap={2}
         >
           {!user.isClient &&
-            freelancerProfile?.skills?.map((item, index) => {
+            freelancerProfile?.skills?.map((skill, index) => {
               return (
                 <Badge
                   borderRadius={"12px"}
@@ -82,7 +82,7 @@ const FreelancerLandingProfile = () => {
                   fontWeight={"bolder"}
                   key={index}
                 >
-                  {item}
+                  {skill}
                 </Badge>
               );
             })}

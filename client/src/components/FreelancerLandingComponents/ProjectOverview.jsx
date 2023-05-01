@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
 const ProjectOverview = ({ project }) => {
-  console.log("project ==> ", project);
   const [isProjectLiked, setIsProjectLiked] = useState(false);
   const { user } = useContext(FlexWorkContext);
 
@@ -65,8 +64,10 @@ const ProjectOverview = ({ project }) => {
                   key={size}
                   borderRadius="full"
                   variant="solid"
-                  color={"gray.300"}
                   colorScheme="whiteAlpha"
+                  bg={"gray.600"}
+                  color={"white"}
+                  fontWeight={"bolder"}
                 >
                   <TagLabel>{skill}</TagLabel>
                 </Tag>

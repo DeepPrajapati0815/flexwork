@@ -15,17 +15,11 @@ const ClientProjectCatalog = ({ clientProjects, isProjects }) => {
   const [isTab] = useMediaQuery("(max-width: 950px)");
   // const [isProjects, setIsProjects] = useState(false);
 
+  console.log(isProjects);
+
   console.log("clientProjects", clientProjects);
 
-  // useEffect(() => {
-  //   if (clientProjects?.length > 0) {
-  //     setIsProjects(true);
-  //   } else {
-  //     setIsProjects(false);
-  //   }
-  // }, [clientProjects]);
 
-  // console.log(isProjects);
   return (
     <Box color={"white"} w={"95%"} p={5}>
       <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>

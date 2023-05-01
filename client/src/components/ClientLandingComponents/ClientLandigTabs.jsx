@@ -9,28 +9,27 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const FreelancerLandingTabs = () => {
+const ClientLandingTabs = () => {
   const navigate = useNavigate();
 
   const handleClick = (prop) => {
-    if (prop == "bestmatch") {
-      navigate("/freelancer?bestmatch");
-    } else if (prop == "recent") {
-      navigate("/freelancer?recent");
-    } else if (prop == "saved") {
-      navigate("/freelancer?saved");
+    if (prop == "all") {
+      navigate("/client");
+    } else if (prop == "draft") {
+      navigate("/client?draft");
+    } else if (prop == "published") {
+      navigate("/client?published");
     }
   };
-
   return (
     <Tabs colorScheme="blue">
       <Text color={"gray.300"} mb={6} fontSize={"2xl"} fontWeight={"bold"}>
         Jobs you might like
       </Text>
       <TabList color={"gray"}>
-        <Tab onClick={() => handleClick("bestmatch")}>Best Matches</Tab>
-        <Tab onClick={() => handleClick("recent")}>Most Recent</Tab>
-        <Tab onClick={() => handleClick("saved")}>Saved Jobs</Tab>
+        <Tab onClick={() => handleClick("all")}>All Projects</Tab>
+        <Tab onClick={() => handleClick("draft")}>Draft Projects</Tab>
+        <Tab onClick={() => handleClick("published")}>Published Projects</Tab>
       </TabList>
 
       <TabPanels></TabPanels>
@@ -38,4 +37,4 @@ const FreelancerLandingTabs = () => {
   );
 };
 
-export default FreelancerLandingTabs;
+export default ClientLandingTabs;

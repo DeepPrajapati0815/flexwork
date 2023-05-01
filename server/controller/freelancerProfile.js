@@ -27,8 +27,6 @@ const updateProfile = async (req, res) => {
         }
       );
 
-      console.log(updatedData);
-
       successLog("Successfully Freelancer Profile updated!");
       infoLog("updateProfile exit");
       return res
@@ -58,10 +56,8 @@ const updateProfile = async (req, res) => {
 const getProfile = async (req, res) => {
   infoLog("getProfile entry");
   const userId = req.params.userId;
-  console.log(userId);
   try {
     const freelancerProfile = await FreelancerProfile.findOne({ userId }, {});
-    console.log(freelancerProfile);
     successLog("Successfully Freelancer Profile fetched!");
     infoLog("getProfile exit");
     return res

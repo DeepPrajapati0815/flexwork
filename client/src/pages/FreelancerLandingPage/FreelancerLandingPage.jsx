@@ -7,14 +7,18 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import { useMediaQuery } from "@chakra-ui/react";
 import { FlexWorkContext } from "../../context/ContextStore";
 import axios from "../../utils/axiosInstance";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const FreelancerLandingPage = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
   const [projects, setProjects] = useState([]);
+  const location = useLocation();
 
   const { setFreelancerProfile, user, freelancerProfile } =
     useContext(FlexWorkContext);
+
+  const navigate = useNavigate();
 
   const getProfileData = async () => {
     try {
@@ -33,22 +37,56 @@ const FreelancerLandingPage = () => {
     } catch (error) {}
   };
 
-  // get all the projects
-  const getAllClientProjects = async () => {
+  // get best match projects
+  const getBestMatchProjects = async () => {
     try {
-      const { data } = await axios.get("/api/v1/client/project");
+      const { data } = await axios.get("/api/v1/client/project?bestmatch=true");
       setProjects(data.data);
-      console.log("projects", projects);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // get recent projects
+  const getRecentProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/project?recent=true");
+      console.log(data);
+      setProjects(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // get saved projects
+  const getSavedProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/project?saved=true");
+      setProjects(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (
+      location.search.split("?")[1] == "recent" ||
+      location.search.split("?")[1] == "saved"
+    ) {
+      navigate("/freelancer?bestmatch");
+    }
+  }, []);
+
   useEffect(() => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();
-    getAllClientProjects();
-  }, [user]);
+
+    if (location.search.split("?")[1] == "recent") {
+      getRecentProjects();
+    } else if (location.search.split("?")[1] == "saved") {
+      getSavedProjects();
+    } else {
+      getBestMatchProjects();
+    }
+  }, [user, location]);
 
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
@@ -63,6 +101,7 @@ const FreelancerLandingPage = () => {
           p={10}
           bg={"#1a202c"}
           rounded={"2xl"}
+          className="scrollbar"
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>
