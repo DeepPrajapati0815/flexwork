@@ -13,10 +13,11 @@ import {
   Tag,
   TagLabel,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
 const ProjectOverview = ({ project }) => {
@@ -38,19 +39,38 @@ const ProjectOverview = ({ project }) => {
     >
       <CardHeader>
         <Flex spacing="4">
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+          <Flex
+            flex="1"
+            gap="4"
+            justifyContent={"space-between"}
+            alignItems="center"
+            flexWrap="wrap"
+          >
             <Box>
-              <Heading size="md">{project?.title}</Heading>
+              <Link to={`/client/project/${project._id}`}>
+                <Heading size="md">{project?.title}</Heading>
+              </Link>
               <Text color={"gray.400"}>
                 Published At {project?.createdAt?.split("T")[0]} On{" "}
                 {project?.createdAt.split("T")[1].split(".")[0]}
               </Text>
             </Box>
+            {user.isClient ? (
+              <Button
+                onClick={() => {
+                  console.log(project);
+                }}
+                colorScheme="teal"
+                size={"sm"}
+              >
+                View
+              </Button>
+            ) : null}
           </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Text>{project?.description}</Text>
+        <Text>{project?.description.slice(0, 300)}.... </Text>
       </CardBody>
 
       <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
@@ -77,6 +97,7 @@ const ProjectOverview = ({ project }) => {
         })}
       </Flex>
       <Text marginLeft={5} mb={3} marginTop={3} color={"gray.400"}>
+        {user.isClient ? "Proposals Received " : "Total Proposals"} :{" "}
         {project?.totalProposals}
       </Text>
 
