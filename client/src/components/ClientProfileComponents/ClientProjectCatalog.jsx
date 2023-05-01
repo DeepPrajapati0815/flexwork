@@ -6,14 +6,26 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
-import { MdWorkHistory } from "react-icons/md";
-import ProjecOverview from "../FreelancerLandingComponents/ProjecOverview";
+import React, { useEffect, useState } from "react";
+import { MdFormatLineSpacing, MdWorkHistory } from "react-icons/md";
+import ProjectOverview from "../FreelancerLandingComponents/ProjectOverview";
 
-const ClientProjectCatalog = () => {
+const ClientProjectCatalog = ({ clientProjects, isProjects }) => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
+  // const [isProjects, setIsProjects] = useState(false);
 
+  console.log("clientProjects", clientProjects);
+
+  // useEffect(() => {
+  //   if (clientProjects?.length > 0) {
+  //     setIsProjects(true);
+  //   } else {
+  //     setIsProjects(false);
+  //   }
+  // }, [clientProjects]);
+
+  // console.log(isProjects);
   return (
     <Box color={"white"} w={"95%"} p={5}>
       <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
@@ -21,7 +33,7 @@ const ClientProjectCatalog = () => {
           <Heading size={isMobile ? "sm" : "md"}>Project Catalog </Heading>
         </Stack>
       </Flex>
-      {false ? (
+      {!isProjects ? (
         <Stack justify={"center"} align={"center"}>
           <MdWorkHistory
             fontSize={isMobile ? "4rem" : isTab ? "6rem" : "8rem"}
@@ -31,9 +43,9 @@ const ClientProjectCatalog = () => {
           </Text>
         </Stack>
       ) : (
-        <Box border={"1px solid white"}>
-          <ProjecOverview></ProjecOverview>
-        </Box>
+        clientProjects?.map((project, index) => {
+          return <ProjectOverview key={index} project={project} />;
+        })
       )}
     </Box>
   );

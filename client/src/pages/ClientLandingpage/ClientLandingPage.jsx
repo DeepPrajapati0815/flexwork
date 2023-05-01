@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import FreelancerLandingTabs from "../../components/FreelancerLandingComponents/FreelancerLandingTabs";
-import ProjecOverview from "../../components/FreelancerLandingComponents/ProjecOverview";
+import ProjectOverview from "../../components/FreelancerLandingComponents/ProjectOverview";
 import FreelancerLandingProfile from "../../components/FreelancerLandingComponents/FreelancerLandingProfile";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { useMediaQuery } from "@chakra-ui/react";
@@ -65,12 +65,12 @@ const ClientLandingPage = () => {
           >
             <SearchBar></SearchBar>
             <FreelancerLandingTabs></FreelancerLandingTabs>
-            <ProjecOverview></ProjecOverview>
-            <ProjecOverview></ProjecOverview>
-            <ProjecOverview></ProjecOverview>
-            <ProjecOverview></ProjecOverview>
-            <ProjecOverview></ProjecOverview>
-            <ProjecOverview></ProjecOverview>
+            <ProjectOverview></ProjectOverview>
+            <ProjectOverview></ProjectOverview>
+            <ProjectOverview></ProjectOverview>
+            <ProjectOverview></ProjectOverview>
+            <ProjectOverview></ProjectOverview>
+            <ProjectOverview></ProjectOverview>
           </Box>
         )}
         <Box

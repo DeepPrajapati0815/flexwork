@@ -19,7 +19,8 @@ import { AiFillHeart } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 
-const ProjecOverview = ({ project }) => {
+const ProjectOverview = ({ project }) => {
+  console.log("project ==> ", project);
   const [isProjectLiked, setIsProjectLiked] = useState(false);
   const { user } = useContext(FlexWorkContext);
 
@@ -40,22 +41,22 @@ const ProjecOverview = ({ project }) => {
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Box>
-              <Heading size="md">{project.title}</Heading>
+              <Heading size="md">{project?.title}</Heading>
               <Text color={"gray.400"}>
-                Published At {project.createdAt.split("T")[0]} On{" "}
-                {project.createdAt.split("T")[1].split(".")[0]}
+                Published At {project?.createdAt?.split("T")[0]} On{" "}
+                {project?.createdAt.split("T")[1].split(".")[0]}
               </Text>
             </Box>
           </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Text>{project.description}</Text>
+        <Text>{project?.description}</Text>
       </CardBody>
 
       <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
         Skills required :
-        {project.skills.map((skill, index) => {
+        {project?.skills?.map((skill, index) => {
           return (
             <HStack key={index} spacing={4}>
               {["md"].map((size) => (
@@ -75,7 +76,7 @@ const ProjecOverview = ({ project }) => {
         })}
       </Flex>
       <Text marginLeft={5} mb={3} marginTop={3} color={"gray.400"}>
-        {project.totalProposals}
+        {project?.totalProposals}
       </Text>
 
       {!user.isClient && (
@@ -126,4 +127,4 @@ const ProjecOverview = ({ project }) => {
   );
 };
 
-export default ProjecOverview;
+export default ProjectOverview;

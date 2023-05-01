@@ -102,8 +102,6 @@ const getProjects = async (req, res) => {
   const { isClient } = req.user;
   const { draft, published, isProfile } = req.query;
 
-  console.log(isClient);
-
   let projects = [];
 
   try {
@@ -111,14 +109,14 @@ const getProjects = async (req, res) => {
       projects = await ClientProject.find({ userId: userId });
     } else if (isClient && published == "true") {
       projects = await ClientProject.find({ userId, isPublished: true });
-    } else if (isClient) {
-      projects = await ClientProject.find({ userId });
-    } else if (!isClient) {
-      projects = await ClientProject.find();
     } else if (isProfile) {
       projects = await ClientProject.find({ userId, isPublished: true })
         .sort({ createdAt: -1 })
         .limit(5);
+    } else if (isClient) {
+      projects = await ClientProject.find({ userId });
+    } else if (!isClient) {
+      projects = await ClientProject.find();
     } else {
       projects = await ClientProject.find();
     }
