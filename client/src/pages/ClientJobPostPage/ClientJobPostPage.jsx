@@ -207,7 +207,7 @@ const Form3 = () => {
     useContext(FlexWorkContext);
   const format = (val) => `₹ ` + val;
   const parse = (val) => val.replace(/^\$/, "");
-  console.log(clientProjectPostDetails);
+
   return (
     <>
       <Box minHeight={"43vh"}>

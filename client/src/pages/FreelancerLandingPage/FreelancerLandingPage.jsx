@@ -47,6 +47,15 @@ const FreelancerLandingPage = () => {
     }
   };
 
+  const getAppliedProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/project?applied=true");
+      setProjects(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // get recent projects
   const getRecentProjects = async () => {
     try {
@@ -69,7 +78,8 @@ const FreelancerLandingPage = () => {
   useEffect(() => {
     if (
       location.search.split("?")[1] == "recent" ||
-      location.search.split("?")[1] == "saved"
+      location.search.split("?")[1] == "saved" ||
+      location.search.split("?")[1] == "applied"
     ) {
       navigate("/freelancer?bestmatch");
     }
@@ -83,6 +93,8 @@ const FreelancerLandingPage = () => {
       getRecentProjects();
     } else if (location.search.split("?")[1] == "saved") {
       getSavedProjects();
+    } else if (location.search.split("?")[1] == "applied") {
+      getAppliedProjects();
     } else {
       getBestMatchProjects();
     }

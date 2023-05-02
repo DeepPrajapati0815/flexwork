@@ -74,7 +74,6 @@ const App = () => {
 
         if (searchParams.get("isClient") === "true" && !data.data.isClient) {
           if (sessionStorage.getItem("isRegistered") === "true") {
-            console.log("navigating....");
             navigate("/freelancer/profile");
             sessionStorage.removeItem("isRegistered");
           } else {

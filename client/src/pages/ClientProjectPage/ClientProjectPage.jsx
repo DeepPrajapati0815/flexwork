@@ -1,38 +1,42 @@
 import {
+  Badge,
   Box,
-  chakra,
-  Container,
-  Stack,
-  Text,
-  Image,
-  Flex,
-  VStack,
   Button,
+  Container,
+  Flex,
   Heading,
-  SimpleGrid,
-  StackDivider,
-  useColorModeValue,
-  VisuallyHidden,
   List,
   ListItem,
-  Badge,
+  SimpleGrid,
+  Stack,
+  StackDivider,
+  Text,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
-import { MdLocalShipping } from "react-icons/md";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ProjectProposalModal from "../../components/ProjectProposal/ProjectProposalModal";
+import { FlexWorkContext } from "../../context/ContextStore";
 import axios from "../../utils/axiosInstance";
 
-export default function Simple() {
+const ClientProjectPage = () => {
   const { id: projectId } = useParams();
   const [project, setProject] = useState({});
 
-  console.log(projectId);
+  const [isApplied, setIsApplied] = useState(false);
+
+  const { user, refresh, setRefresh } = useContext(FlexWorkContext);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getParticularProject = async () => {
     try {
       const { data } = await axios.get(`/api/v1/client/project/${projectId}`);
       setProject(data.data);
+      console.log(data.isApplied);
+      setIsApplied(data.isApplied);
     } catch (error) {
       console.log(error);
     }
@@ -40,10 +44,12 @@ export default function Simple() {
 
   useEffect(() => {
     getParticularProject();
-  }, []);
+  }, [refresh]);
+
+  console.log(isApplied);
 
   return (
-    <Container maxW={"10xl"} w={"8xl"} my={10}>
+    <Container maxW={"10xl"} w={"90vw"} my={10}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
@@ -240,12 +246,26 @@ export default function Simple() {
                 boxShadow: "lg",
                 backgroundColor: "teal",
               }}
+              isDisabled={isApplied}
+              onClick={() => {
+                onOpen();
+              }}
             >
-              Send Proposal
+              Apply Now
             </Button>
+            <ProjectProposalModal
+              setIsApplied={setIsApplied}
+              freelancerId={user._id}
+              project={project}
+              isOpen={isOpen}
+              setRefresh={setRefresh}
+              onClose={onClose}
+            ></ProjectProposalModal>
           </Flex>
         </Stack>
       </SimpleGrid>
     </Container>
   );
-}
+};
+
+export default ClientProjectPage;
