@@ -104,7 +104,6 @@ const FreelancerLandingPage = () => {
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
       <Flex direction={"row"}>
         <Box
-          overflowY={"scroll"}
           height={"100vh"}
           w={isMobile ? "85vw" : isTab ? "90vw" : "65vw"}
           minWidth={"65vw"}
@@ -117,9 +116,11 @@ const FreelancerLandingPage = () => {
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>
-          {projects.map((project, index) => {
-            return <ProjectOverview key={index} project={project} />;
-          })}
+          <Box>
+            {projects.map((project, index) => {
+              return <ProjectOverview key={index} project={project} />;
+            })}
+          </Box>
         </Box>
         <Box
           flex={1}

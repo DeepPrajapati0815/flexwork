@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import ProjectOverview from "../../components/FreelancerLandingComponents/ProjectOverview";
 import FreelancerLandingProfile from "../../components/FreelancerLandingComponents/FreelancerLandingProfile";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -111,12 +111,12 @@ const ClientLandingPage = () => {
     }
   }, [user, location]);
 
-  console.log(clientProjects);
+  console.log("clientProjects", clientProjects);
 
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
       <Flex direction={"row"}>
-        {!isProject ? (
+        {!isProject && window.location.href === "/client" ? (
           <ClientPostJobSection></ClientPostJobSection>
         ) : (
           <Box
@@ -130,13 +130,27 @@ const ClientLandingPage = () => {
             rounded={"2xl"}
             roundedTopRight={0}
             roundedBottomRight={0}
-            className="scrollbar"
           >
             <SearchBar></SearchBar>
             <ClientLandingTabs></ClientLandingTabs>
-            {clientProjects?.map((project, index) => {
-              return <ProjectOverview key={index} project={project} />;
-            })}
+            {clientProjects.length ? (
+              <>
+                {clientProjects?.map((project, index) => {
+                  return <ProjectOverview key={index} project={project} />;
+                })}
+              </>
+            ) : (
+              <Stack
+                className="scrollbar"
+                justify={"center"}
+                h={"100%"}
+                align={"center"}
+              >
+                <Heading color={"white"} size={"lg"}>{`No ${
+                  location.search.split("?")[1]
+                } Projects`}</Heading>
+              </Stack>
+            )}
           </Box>
         )}
         <Box

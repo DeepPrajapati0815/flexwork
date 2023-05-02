@@ -18,12 +18,18 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProjectProposalModal from "../../components/ProjectProposal/ProjectProposalModal";
+import ProposalOverview from "../../components/ProjectProposal/ProposalOverview";
 import { FlexWorkContext } from "../../context/ContextStore";
 import axios from "../../utils/axiosInstance";
+import { useForceUpdate } from "framer-motion";
+import { BiCheckCircle } from "react-icons/bi";
 
 const ClientProjectPage = () => {
   const { id: projectId } = useParams();
   const [project, setProject] = useState({});
+
+  const [recievedProposals, setRecivedProposals] = useState([]);
+  const [freelacersData, setFreelancersData] = useState([]);
 
   const [isApplied, setIsApplied] = useState(false);
 
@@ -42,11 +48,20 @@ const ClientProjectPage = () => {
     }
   };
 
+  const getRecivedProposals = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/client/proposal?limit=true&id=${projectId}`
+      );
+      setRecivedProposals(data?.data?.clientAllProposals);
+      setFreelancersData(data?.data?.freelancers);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     getParticularProject();
+    getRecivedProposals();
   }, [refresh]);
-
-  console.log(isApplied);
 
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>
@@ -215,53 +230,77 @@ const ClientProjectPage = () => {
               </Box>
             </SimpleGrid>
           </Stack>
-
-          <Flex gap={4}>
-            <Button
-              rounded={"none"}
-              w={"full"}
-              mt={8}
-              size={"lg"}
-              py={"7"}
-              color={useColorModeValue("white", "gray.900")}
-              textTransform={"uppercase"}
-              variant="outline"
-              _hover={{
-                boxShadow: "lg",
-                backgroundColor: "teal",
-              }}
-            >
-              Add to wishlist
-            </Button>
-            <Button
-              rounded={"none"}
-              w={"full"}
-              mt={8}
-              size={"lg"}
-              py={"7"}
-              bg={useColorModeValue("rgb(46,78,116)", "gray.50")}
-              color={useColorModeValue("white", "gray.900")}
-              textTransform={"uppercase"}
-              _hover={{
-                boxShadow: "lg",
-                backgroundColor: "teal",
-              }}
-              isDisabled={isApplied}
-              onClick={() => {
-                onOpen();
-              }}
-            >
-              Apply Now
-            </Button>
-            <ProjectProposalModal
-              setIsApplied={setIsApplied}
-              freelancerId={user._id}
-              project={project}
-              isOpen={isOpen}
-              setRefresh={setRefresh}
-              onClose={onClose}
-            ></ProjectProposalModal>
-          </Flex>
+          {!user.isClient ? (
+            <Flex gap={4}>
+              <Button
+                rounded={"none"}
+                w={"full"}
+                mt={8}
+                size={"lg"}
+                py={"7"}
+                color={"white"}
+                textTransform={"uppercase"}
+                variant="outline"
+                _hover={{
+                  boxShadow: "lg",
+                  backgroundColor: "teal",
+                }}
+              >
+                Add to wishlist
+              </Button>
+              <Button
+                rounded={"none"}
+                w={"full"}
+                mt={8}
+                size={"lg"}
+                py={"7"}
+                bg={"rgb(46,78,116)"}
+                color={("white", "gray.900")}
+                textTransform={"uppercase"}
+                _hover={{
+                  boxShadow: "lg",
+                  backgroundColor: "teal",
+                }}
+                isDisabled={isApplied}
+                onClick={() => {
+                  onOpen();
+                }}
+              >
+                {isApplied ? (
+                  <>
+                    <BiCheckCircle fontSize={"1.3rem"}></BiCheckCircle>
+                    &nbsp;
+                    <p>Applied</p>
+                  </>
+                ) : (
+                  "Apply Now"
+                )}
+              </Button>
+              <ProjectProposalModal
+                setIsApplied={setIsApplied}
+                freelancerId={user._id}
+                project={project}
+                isOpen={isOpen}
+                setRefresh={setRefresh}
+                onClose={onClose}
+              ></ProjectProposalModal>
+            </Flex>
+          ) : (
+            <Box>
+              <Heading color={"white"} size={"md"} textAlign={"center"} my={6}>
+                Recived Proposals
+              </Heading>
+              {freelacersData?.map((freelancer, index) => {
+                return (
+                  <ProposalOverview
+                    key={index}
+                    freelancer={freelacersData[index]}
+                    proposal={recievedProposals[index]}
+                  />
+                );
+              })}
+            </Box>
+          )}
         </Stack>
       </SimpleGrid>
     </Container>

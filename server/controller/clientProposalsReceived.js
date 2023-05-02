@@ -1,21 +1,43 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
+const User = require("../models/User");
 
 const getAllProposals = async (req, res) => {
   infoLog("getAllProposals entry");
-  const { id: projectId } = req.query;
+  const { id: projectId, limit } = req.query;
   const { id: clientId } = req.user;
   try {
-    const clientAllProposals = await FreelancerProposalRequest.find({
-      $and: [{ projectId: projectId }, { clientId: clientId }],
-    });
+    let clientAllProposals = [];
+    let freelancers = [];
+    let userIds = [];
+
+    if (limit == "true") {
+      clientAllProposals = await FreelancerProposalRequest.find({
+        $and: [{ projectId: projectId }, { clientId: clientId }],
+      })
+        .limit(5)
+        .sort({ createdAt: -1 });
+      userIds = clientAllProposals.map((proposal) => proposal.freelancerId);
+
+      freelancers = await User.find({ _id: { $in: userIds } });
+    } else {
+      clientAllProposals = await FreelancerProposalRequest.find({
+        $and: [{ projectId: projectId }, { clientId: clientId }],
+      });
+
+      userIds = clientAllProposals.map((proposal) => proposal.freelancerId);
+
+      freelancers = await User.find({ _id: { $in: userIds } });
+    }
 
     successLog("Successfully fetched all proposals!");
     infoLog("getAllProposals exit");
-    return res
-      .status(200)
-      .json({ isProposalsFetched: true, data: clientAllProposals });
+    return res.status(200).json({
+      isProposalsFetched: true,
+      data: { clientAllProposals, freelancers },
+    });
   } catch (error) {
+    console.log(error);
     infoLog("getProjects exit");
     errorLog("Error While fetching all proposals");
     return res.status(500).json({ isProposalsFetched: false, data: {} });

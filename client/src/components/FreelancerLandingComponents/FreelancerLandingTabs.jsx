@@ -1,12 +1,10 @@
 import {
+  Box,
   Tab,
   TabList,
-  TabPanel,
   TabPanels,
   Tabs,
-  Flex,
-  Text,
-  Box,
+  Text
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
