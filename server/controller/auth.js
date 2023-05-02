@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { errorLog, successLog, infoLog } = require("../helper/logHelper");
 const { hashPassword, comparePassword } = require("../helper/bcrypt");
 const { generateToken } = require("../helper/JWT.js");
+const passport = require("passport");
 
 const registerUser = async (req, res) => {
   infoLog("registerUser entry");
@@ -73,6 +74,7 @@ const registerUser = async (req, res) => {
     infoLog("registerUser exit");
     return res.status(201).json({ isRegister: true });
   } catch (error) {
+    console.log(error);
     infoLog("registerUser exit");
     errorLog("Error While Registration!");
     return res.status(500).json({ isRegister: false });
@@ -93,7 +95,9 @@ const loginUser = async (req, res) => {
   try {
     // check if the user logged in or not
 
-    const isRegistered = await User.findOne({ username });
+    const isRegistered = await User.findOne({
+      $or: [{ username: username }, { email: username }],
+    });
 
     if (!isRegistered) {
       infoLog("loginUser exit");
@@ -114,18 +118,32 @@ const loginUser = async (req, res) => {
     const token = generateToken({
       id: isRegistered._id,
       username: isRegistered.username,
+      email: isRegistered.email,
       isClient: isRegistered.isClient,
       isAdmin: isRegistered.isAdmin,
     });
-    console.log(token);
 
-    res.cookie("token", token, { maxAge: 9000000 });
+    res.cookie("token", token, { maxAge: 60 * 60 * 24 * 1000 });
 
     successLog("Successfully LoggedIn!");
     infoLog("loginUser exit");
-    return res.status(200).json({ isLogin: true });
+    return res.status(200).json({
+      isLogin: true,
+      user: {
+        _id: isRegistered._id,
+        firstName: isRegistered.firstName,
+        lastName: isRegistered.lastName,
+        email: isRegistered.email,
+        username: isRegistered.username,
+        city: isRegistered.city,
+        state: isRegistered.state,
+        createdAt: isRegistered.createdAt,
+        isClient: isRegistered.isClient,
+        authMode: isRegistered.authMode,
+      },
+    });
   } catch (error) {
-    infoLog("loginUser exit");
+    console.log(error);
     errorLog("error while login the user");
     return res.status(500).json({ isLogin: false });
   }

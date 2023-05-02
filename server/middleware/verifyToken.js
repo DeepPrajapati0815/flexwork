@@ -3,7 +3,6 @@ const { errorLog } = require("../helper/logHelper");
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
-
   if (!token) {
     errorLog("No Token");
     return res.status(400).json({ isToken: false });
@@ -40,7 +39,30 @@ const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
+const verifyTokenAndClient = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isClient) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
+const verifyTokenAndFreelancer = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (!req.user.isClient) {
+      return next();
+    }
+
+    return res.status(403).json({ message: "You Are Not Allowed To Do That" });
+  });
+};
+
 module.exports = {
   verifyToken,
   verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+  verifyTokenAndClient,
+  verifyTokenAndFreelancer,
 };

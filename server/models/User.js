@@ -9,35 +9,30 @@ const UserSchema = new Schema(
   {
     firstName: {
       type: String,
-      required: [true, "must provide firstName"],
     },
     lastName: {
       type: String,
-      required: [true, "must provide lastName"],
     },
     username: {
       type: String,
-      required: [true, "must provide username"],
       unique: true,
+    },
+    profileImg: {
+      type: String,
     },
     city: {
       type: String,
-      required: [true, "must provide city"],
     },
     state: {
       type: String,
-      required: [true, "must provide state"],
     },
     email: {
       type: String,
       lowercase: true,
-      validate: [validateEmail, "Please fill a valid email address"],
-      required: [true, "must provide email"],
       unique: true,
     },
     password: {
       type: String,
-      required: true,
     },
     isClient: {
       type: Boolean,
@@ -50,6 +45,7 @@ const UserSchema = new Schema(
     authMode: {
       type: String,
       required: true,
+      default: "manual",
     },
   },
   { timestamps: true }
