@@ -2,7 +2,6 @@ const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 
 const createProposal = async (req, res) => {
-
   const {
     expectedBidRate,
     duration,
@@ -26,6 +25,18 @@ const createProposal = async (req, res) => {
   }
 
   try {
+    const existFreelancerProposal = await FreelancerProposalRequest.findOne({
+      $and: [{ freelancerId }, { projectId }],
+    });
+
+    if (existFreelancerProposal) {
+      infoLog("createProposal exit");
+      errorLog("already exist freelancer profile proposal!");
+      return res
+        .status(400)
+        .json({ isProposalCreated: false, isProposalExist: true, data: {} });
+    }
+
     const newFreelancerProposalRequest = new FreelancerProposalRequest({
       projectId,
       clientId,

@@ -1,6 +1,7 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const ClientProject = require("../models/ClientProject");
 const FreelancerProfile = require("../models/FreelancerProfile");
+const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 
 const createProject = async (req, res) => {
   infoLog("createProject entry");
@@ -68,6 +69,9 @@ const updateProject = async (req, res) => {
   const data = req.body;
   const { projectId } = req.params;
 
+  console.log("data", data);
+  console.log("projectId", projectId);
+
   if (!data) {
     infoLog("updateProject exit");
     res.status(400).json({ isProjectUpdated: false, data: {} });
@@ -99,13 +103,20 @@ const getProjects = async (req, res) => {
   infoLog("getProjects entry");
 
   const { isClient } = req.user;
-  const { draft, published, isProfile, userId, bestmatch, recent, saved } =
-    req.query;
+  const {
+    draft,
+    published,
+    isProfile,
+    userId,
+    bestmatch,
+    recent,
+    saved,
+    applied,
+  } = req.query;
 
   const { id } = req.user;
 
   let projects = [];
-
   try {
     if (isClient && draft == "true") {
       projects = await ClientProject.find({
@@ -125,17 +136,52 @@ const getProjects = async (req, res) => {
       projects = await ClientProject.find({ userId });
     } else if (bestmatch == "true") {
       const profile = await FreelancerProfile.findOne({ userId: id });
+      let freelancerProposals = await FreelancerProposalRequest.find({
+        freelancerId: id,
+      }).exec();
+      let freelancerProposalsIds = freelancerProposals
+        .map((e) => e.projectId)
+        .filter(Boolean);
       projects = await ClientProject.find({
-        $and: [{ skills: { $in: profile?.skills } }, { isPublished: true }],
-      }).sort({ createdAt: -1 });
+        $and: [
+          { skills: { $in: profile?.skills } },
+          { isPublished: true },
+          { _id: { $nin: freelancerProposalsIds } },
+        ],
+      })
+        .sort({ createdAt: -1 })
+        .exec();
     } else if (recent == "true") {
+      let freelancerProposals = await FreelancerProposalRequest.find({
+        freelancerId: id,
+      }).exec();
+      let freelancerProposalsIds = freelancerProposals
+        .map((e) => e.projectId)
+        .filter(Boolean);
       projects = await ClientProject.find({
         isPublished: true,
+        _id: { $nin: freelancerProposalsIds },
       }).sort({ createdAt: -1 });
     } else if (saved == "true") {
       // do it later
-    }
+    } else if (applied == "true") {
+      const proposals = await FreelancerProposalRequest.find({
+        freelancerId: req.user.id,
+      });
+      const projectIds = proposals.map((proposal) => proposal.projectId);
 
+      projects = await ClientProject.find({
+        _id: { $in: projectIds },
+      }).lean();
+      projects = projects.map((project) => {
+        let proposal = proposals
+          .filter((proposal) => proposal.projectId == project._id)
+          .find((a) => a);
+        project["status"] = proposal?.status;
+        project["proposalID"] = proposal?._id;
+        return project;
+      });
+    }
     successLog("Successfully fetched all projects!");
     infoLog("getProjects exit");
     return res.status(200).json({ isProjectsFetched: true, data: projects });
@@ -153,10 +199,27 @@ const getSingleProject = async (req, res) => {
   try {
     const userProject = await ClientProject.findById(projectId);
 
+    const existFreelancerProposal = await FreelancerProposalRequest.findOne({
+      $and: [{ freelancerId: req.user.id }, { projectId }],
+    });
+
+    let isApplied = false;
+
+    if (existFreelancerProposal) {
+      isApplied = true;
+    } else {
+      isApplied = false;
+    }
+
     successLog("Successfully fetched single project!");
     infoLog("getSingleProject exit");
-    return res.status(200).json({ isProjectsFetched: true, data: userProject });
+    return res.status(200).json({
+      isProjectsFetched: true,
+      data: userProject,
+      isApplied,
+    });
   } catch (error) {
+    console.log(error);
     infoLog("getSingleProject exit");
     errorLog("Error While fetching single project");
     return res.status(500).json({ isProjectFetched: false, data: {} });

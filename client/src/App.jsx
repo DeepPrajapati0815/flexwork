@@ -25,6 +25,7 @@ import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
 import ClientProjectPage from "./pages/ClientProjectPage/ClientProjectPage";
 import NotFound from "./pages/404Page/NotFound";
+import ClientAllProposalsPage from "./pages/ClientAllProposalsPage/ClientAllProposalsPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -75,7 +76,6 @@ const App = () => {
 
         if (searchParams.get("isClient") === "true" && !data.data.isClient) {
           if (sessionStorage.getItem("isRegistered") === "true") {
-            console.log("navigating....");
             navigate("/freelancer/profile");
             sessionStorage.removeItem("isRegistered");
           } else {
@@ -189,6 +189,11 @@ const App = () => {
           <Route
             path="/client/project/:id"
             element={isLogin ? <ClientProjectPage /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/client/project/proposals/:id"
+            element={isLogin ? <ClientAllProposalsPage /> : <Navigate to="/login" />}
           />
 
           <Route

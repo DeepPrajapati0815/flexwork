@@ -6,17 +6,14 @@ const freelancerProposalRequestSchema = new Schema(
       type: String,
       required: [true, "must provide project id"],
     },
-
     clientId: {
       type: String,
       required: [true, "must provide client id"],
     },
-
     freelancerId: {
       type: String,
       required: [true, "must provide freelancerId"],
     },
-
     expectedBidRate: {
       type: Number,
       required: [true, "must provide project expected bid rate"],
@@ -30,18 +27,14 @@ const freelancerProposalRequestSchema = new Schema(
     portfolio: {
       type: String,
     },
-
     coverLetter: {
       type: String,
       required: [true, "must provide cover letter"],
     },
-    isAccepted: {
-      type: Boolean,
-      default: false,
-    },
-    isRejected: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: ["Pending", "Accepted", "Rejected"],
+      default: "Pending",
     },
   },
   { timestamps: true }

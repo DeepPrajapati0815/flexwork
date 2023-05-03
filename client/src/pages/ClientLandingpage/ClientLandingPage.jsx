@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import ProjectOverview from "../../components/FreelancerLandingComponents/ProjectOverview";
 import FreelancerLandingProfile from "../../components/FreelancerLandingComponents/FreelancerLandingProfile";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -18,7 +18,8 @@ const ClientLandingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user, clientProfile, setClientProfile } = useContext(FlexWorkContext);
+  const { user, clientProfile, setClientProfile, refresh } =
+    useContext(FlexWorkContext);
 
   // fetch the client profile data and set it to context
   const getProfileData = async () => {
@@ -109,14 +110,14 @@ const ClientLandingPage = () => {
     } else {
       getClientProjects();
     }
-  }, [user, location]);
+  }, [user, location, refresh]);
 
-  console.log(clientProjects);
+  console.log("clientProjects", clientProjects);
 
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
       <Flex direction={"row"}>
-        {!isProject ? (
+        {!isProject && window.location.href === "/client" ? (
           <ClientPostJobSection></ClientPostJobSection>
         ) : (
           <Box
@@ -134,9 +135,19 @@ const ClientLandingPage = () => {
           >
             <SearchBar></SearchBar>
             <ClientLandingTabs></ClientLandingTabs>
-            {clientProjects?.map((project, index) => {
-              return <ProjectOverview key={index} project={project} />;
-            })}
+            {clientProjects.length ? (
+              <>
+                {clientProjects?.map((project, index) => {
+                  return <ProjectOverview key={index} project={project} />;
+                })}
+              </>
+            ) : (
+              <Stack justify={"center"} h={"100%"} align={"center"}>
+                <Heading color={"white"} size={"lg"}>{`No ${
+                  location.search.split("?")[1]
+                } Projects`}</Heading>
+              </Stack>
+            )}
           </Box>
         )}
         <Box

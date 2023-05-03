@@ -15,7 +15,7 @@ const FreelancerLandingPage = () => {
   const [projects, setProjects] = useState([]);
   const location = useLocation();
 
-  const { setFreelancerProfile, user, freelancerProfile } =
+  const { setFreelancerProfile, refresh, user, freelancerProfile } =
     useContext(FlexWorkContext);
 
   const navigate = useNavigate();
@@ -48,6 +48,16 @@ const FreelancerLandingPage = () => {
     }
   };
 
+  const getAppliedProjects = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/client/project?applied=true");
+      setProjects(data?.data);
+      // Get status of project
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // get recent projects
   const getRecentProjects = async () => {
     try {
@@ -70,7 +80,8 @@ const FreelancerLandingPage = () => {
   useEffect(() => {
     if (
       location.search.split("?")[1] == "recent" ||
-      location.search.split("?")[1] == "saved"
+      location.search.split("?")[1] == "saved" ||
+      location.search.split("?")[1] == "applied"
     ) {
       navigate("/freelancer?bestmatch");
     }
@@ -84,16 +95,17 @@ const FreelancerLandingPage = () => {
       getRecentProjects();
     } else if (location.search.split("?")[1] == "saved") {
       getSavedProjects();
+    } else if (location.search.split("?")[1] == "applied") {
+      getAppliedProjects();
     } else {
       getBestMatchProjects();
     }
-  }, [user, location]);
+  }, [user, location, refresh]);
 
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
       <Flex direction={"row"}>
         <Box
-          overflowY={"scroll"}
           height={"100vh"}
           w={isMobile ? "85vw" : isTab ? "90vw" : "65vw"}
           minWidth={"65vw"}
@@ -106,9 +118,17 @@ const FreelancerLandingPage = () => {
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>
-          {projects.map((project, index) => {
-            return <ProjectOverview key={index} project={project} />;
-          })}
+          <Box>
+            {projects.map((project, index) => {
+              return (
+                <ProjectOverview
+                  key={index}
+                  project={project}
+                  location={location.search.split("?")[1]}
+                />
+              );
+            })}
+          </Box>
         </Box>
         <Box
           flex={1}

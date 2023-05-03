@@ -5,6 +5,7 @@ const {
   getAllProposals,
   approveProposal,
   rejectProposal,
+  deleteProposal,
 } = require("../controller/clientProposalsReceived");
 
 const {
@@ -16,5 +17,6 @@ router.get("/", verifyTokenAndClient, getAllProposals);
 router.get("/:proposalId", verifyTokenAndClient, getSingleProposal);
 router.put("/:proposalId", verifyTokenAndClient, approveProposal);
 router.delete("/:proposalId", verifyTokenAndClient, rejectProposal);
+router.post("/:proposalId", verifyToken, deleteProposal);
 
 module.exports = router;

@@ -1,38 +1,79 @@
 import {
+  Badge,
   Box,
-  chakra,
-  Container,
-  Stack,
-  Text,
-  Image,
-  Flex,
-  VStack,
   Button,
+  Container,
+  Flex,
   Heading,
-  SimpleGrid,
-  StackDivider,
-  useColorModeValue,
-  VisuallyHidden,
   List,
   ListItem,
-  Badge,
+  SimpleGrid,
+  Stack,
+  StackDivider,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
-import { MdLocalShipping } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { BiCheckCircle } from "react-icons/bi";
+import { Link, useParams } from "react-router-dom";
+import ProjectProposalModal from "../../components/ProjectProposal/ProjectProposalModal";
+import ProposalOverview from "../../components/ProjectProposal/ProposalOverview";
+import { FlexWorkContext } from "../../context/ContextStore";
 import axios from "../../utils/axiosInstance";
 
-export default function Simple() {
+const ClientProjectPage = () => {
   const { id: projectId } = useParams();
   const [project, setProject] = useState({});
 
-  console.log(projectId);
+  const [recievedProposals, setRecivedProposals] = useState([]);
+  const [freelacersData, setFreelancersData] = useState([]);
+
+  const [isApplied, setIsApplied] = useState(false);
+
+  const { user, refresh, setRefresh } = useContext(FlexWorkContext);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getParticularProject = async () => {
     try {
       const { data } = await axios.get(`/api/v1/client/project/${projectId}`);
       setProject(data.data);
+      setIsApplied(data?.isApplied);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLatestFiveProposal = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/client/proposal?limit=true&id=${projectId}`
+      );
+      setRecivedProposals(data?.data?.clientAllProposals);
+      setFreelancersData(data?.data?.freelancers);
+    } catch (error) {}
+  };
+
+  const publishProject = async () => {
+    try {
+      const res = await axios.put(`/api/v1/client/project/${project._id}`, {
+        isPublished: true,
+      });
+      console.log(res);
+      setRefresh(Math.random() * 6000000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unpublishProject = async () => {
+    try {
+      const res = await axios.put(`/api/v1/client/project/${project._id}`, {
+        isPublished: false,
+      });
+      console.log(res);
+      setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
     }
@@ -40,14 +81,17 @@ export default function Simple() {
 
   useEffect(() => {
     getParticularProject();
-  }, []);
+    getLatestFiveProposal();
+  }, [refresh]);
+
+  console.log("freelacersData", freelacersData);
 
   return (
-    <Container maxW={"10xl"} w={"8xl"} my={10}>
+    <Container maxW={"10xl"} w={"90vw"} my={10}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 24 }}
+        py={{ base: 18, md: 6 }}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -59,6 +103,35 @@ export default function Simple() {
         px={10}
       >
         <Stack spacing={{ base: 6, md: 10 }}>
+          <Box display={"flex"} my={"0"} justifyContent={"flex-end"}>
+            {user.isClient && !project?.isPublished ? (
+              <Button
+                onClick={() => {
+                  publishProject();
+                }}
+                colorScheme="facebook"
+                size={"sm"}
+                minW="100px"
+              >
+                publish
+              </Button>
+            ) : (
+              user.isClient &&
+              project?.isPublished && (
+                <Button
+                  onClick={() => {
+                    unpublishProject();
+                  }}
+                  bg={"red.500"}
+                  size={"sm"}
+                  minW="100px"
+                  _hover={{ background: "red.400" }}
+                >
+                  unpublish
+                </Button>
+              )
+            )}
+          </Box>
           <Box
             as={"header"}
             style={{
@@ -209,43 +282,95 @@ export default function Simple() {
               </Box>
             </SimpleGrid>
           </Stack>
-
-          <Flex gap={4}>
-            <Button
-              rounded={"none"}
-              w={"full"}
-              mt={8}
-              size={"lg"}
-              py={"7"}
-              color={useColorModeValue("white", "gray.900")}
-              textTransform={"uppercase"}
-              variant="outline"
-              _hover={{
-                boxShadow: "lg",
-                backgroundColor: "teal",
-              }}
-            >
-              Add to wishlist
-            </Button>
-            <Button
-              rounded={"none"}
-              w={"full"}
-              mt={8}
-              size={"lg"}
-              py={"7"}
-              bg={useColorModeValue("rgb(46,78,116)", "gray.50")}
-              color={useColorModeValue("white", "gray.900")}
-              textTransform={"uppercase"}
-              _hover={{
-                boxShadow: "lg",
-                backgroundColor: "teal",
-              }}
-            >
-              Send Proposal
-            </Button>
-          </Flex>
+          {!user.isClient ? (
+            <Flex gap={4}>
+              <Button
+                rounded={"none"}
+                w={"full"}
+                mt={8}
+                size={"lg"}
+                py={"7"}
+                color={"white"}
+                textTransform={"uppercase"}
+                variant="outline"
+                _hover={{
+                  boxShadow: "lg",
+                  backgroundColor: "teal",
+                }}
+              >
+                Add to wishlist
+              </Button>
+              <Button
+                rounded={"none"}
+                w={"full"}
+                mt={8}
+                size={"lg"}
+                py={"7"}
+                bg={"rgb(46,78,116)"}
+                color={("white", "gray.900")}
+                textTransform={"uppercase"}
+                _hover={{
+                  boxShadow: "lg",
+                  backgroundColor: "teal",
+                }}
+                isDisabled={isApplied}
+                onClick={() => {
+                  onOpen();
+                }}
+              >
+                {isApplied ? (
+                  <>
+                    <BiCheckCircle fontSize={"1.3rem"}></BiCheckCircle>
+                    &nbsp;
+                    <p>Applied</p>
+                  </>
+                ) : (
+                  "Apply Now"
+                )}
+              </Button>
+              <ProjectProposalModal
+                setIsApplied={setIsApplied}
+                freelancerId={user._id}
+                project={project}
+                isOpen={isOpen}
+                setRefresh={setRefresh}
+                onClose={onClose}
+              ></ProjectProposalModal>
+            </Flex>
+          ) : (
+            <Box>
+              <Flex
+                flexDirection={"row-reverse"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+              >
+                <Link to={`/client/project/proposals/${project._id}`}>
+                  <Button colorScheme="facebook">view al</Button>
+                </Link>
+                <Heading
+                  color={"white"}
+                  size={"md"}
+                  textAlign={"center"}
+                  my={6}
+                >
+                  Received Proposals
+                </Heading>
+              </Flex>
+              {freelacersData?.map((freelancer, index) => {
+                return (
+                  <ProposalOverview
+                    key={index}
+                    freelancer={freelacersData[index]}
+                    proposal={recievedProposals[index]}
+                  />
+                );
+              })}
+            </Box>
+          )}
         </Stack>
       </SimpleGrid>
     </Container>
   );
-}
+};
+
+export default ClientProjectPage;
