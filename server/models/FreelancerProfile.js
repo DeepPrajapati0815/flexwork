@@ -17,6 +17,7 @@ const freelancerProfileSchema = new Schema(
     },
     skills: {
       type: [String],
+      default:[]
     },
   },
   { timestamps: true }

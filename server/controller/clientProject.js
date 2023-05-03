@@ -124,9 +124,9 @@ const getProjects = async (req, res) => {
     } else if (isClient) {
       projects = await ClientProject.find({ userId });
     } else if (bestmatch == "true") {
-      const { skills } = await FreelancerProfile.findOne({ userId: id });
+      const profile = await FreelancerProfile.findOne({ userId: id });
       projects = await ClientProject.find({
-        $and: [{ skills: { $in: skills } }, { isPublished: true }],
+        $and: [{ skills: { $in: profile?.skills } }, { isPublished: true }],
       }).sort({ createdAt: -1 });
     } else if (recent == "true") {
       projects = await ClientProject.find({

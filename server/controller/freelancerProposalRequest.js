@@ -2,10 +2,15 @@ const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 
 const createProposal = async (req, res) => {
-  const { clientId, projectId } = req.query;
-  const { id: freelancerId } = req.user;
 
-  const { expectedBidRate, duration, coverLetter } = req.body;
+  const {
+    expectedBidRate,
+    duration,
+    coverLetter,
+    clientId,
+    projectId,
+    freelancerId,
+  } = req.body;
 
   if (
     !expectedBidRate ||

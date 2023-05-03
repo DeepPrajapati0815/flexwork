@@ -24,6 +24,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import RegisterOption from "./pages/RegisterOption/RegisterOption";
 import ClientProjectPage from "./pages/ClientProjectPage/ClientProjectPage";
+import NotFound from "./pages/404Page/NotFound";
 
 const App = () => {
   const navigate = useNavigate();
@@ -221,7 +222,7 @@ const App = () => {
             }
           />
 
-          <Route path="/*" element={<Navigate to={"/login"} />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>{" "}
         <Footer></Footer>
       </div>
