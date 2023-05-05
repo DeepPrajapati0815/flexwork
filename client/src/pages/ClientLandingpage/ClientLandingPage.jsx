@@ -25,7 +25,6 @@ const ClientLandingPage = () => {
   const getProfileData = async () => {
     try {
       const { data } = await axios.get(`/api/v1/client/profile/${user._id}`);
-      console.log(data);
       const { companyName, description, isVerified } = data.data;
       setClientProfile({
         ...clientProfile,
@@ -112,7 +111,6 @@ const ClientLandingPage = () => {
     }
   }, [user, location, refresh]);
 
-  console.log("clientProjects", clientProjects);
 
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>

@@ -83,7 +83,6 @@ const ProjectProposalModal = ({
         setRefresh(Math.random() * 600000000);
       }
     } catch (error) {
-      console.log(error.response?.data?.isProposalExist);
       if (error.response?.data?.isProposalExist) {
         toast.error("you have already sent a proposal for this project!.", {
           style: {

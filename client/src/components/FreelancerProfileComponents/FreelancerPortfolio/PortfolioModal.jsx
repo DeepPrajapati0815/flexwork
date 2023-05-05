@@ -125,8 +125,6 @@ const PortfolioModal = ({
     }
   };
 
-  console.log("portfolio===>", freelancerPortfolio);
-
   return (
     <>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -166,7 +164,6 @@ const PortfolioModal = ({
                   <FormLabel>Role</FormLabel>
                   <Input
                     type="text"
-                    
                     value={
                       isUpdate ? updatePortfolio.role : freelancerPortfolio.role
                     }

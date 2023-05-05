@@ -27,12 +27,10 @@ const ClientComapnyDetailsModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(clientProfile);
       const res = await axios.put(
         `/api/v1/client/profile/${clientProfile.userId}`,
         clientProfile
       );
-      console.log(res);
     } catch (error) {}
   };
 

@@ -63,7 +63,6 @@ const RegisterOption = ({ isUserClient, isLogin, setIsClient, isClient }) => {
           <button
             className="optionBtn"
             onClick={() => {
-              console.log(isClient);
               if (isClient) {
                 navigate("/register/client");
                 setIsClient(false);

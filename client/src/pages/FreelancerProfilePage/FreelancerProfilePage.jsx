@@ -12,14 +12,21 @@ import axios from "../../utils/axiosInstance";
 import FreelancerProjectCatalog from "../../components/FreelancerProfileComponents/FreelancerProjectCatalog/FreelancerProjectCatalog";
 
 const FreelancerProfilePage = () => {
-  const { setFreelancerProfile, user, freelancerProfile } =
-    useContext(FlexWorkContext);
+  const {
+    setFreelancerProfile,
+    user,
+    skeletonLoading,
+    setSkeletonLoading,
+    freelancerProfile,
+  } = useContext(FlexWorkContext);
 
   const getProfileData = async () => {
     try {
+      setSkeletonLoading(true);
       const { data } = await axios.get(
         `/api/v1/freelancer/profile/${user._id}`
       );
+      setSkeletonLoading(false);
       const { _id, title, description, skills } = data.data;
       setFreelancerProfile({
         ...freelancerProfile,
@@ -36,6 +43,8 @@ const FreelancerProfilePage = () => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();
   }, [user]);
+
+  console.log(skeletonLoading);
 
   return (
     <Box

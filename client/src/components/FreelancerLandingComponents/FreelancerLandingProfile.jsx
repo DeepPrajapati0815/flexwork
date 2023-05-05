@@ -17,7 +17,6 @@ const FreelancerLandingProfile = () => {
   const { user, freelancerProfile, clientProfile } =
     useContext(FlexWorkContext);
 
-  console.log(clientProfile);
 
   return (
     <Center minWidth={"25vw"}>

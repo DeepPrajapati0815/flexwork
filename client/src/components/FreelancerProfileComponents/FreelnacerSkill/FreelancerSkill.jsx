@@ -9,6 +9,7 @@ import {
   useDisclosure,
   useMediaQuery,
   Text,
+  Skeleton,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import SkillModal from "./SkillModal";
@@ -19,7 +20,7 @@ const FreelancerSkill = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
 
   const [isTab] = useMediaQuery("(max-width: 950px)");
-  const { freelancerProfile, setFreelancerProfile } =
+  const { freelancerProfile, skeletonLoading, setFreelancerProfile } =
     useContext(FlexWorkContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,20 +29,31 @@ const FreelancerSkill = () => {
     <Box color={"white"} w={"95%"} p={5}>
       <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
         <Stack direction={"row"} justify={"center"} align={"center"}>
-          <Heading size={isMobile ? "sm" : "md"}>Skills</Heading>
+          {skeletonLoading ? (
+            <Skeleton
+              height="26px"
+              width={"90px"}
+              color="white"
+              fadeDuration={1}
+            />
+          ) : (
+            <>
+              <Heading size={isMobile ? "sm" : "md"}>Skills</Heading>
+              <AddIcon
+                onClick={onOpen}
+                style={{
+                  borderRadius: "50%",
+                  padding: "2px",
+                  background: "#e2e9e2",
+                  color: "#2e4e74",
+                  cursor: "pointer",
+                  fontSize: "1.4rem",
+                }}
+                color={"white"}
+              ></AddIcon>
+            </>
+          )}
 
-          <AddIcon
-            onClick={onOpen}
-            style={{
-              borderRadius: "50%",
-              padding: "2px",
-              background: "#e2e9e2",
-              color: "#2e4e74",
-              cursor: "pointer",
-              fontSize: "1.4rem",
-            }}
-            color={"white"}
-          ></AddIcon>
           <SkillModal
             freelancerProfile={freelancerProfile}
             setFreelancerProfile={setFreelancerProfile}
@@ -50,7 +62,14 @@ const FreelancerSkill = () => {
           ></SkillModal>
         </Stack>
       </Flex>
-      {freelancerProfile?.skills?.length > 0 ? (
+      {skeletonLoading ? (
+        <Skeleton
+          height="26px"
+          width={"500px"}
+          color="white"
+          fadeDuration={1}
+        />
+      ) : freelancerProfile?.skills?.length > 0 ? (
         <Flex gap={3} flexWrap={"wrap"}>
           {freelancerProfile?.skills?.map((skill, i) => (
             <Tag

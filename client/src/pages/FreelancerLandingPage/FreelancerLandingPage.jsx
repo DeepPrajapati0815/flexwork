@@ -41,7 +41,6 @@ const FreelancerLandingPage = () => {
   const getBestMatchProjects = async () => {
     try {
       const { data } = await axios.get("/api/v1/client/project?bestmatch=true");
-      console.log("best match", data);
       setProjects(data.data);
     } catch (error) {
       console.log(error);

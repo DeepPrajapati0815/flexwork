@@ -25,7 +25,6 @@ import axios from "../../utils/axiosInstance";
 const ProjectOverview = ({ project, location }) => {
   const [isProjectLiked, setIsProjectLiked] = useState(false);
   const { user, setRefresh } = useContext(FlexWorkContext);
-  console.log("project==>", project);
   let statusColor = "red";
   if (project?.status == "Accepted") {
     statusColor = "green";
@@ -43,7 +42,6 @@ const ProjectOverview = ({ project, location }) => {
       const res = await axios.put(`/api/v1/client/project/${project._id}`, {
         isPublished: true,
       });
-      console.log(res);
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
@@ -54,7 +52,6 @@ const ProjectOverview = ({ project, location }) => {
       const res = await axios.put(`/api/v1/client/project/${project._id}`, {
         isPublished: false,
       });
-      console.log(res);
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);

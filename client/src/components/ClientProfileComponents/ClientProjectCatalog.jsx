@@ -15,10 +15,6 @@ const ClientProjectCatalog = ({ clientProjects, isProjects }) => {
   const [isTab] = useMediaQuery("(max-width: 950px)");
   // const [isProjects, setIsProjects] = useState(false);
 
-  console.log(isProjects);
-
-  console.log("clientProjects", clientProjects);
-
 
   return (
     <Box color={"white"} w={"95%"} p={5}>

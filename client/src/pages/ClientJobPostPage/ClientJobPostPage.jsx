@@ -377,7 +377,6 @@ export default function ClientJobPostPage() {
           clientProjectPostDetails
         );
         setIsLoading(false);
-        console.log(res);
         setClientProjectPostDetails({
           title: "",
           description: "",

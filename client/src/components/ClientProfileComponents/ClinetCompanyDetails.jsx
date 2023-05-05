@@ -22,7 +22,6 @@ const ClientCompanyDetails = () => {
   const getProfileData = async () => {
     try {
       const { data } = await axios.get(`/api/v1/client/profile/${user._id}`);
-      console.log(data);
       const { _id, description, companyName, isVerified, userId } = data.data;
       setClientProfile({
         ...clientProfile,

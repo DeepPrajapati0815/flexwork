@@ -61,7 +61,6 @@ const ClientProjectPage = () => {
       const res = await axios.put(`/api/v1/client/project/${project._id}`, {
         isPublished: true,
       });
-      console.log(res);
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
@@ -72,7 +71,6 @@ const ClientProjectPage = () => {
       const res = await axios.put(`/api/v1/client/project/${project._id}`, {
         isPublished: false,
       });
-      console.log(res);
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
@@ -84,7 +82,6 @@ const ClientProjectPage = () => {
     getLatestFiveProposal();
   }, [refresh]);
 
-  console.log("freelacersData", freelacersData);
 
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import axios from "../../../utils/axiosInstance";
 import FreelancerPortfolioItem from "./FreelancerPortfolioItem";
 import { toast } from "react-hot-toast";
+import FreelancerPortfolioSkeleton from "./FreelancerPortfolioSkeleton";
 
 const FreelancerPortfolioSection = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,7 +27,7 @@ const FreelancerPortfolioSection = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [updatePortfolio, setUpdatePortfolio] = useState({});
 
-  const { freelancerProfile, refresh, setRefresh } =
+  const { freelancerProfile, refresh, skeletonLoading, setRefresh } =
     useContext(FlexWorkContext);
 
   const [freelancerPortfolios, setFreelancerPortfolios] = useState([]);
@@ -122,21 +123,21 @@ const FreelancerPortfolioSection = () => {
           ></PortfolioModal>
         </Stack>
       </Flex>
-      {isData ? (
-        <>
-          {freelancerPortfolios?.map((portfolio, index) => {
-            return (
-              <FreelancerPortfolioItem
-                key={index}
-                portfolio={portfolio}
-                deletePortfolio={deletePortfolio}
-                onOpen={onOpen}
-                setIsUpdate={setIsUpdate}
-                setUpdatePortfolio={setUpdatePortfolio}
-              />
-            );
-          })}
-        </>
+      {skeletonLoading ? (
+        <FreelancerPortfolioSkeleton />
+      ) : isData ? (
+        freelancerPortfolios?.map((portfolio, index) => {
+          return (
+            <FreelancerPortfolioItem
+              key={index}
+              portfolio={portfolio}
+              deletePortfolio={deletePortfolio}
+              onOpen={onOpen}
+              setIsUpdate={setIsUpdate}
+              setUpdatePortfolio={setUpdatePortfolio}
+            />
+          );
+        })
       ) : (
         <Stack justify={"center"} align={"center"}>
           <MdWorkOutline

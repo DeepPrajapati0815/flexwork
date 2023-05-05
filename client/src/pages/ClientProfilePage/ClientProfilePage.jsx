@@ -17,13 +17,11 @@ const ClientProfilePage = () => {
   // fetch the latest 5 project of that profile user
 
   const fetchLatestFiveProject = async () => {
-    console.log("userid", user._id);
     try {
       const { data } = await axios.get(
         `/api/v1/client/project?isProfile=true&userId=${user._id}`
       );
       setClientProjects(data.data);
-      console.log("my data", data);
       if (data.data.length !== 0) {
         setIsProjects(true);
       } else {
@@ -35,7 +33,6 @@ const ClientProfilePage = () => {
     }
   };
 
-  console.log("ClientProfilePage => ", clientProjects);
 
   useEffect(() => {
     fetchLatestFiveProject();

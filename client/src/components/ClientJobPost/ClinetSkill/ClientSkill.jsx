@@ -25,7 +25,6 @@ const ClientSkill = ({
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(clientProjectPostDetails);
 
   return (
     <Box color={"white"} w={"95%"}>

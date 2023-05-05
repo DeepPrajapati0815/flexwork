@@ -70,7 +70,6 @@ const SkillModal = ({
                           const removed = freelancerProfile?.skills?.filter(
                             (s) => s !== skill
                           );
-                          console.log(removed);
                           setFreelancerProfile({
                             ...freelancerProfile,
                             skills: removed,

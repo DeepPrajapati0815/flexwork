@@ -15,6 +15,7 @@ import { FlexWorkContext } from "../../../context/ContextStore";
 import axios from "../../../utils/axiosInstance";
 import FreelancerEducationItem from "./FreelancerEducationItem";
 import { toast } from "react-hot-toast";
+import FreelancerEducationSkeleton from "./FreelancerEducationSkeleton";
 
 const FreelancerEducationSection = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
@@ -24,7 +25,7 @@ const FreelancerEducationSection = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateEducation, setUpdateEducation] = useState({});
 
-  const { setRefresh } = useContext(FlexWorkContext);
+  const { setRefresh, skeletonLoading } = useContext(FlexWorkContext);
 
   const [educations, setEducations] = useState([]);
 
@@ -98,6 +99,7 @@ const FreelancerEducationSection = () => {
   return (
     <Box color={"white"} w={"95%"} p={5}>
       <Flex mb={10} align={"center"} gap={2} justify={"space-between"}>
+        
         <Stack direction={"row"} justify={"center"} align={"center"}>
           <Heading size={isMobile ? "sm" : "md"}>Education Details</Heading>
           <AddIcon
@@ -128,7 +130,9 @@ const FreelancerEducationSection = () => {
           ></EducationModal>
         </Stack>
       </Flex>
-      {isData ? (
+      {skeletonLoading ? (
+        <FreelancerEducationSkeleton />
+      ) : isData ? (
         educations?.map((education, index) => {
           return (
             <FreelancerEducationItem

@@ -16,12 +16,13 @@ import axios from "../../../utils/axiosInstance";
 import { FlexWorkContext } from "../../../context/ContextStore";
 import { toast } from "react-hot-toast";
 import FreelancerExperienceItem from "./FreelancerExperienceItem";
+import FreelancerExperienceSkeleton from "./FreelancerExperienceSkeleton";
 
 const FreelancerExperienceSection = () => {
   const [isMobile] = useMediaQuery("(max-width: 500px)");
   const [isTab] = useMediaQuery("(max-width: 950px)");
 
-  const { refresh, setRefresh, freelancerProfile } =
+  const { refresh, skeletonLoading, setRefresh, freelancerProfile } =
     useContext(FlexWorkContext);
 
   const [isData, setIsData] = useState(false);
@@ -132,7 +133,9 @@ const FreelancerExperienceSection = () => {
           ></ExperienceModal>
         </Stack>
       </Flex>
-      {isData ? (
+      {skeletonLoading ? (
+        <FreelancerExperienceSkeleton />
+      ) : isData ? (
         experiences.map((experience, index) => {
           return (
             <FreelancerExperienceItem

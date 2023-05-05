@@ -21,6 +21,8 @@ const FlexWorkContextProvider = ({ children }) => {
     userId: "",
   });
 
+  const [skeletonLoading, setSkeletonLoading] = useState(false);
+
   const [clientProjectPostDetails, setClientProjectPostDetails] = useState({
     title: "",
     description: "",
@@ -49,6 +51,8 @@ const FlexWorkContextProvider = ({ children }) => {
         setClientProfile,
         clientProjectPostDetails,
         setClientProjectPostDetails,
+        skeletonLoading,
+        setSkeletonLoading,
       }}
     >
       {children}

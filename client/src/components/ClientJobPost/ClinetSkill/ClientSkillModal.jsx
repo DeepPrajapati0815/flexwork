@@ -70,7 +70,6 @@ const ClientSkillModal = ({
                             clientProjectPostDetails?.skills?.filter(
                               (s) => s !== skill
                             );
-                          console.log(removed);
                           setClientProjectPostDetails({
                             ...clientProjectPostDetails,
                             skills: removed,
