@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -20,18 +21,31 @@ import { useState } from "react";
 import axios from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
+import { toast } from "react-hot-toast";
 
 const ProposalOverview = ({ freelancer, proposal }) => {
   const [isMore, setIsMore] = useState(false);
   const { setRefresh } = useContext(FlexWorkContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { id: projectId } = useParams();
 
   const approveProposal = async () => {
     try {
-      const res = await axios.put(
+      setIsLoading(true);
+      const { data } = await axios.put(
         `/api/v1/client/proposal/${proposal._id}?id=${projectId}`
       );
+
+      setIsLoading(false);
+
+      toast.success("Sent Mail!", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
@@ -43,6 +57,13 @@ const ProposalOverview = ({ freelancer, proposal }) => {
       const res = await axios.delete(
         `/api/v1/client/proposal/${proposal._id}?id=${projectId}`
       );
+
+      toast.success("Sent Mail!", {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
       setRefresh(Math.random() * 6000000);
     } catch (error) {
       console.log(error);
@@ -75,9 +96,16 @@ const ProposalOverview = ({ freelancer, proposal }) => {
             </Box>
           </Flex>
           {proposal?.status === "Accepted" ? (
-            <Box color={"green"} fontWeight={"bolder"}>
-              Approved
-            </Box>
+            <>
+              <Flex alignItems={"center"} gap={2}>
+                <Button colorScheme="whatsapp" size={"xs"} py={4}>
+                  schedule meeting
+                </Button>
+                <Box color={"green"} fontWeight={"bolder"}>
+                  Approved
+                </Box>
+              </Flex>
+            </>
           ) : (
             <Box>
               <IconButton
@@ -94,6 +122,7 @@ const ProposalOverview = ({ freelancer, proposal }) => {
                 colorScheme="whatsapp"
                 onClick={approveProposal}
                 icon={<BiCheck fontSize={"1rem"} />}
+                isLoading={isLoading}
               />
             </Box>
           )}

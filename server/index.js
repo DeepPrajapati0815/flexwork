@@ -1,4 +1,5 @@
 // Import required packages and modules
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db/db");
@@ -10,7 +11,7 @@ const cookieSession = require("cookie-session");
 require("./service/googleAuth");
 require("./service/linkedInAuth");
 require("./service/githubAuth");
-require("dotenv").config();
+const nodemailer = require("nodemailer");
 
 const app = express();
 

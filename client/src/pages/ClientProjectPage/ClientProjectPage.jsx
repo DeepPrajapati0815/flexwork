@@ -82,6 +82,8 @@ const ClientProjectPage = () => {
     getLatestFiveProposal();
   }, [refresh]);
 
+  console.log(freelacersData);
+  console.log(recievedProposals);
 
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>
@@ -130,14 +132,13 @@ const ClientProjectPage = () => {
             )}
           </Box>
           <Box
-            as={"header"}
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
-            <Box>
+            <Flex flex={16} direction={"column"} alignItems={"flex-start"}>
               <Heading
                 lineHeight={1.1}
                 fontWeight={600}
@@ -155,8 +156,15 @@ const ClientProjectPage = () => {
                 Published At {project?.createdAt?.split("T")[0]} On{" "}
                 {project?.createdAt?.split("T")[1].split(".")[0]}
               </Text>
-            </Box>
-            <Text fontWeight={"bolder"} fontSize={"2xl"} mr={3}>
+            </Flex>
+            <Text
+              alignSelf={"flex-start"}
+              textAlign={"right"}
+              fontWeight={"bolder"}
+              fontSize={"2xl"}
+              mr={3}
+              flex={2}
+            >
               ₹ {project?.projectRate}
             </Text>
           </Box>

@@ -1,10 +1,5 @@
 const { Schema, default: mongoose } = require("mongoose");
 
-const validateEmail = (email) => {
-  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email);
-};
-
 const UserSchema = new Schema(
   {
     firstName: {
@@ -28,6 +23,7 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
+
       lowercase: true,
       unique: true,
     },

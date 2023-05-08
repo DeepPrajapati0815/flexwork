@@ -7,8 +7,8 @@ const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
 passport.use(
   new LinkedInStrategy(
     {
-      clientID: "776xe01694h7l0",
-      clientSecret: "nTDyidTM4XjINv1V",
+      clientID: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
       callbackURL: "http://localhost:5000/auth/linkedin/callback",
       scope: ["r_emailaddress", "r_liteprofile"],
       state: true,

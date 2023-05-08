@@ -89,7 +89,7 @@ const ProjectOverview = ({ project, location }) => {
                   <Heading size="md">{project?.title}</Heading>
                 </Link>
                 <Text color={"gray.400"}>
-                  Published At {project?.createdAt?.split("T")[0]} On{" "}
+                  Created At {project?.createdAt?.split("T")[0]} On{" "}
                   {project?.createdAt.split("T")[1].split(".")[0]}
                 </Text>
               </Box>

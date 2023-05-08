@@ -1,6 +1,8 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const FreelancerProposalRequest = require("../models/FreelancerProposalRequest");
 const User = require("../models/User");
+const ClientProject = require("../models/ClientProject");
+const { sendMail } = require("../service/nodemailer");
 
 const getAllProposals = async (req, res) => {
   infoLog("getAllProposals entry");
@@ -17,10 +19,12 @@ const getAllProposals = async (req, res) => {
         $or: [{ status: "Pending" }, { status: "Accepted" }],
       })
         .limit(5)
-        .sort({ createdAt: -1 });
+        .sort({ freelancerId: 1, createdAt: -1 });
       userIds = clientAllProposals.map((proposal) => proposal.freelancerId);
 
-      freelancers = await User.find({ _id: { $in: userIds } });
+      freelancers = await User.find({ _id: { $in: userIds } }).sort({
+        _id: 1,
+      });
     } else {
       clientAllProposals = await FreelancerProposalRequest.find({
         $and: [{ projectId: projectId }, { clientId: clientId }],
@@ -29,7 +33,9 @@ const getAllProposals = async (req, res) => {
 
       userIds = clientAllProposals.map((proposal) => proposal.freelancerId);
 
-      freelancers = await User.find({ _id: { $in: userIds } });
+      freelancers = await User.find({ _id: { $in: userIds } }).sort({
+        _id: 1,
+      });
     }
 
     successLog("Successfully fetched all proposals!");
@@ -67,6 +73,31 @@ const approveProposal = async (req, res) => {
   infoLog("approveProposal entry");
   const { proposalId } = req.params;
   const { id: projectId } = req.query;
+
+  const acceptMessage = `I hope this email finds you well. I am writing to confirm that we have reviewed your proposal, and after careful consideration, we have decided to accept it.
+
+We are impressed with the quality of your work and the thoroughness of your proposal. We believe that your proposed solution is the best fit for our needs, and we look forward to working with you to bring this project to fruition.
+    
+We are excited to begin this project with you and are confident that we will have a successful outcome. Please let us know if you have any questions or concerns.
+  
+Thank you for your hard work and dedication to this project.
+  
+Best regards,
+  
+flexWork`;
+
+  const rejectMessage = `Thank you for submitting your proposal. We appreciate the time and effort you have put into the proposal, and we have carefully reviewed it.
+
+After careful consideration, we regret to inform you that your proposal has not been selected for further consideration at this time. While we found your proposal to be interesting and well-written, we have decided to move forward with another proposal that better fits our current needs.
+  
+We understand that receiving a rejection can be disappointing, but we encourage you to keep pursuing your goals and to submit future proposals as they become available. Your skills and expertise are valuable, and we appreciate the opportunity to consider your proposal.
+  
+Thank you again for your interest in working with us, and we wish you all the best in your future endeavors.
+  
+Sincerely,
+  
+fleXwork`;
+
   try {
     const approvedProposal = await FreelancerProposalRequest.findByIdAndUpdate(
       proposalId,
@@ -77,12 +108,11 @@ const approveProposal = async (req, res) => {
     );
     // after approving a proposal find all the freelancer who bid in this project
 
-    const restFreelancerBids = await FreelancerProposalRequest.find({
+    const restFreelancerProposals = await FreelancerProposalRequest.find({
       $and: [{ projectId: projectId }, { _id: { $ne: proposalId } }],
     });
-    // console.log(restFreelancerBids.map((a) => a.id).filter(Boolean));
 
-    let rejectedProposal = restFreelancerBids.map((a) => a.id).filter(Boolean);
+    let restFreelacersId = restFreelancerProposals.map((a) => a.freelancerId);
 
     await FreelancerProposalRequest.updateMany(
       {
@@ -91,12 +121,45 @@ const approveProposal = async (req, res) => {
       { status: "Rejected" }
     );
 
+    const acceptFreelancerEmail = await User.find(
+      {
+        _id: approvedProposal?.freelancerId,
+      },
+      "email"
+    );
+
+    // unpublish the project
+    await ClientProject.findByIdAndUpdate(projectId, { isPublished: false });
+
+    // send acceptance mail to freelancer
+    sendMail({
+      name: "flexWork",
+      email: acceptFreelancerEmail?.email,
+      message: acceptMessage,
+    });
+
+    const restFreelancerEmails = await User.find(
+      {
+        _id: { $in: restFreelacersId },
+      },
+      "email"
+    );
+
+    restFreelancerEmails.forEach((freelancer) => {
+      sendMail({
+        name: "flexWork",
+        email: freelancer?.email,
+        message: rejectMessage,
+      });
+    });
+
     successLog("Successfully approved single proposal!");
     infoLog("approveProposal exit");
+
     return res.status(200).json({
       isProposalsApproved: true,
       data: approvedProposal,
-      // restFreelancers: restFreelancerIds,
+      restFreelancerEmails: restFreelancerEmails,
     });
   } catch (error) {
     console.log(error);
