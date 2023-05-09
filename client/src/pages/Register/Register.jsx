@@ -6,9 +6,13 @@ import { FaGithub } from "react-icons/fa";
 import AuthButton from "../../components/AuthButton/AuthButton";
 import googleIcon from "../../img/google.ico";
 import axios from "../../utils/axiosInstance";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import { toast } from "react-hot-toast";
 
 const Register = ({ isUserClient, isLogin, title }) => {
+  const navigate = useNavigate();
+
   const [registerData, setRegisterData] = useState({
     firstName: "",
     lastName: "",
@@ -41,10 +45,29 @@ const Register = ({ isUserClient, isLogin, title }) => {
           registerData.isClient = false;
         }
 
-        await axios.post("/api/v1/auth/register", registerData, {
+        const res = await axios.post("/api/v1/auth/register", registerData, {
           headers: { "Content-Type": "application/json" },
         });
-      } catch (error) {}
+
+        if (res.data.isRegister) {
+          toast.success("Registered Successfully!", {
+            style: {
+              padding: "16px",
+              animationDuration: "2s",
+            },
+          });
+
+          navigate("/login");
+        }
+      } catch (error) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message, {
+          style: {
+            padding: "16px",
+            animationDuration: "2s",
+          },
+        });
+      }
     }
 
     setRegisterData({

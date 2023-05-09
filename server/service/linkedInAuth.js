@@ -1,8 +1,8 @@
 const LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
 const passport = require("passport");
 
-const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
-const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
+const CLIENT_ID = process.env.LINKED_IN_CLIENT_ID;
+const CLIENT_SECRET = process.env.LINKED_IN_CLIENT_SECRET;
 
 passport.use(
   new LinkedInStrategy(

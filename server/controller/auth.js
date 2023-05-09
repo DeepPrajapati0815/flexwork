@@ -30,14 +30,18 @@ const registerUser = async (req, res) => {
       !confirmpassword
     ) {
       infoLog("registerUser exit");
-      res.status(400).json({ isRegister: false });
+      res
+        .status(400)
+        .json({ isRegister: false, message: "missing required fields" });
       return errorLog("Invalid Details");
     }
 
     if (password !== confirmpassword) {
       infoLog("registerUser exit");
 
-      res.status(400).json({ isRegister: false });
+      res
+        .status(400)
+        .json({ isRegister: false, message: "Password Not Matched" });
       return errorLog("Password Not Matched");
     }
 
@@ -77,7 +81,9 @@ const registerUser = async (req, res) => {
     console.log(error);
     infoLog("registerUser exit");
     errorLog("Error While Registration!");
-    return res.status(500).json({ isRegister: false });
+    return res
+      .status(500)
+      .json({ isRegister: false, message: "Internal Server Error" });
   }
 };
 
@@ -88,7 +94,9 @@ const loginUser = async (req, res) => {
 
   if (!username || !password) {
     infoLog("loginUser exit");
-    res.status(400).json({ isLogin: false });
+    res
+      .status(400)
+      .json({ isLogin: false, message: "Missing Required Fileds!" });
     return errorLog("Invalid Details");
   }
 
@@ -101,17 +109,17 @@ const loginUser = async (req, res) => {
 
     if (!isRegistered) {
       infoLog("loginUser exit");
-      res.status(401).json({ isLogin: false });
+      res
+        .status(401)
+        .json({ isLogin: false, message: "User is not registerd!" });
       return errorLog("Unauthorized User Trying To Login");
     }
-
-    // if found then compare the password
 
     const isMatch = await comparePassword(password, isRegistered?.password);
 
     if (!isMatch) {
       infoLog("loginUser exit");
-      res.status(401).json({ isLogin: false });
+      res.status(401).json({ isLogin: false, message: "Incorrect Password!" });
       return errorLog("Authentication Failed");
     }
 

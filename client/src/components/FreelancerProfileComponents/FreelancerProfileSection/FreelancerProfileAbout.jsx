@@ -77,7 +77,7 @@ const FreelancerProfileAbout = () => {
             w={isMobile ? "100%" : "85%"}
             fontSize={isMobile ? "0.5rem" : "1rem"}
           >
-            {freelancerProfile.description}
+            {`${freelancerProfile.description}`}
           </Text>
         </Stack>
       )}

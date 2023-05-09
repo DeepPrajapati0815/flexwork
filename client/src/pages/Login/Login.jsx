@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
+import { toast } from "react-hot-toast";
 import { FaGithub } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthButton/AuthButton";
-import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
@@ -14,8 +14,6 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
     username: "",
     password: "",
   });
-
-  const { setUser, setUserId } = useContext(FlexWorkContext);
 
   const navigate = useNavigate();
 
@@ -34,6 +32,12 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
             password: "",
           });
           localStorage.setItem("userId", res.data.user._id);
+          toast.success("Login Success", {
+            style: {
+              padding: "16px",
+              animationDuration: "2s",
+            },
+          });
           window.location.href = "/";
           setLoginData({
             username: "",
@@ -43,6 +47,13 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message, {
+        style: {
+          padding: "16px",
+          animationDuration: "2s",
+        },
+      });
+      
       setLoginData({
         username: "",
         password: "",

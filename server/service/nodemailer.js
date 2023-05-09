@@ -1,7 +1,10 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const NODEMAILER_USER = process.env.NODEMAILER_USER;
 const NODEMAILER_PASS = process.env.NODEMAILER_PASS;
+
+console.log("process.env.NODEMAILER_USER", process.env.NODEMAILER_USER);
 
 const sendMail = ({ name, email, message }) => {
   console.log(email);
