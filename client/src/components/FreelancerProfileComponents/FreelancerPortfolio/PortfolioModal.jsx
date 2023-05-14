@@ -57,6 +57,7 @@ const PortfolioModal = ({
       if (isUpdate && updatePortfolio._id) {
         try {
           setisLoading(true);
+
           const { data } = await axios.put(
             `/api/v1/freelancer/portfolio/${updatePortfolio._id}`,
             updatePortfolio
@@ -91,10 +92,18 @@ const PortfolioModal = ({
           freelancerPortfolio.projectSolution
         ) {
           setisLoading(true);
+
+          const formData = new FormData();
+          formData.append("file", freelancerPortfolio.file);
+          formData.append("portfolio", JSON.stringify(freelancerPortfolio));
+
+          console.log(formData);
+
           const { data } = await axios.post(
             `/api/v1/freelancer/portfolio/${freelancerPortfolio.profileId}`,
-            freelancerPortfolio
+            formData
           );
+
           setisLoading(false);
           setFreelancerPortfolio({
             title: "",
@@ -263,16 +272,15 @@ const PortfolioModal = ({
                   <FormLabel>Attach File</FormLabel>
                   <Input
                     type="file"
-                    value={isUpdate ? "" : freelancerPortfolio.file}
                     onChange={(e) =>
                       isUpdate
                         ? setUpdatePortfolio({
                             ...updatePortfolio,
-                            file: e.target.value,
+                            file: e.target.files[0],
                           })
                         : setFreelancerPortfolio({
                             ...freelancerPortfolio,
-                            file: e.target.value,
+                            file: e.target.files[0],
                           })
                     }
                     style={{ cursor: "pointer" }}

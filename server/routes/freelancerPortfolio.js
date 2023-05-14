@@ -3,6 +3,8 @@ const {
   verifyToken,
 } = require("../middleware/verifyToken");
 
+const upload = require("../middleware/uploadFile");
+
 const {
   addPortfolio,
   updatePortfolio,
@@ -12,7 +14,12 @@ const {
 
 const router = require("express").Router();
 
-router.post("/:profileId", verifyTokenAndFreelancer, addPortfolio);
+router.post(
+  "/:profileId",
+  verifyTokenAndFreelancer,
+  upload.single("file"),
+  addPortfolio
+);
 router.put("/:portfolioId", verifyTokenAndFreelancer, updatePortfolio);
 router.delete("/:portfolioId", verifyTokenAndFreelancer, removePortfolio);
 router.get("/:profileId", verifyToken, getPortfolios);

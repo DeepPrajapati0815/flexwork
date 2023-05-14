@@ -7,46 +7,44 @@ const addPortfolio = async (req, res) => {
 
   const { profileId } = req.params;
 
-  const {
-    title,
-    file,
-    completionDate,
-    role,
-    projectChallange,
-    projectSolution,
-  } = req.body;
+  console.log("files", req.file.location);
+
+  const { title, completionDate, role, projectChallange, projectSolution } =
+    JSON.parse(req.body.portfolio);
 
   try {
     if (
       !title ||
-      !file ||
+      !req.file ||
       !completionDate ||
       !role ||
       !profileId ||
       !projectChallange ||
       !projectSolution
     ) {
-      console.log(req.body);
       infoLog("addPortfolio exit");
       res.status(400).json({ isPortfolioAdded: false, data: {} });
       return errorLog("Invalid Details");
     }
 
-    const newPortfolio = new FreelancerPortfolio({
-      title,
-      role,
-      file,
-      completionDate,
-      projectChallange,
-      projectSolution,
-      profileId,
-    });
+    const file = req.file.filename;
 
-    const data = await newPortfolio.save();
+    console.log(file);
+    // const newPortfolio = new FreelancerPortfolio({
+    //   title,
+    //   role,
+    //   file,
+    //   completionDate,
+    //   projectChallange,
+    //   projectSolution,
+    //   profileId,
+    // });
 
-    successLog("Successfully portfolio added to Freelancer Profile!");
-    infoLog("addEducation exit");
-    return res.status(201).json({ isPortfolioAdded: true, data });
+    // const data = await newPortfolio.save();
+
+    // successLog("Successfully portfolio added to Freelancer Profile!");
+    // infoLog("addEducation exit");
+    // return res.status(201).json({ isPortfolioAdded: true, data });
   } catch (error) {
     console.log(error);
     infoLog("addEducation exit");
