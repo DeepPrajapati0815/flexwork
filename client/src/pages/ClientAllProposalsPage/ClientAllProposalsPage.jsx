@@ -27,18 +27,7 @@ const ClientAllProposalsPage = () => {
   }, []);
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>
-      <SimpleGrid
-        // columns={{ base: 1, lg: 2 }}
-        spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 6 }}
-        style={{
-          border: "1px solid gray",
-          borderRadius: "15px",
-          background: "rgb(26,32,44)",
-        }}
-        color={"white"}
-        px={10}
-      >
+      <SimpleGrid spacing={{ base: 8, md: 10 }} color={"white"}>
         <Stack display="flex" flexDirection={"column"}>
           {freelacersData?.map((freelancer, index) => {
             return (

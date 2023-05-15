@@ -69,6 +69,7 @@ const getSingleProposal = async (req, res) => {
     return res.status(500).json({ isProposalFetched: false, data: {} });
   }
 };
+
 const approveProposal = async (req, res) => {
   infoLog("approveProposal entry");
   const { proposalId } = req.params;
@@ -99,6 +100,8 @@ Sincerely,
 fleXwork`;
 
   try {
+    console.log("proposalId", proposalId);
+
     const approvedProposal = await FreelancerProposalRequest.findByIdAndUpdate(
       proposalId,
       {
@@ -106,13 +109,19 @@ fleXwork`;
       },
       { new: true }
     );
+
+    console.log("approveProposal", approveProposal);
     // after approving a proposal find all the freelancer who bid in this project
 
     const restFreelancerProposals = await FreelancerProposalRequest.find({
       $and: [{ projectId: projectId }, { _id: { $ne: proposalId } }],
     });
 
+    console.log("RestFreelancerProposals", restFreelancerProposals);
+
     let restFreelacersId = restFreelancerProposals.map((a) => a.freelancerId);
+
+    console.log("RestFreelacersId", restFreelacersId);
 
     await FreelancerProposalRequest.updateMany(
       {
@@ -127,6 +136,8 @@ fleXwork`;
       },
       "email"
     );
+
+    console.log("acceptFreelancerEmail", acceptFreelancerEmail);
 
     // unpublish the project
     await ClientProject.findByIdAndUpdate(projectId, { isPublished: false });
@@ -144,6 +155,8 @@ fleXwork`;
       },
       "email"
     );
+
+    console.log("restFreelancerEmails", restFreelancerEmails);
 
     restFreelancerEmails.forEach((freelancer) => {
       sendMail({

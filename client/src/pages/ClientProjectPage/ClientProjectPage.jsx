@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
@@ -29,6 +30,9 @@ const ClientProjectPage = () => {
 
   const [recievedProposals, setRecivedProposals] = useState([]);
   const [freelacersData, setFreelancersData] = useState([]);
+
+  const [isMobile] = useMediaQuery("(max-width: 500px)");
+  const [isTab] = useMediaQuery("(max-width: 950px)");
 
   const [isApplied, setIsApplied] = useState(false);
 
@@ -86,7 +90,7 @@ const ClientProjectPage = () => {
   console.log(recievedProposals);
 
   return (
-    <Container maxW={"10xl"} w={"90vw"} my={10}>
+    <Container maxW={"10xl"} w={isMobile ? "100vw" : "90vw"} my={10}>
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
@@ -99,9 +103,9 @@ const ClientProjectPage = () => {
           background: "rgb(26,32,44)",
         }}
         color={"white"}
-        px={10}
+        px={isMobile ? 4 : 10}
       >
-        <Stack spacing={{ base: 6, md: 10 }}>
+        <Stack spacing={{ base: 6, md: 10 }} w={"100%"}>
           <Box display={"flex"} my={"0"} justifyContent={"flex-end"}>
             {user.isClient && !project?.isPublished ? (
               <Button
@@ -109,8 +113,8 @@ const ClientProjectPage = () => {
                   publishProject();
                 }}
                 colorScheme="facebook"
-                size={"sm"}
-                minW="100px"
+                size={isMobile ? "xs" : "sm"}
+                minW={!isMobile && "100px"}
               >
                 publish
               </Button>
@@ -122,8 +126,8 @@ const ClientProjectPage = () => {
                     unpublishProject();
                   }}
                   bg={"red.500"}
-                  size={"sm"}
-                  minW="100px"
+                  size={isMobile ? "xs" : "sm"}
+                  minW={!isMobile && "100px"}
                   _hover={{ background: "red.400" }}
                 >
                   unpublish
@@ -142,16 +146,16 @@ const ClientProjectPage = () => {
               <Heading
                 lineHeight={1.1}
                 fontWeight={600}
-                fontSize={{ base: "2xl", sm: "4xl", lg: "4xl" }}
+                fontSize={isMobile ? "small" : "2xl"}
               >
                 {project.title}
               </Heading>
               <Text
                 color={useColorModeValue("gray.400", "gray.400")}
                 fontWeight={300}
-                fontSize={"1xl"}
-                textAlign={"right"}
-                py={2}
+                fontSize={isMobile ? "10px" : "1xl"}
+                textAlign={!isMobile && "right"}
+                py={isMobile ? 1 : 2}
               >
                 Published At {project?.createdAt?.split("T")[0]} On{" "}
                 {project?.createdAt?.split("T")[1].split(".")[0]}
@@ -161,7 +165,7 @@ const ClientProjectPage = () => {
               alignSelf={"flex-start"}
               textAlign={"right"}
               fontWeight={"bolder"}
-              fontSize={"2xl"}
+              fontSize={isMobile ? "12px" : "2xl"}
               mr={3}
               flex={2}
             >
@@ -179,27 +183,31 @@ const ClientProjectPage = () => {
             }
           >
             <VStack spacing={{ base: 4, sm: 6 }}>
-              <Text w={"100%"} fontSize={"lg"}>
+              <Text w={"100%"} fontSize={isMobile ? "10px" : "lg"}>
                 {project.description}
               </Text>
             </VStack>
             <Box>
               <Text
-                fontSize={{ base: "16px", lg: "18px" }}
                 color={useColorModeValue("rgb(46,78,116)")}
-                fontWeight={"500"}
+                fontSize={isMobile ? "12px" : "18px"}
+                fontWeight={"900"}
                 textTransform={"uppercase"}
                 mb={"4"}
               >
                 Skills required
               </Text>
 
-              <SimpleGrid columns={{ base: 1, md: 12 }} spacing={2}>
+              <SimpleGrid
+                display={"flex"}
+                columns={{ base: 1, md: 12 }}
+                spacing={2}
+              >
                 {project?.skills?.map((skill, index) => {
                   return (
                     <List style={{ marginLeft: "10px" }} key={index}>
                       <ListItem>
-                        <Badge py={1} px={2}>
+                        <Badge fontSize={isMobile && "8px"} py={1} px={2}>
                           {skill}
                         </Badge>
                       </ListItem>
@@ -212,9 +220,9 @@ const ClientProjectPage = () => {
             <SimpleGrid columns={{ base: 1, md: 2 }}>
               <Box>
                 <Text
-                  fontSize={{ base: "16px", lg: "18px" }}
                   color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
+                  fontSize={isMobile ? "12px" : "18px"}
+                  fontWeight={"900"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -224,6 +232,7 @@ const ClientProjectPage = () => {
                 <Text
                   style={{ fontWeight: "700", marginLeft: "10px" }}
                   textTransform={"capitalize"}
+                  fontSize={isMobile && "10px"}
                 >
                   {project?.category}
                 </Text>
@@ -231,9 +240,9 @@ const ClientProjectPage = () => {
 
               <Box>
                 <Text
-                  fontSize={{ base: "16px", lg: "18px" }}
+                  fontSize={isMobile ? "12px" : "18px"}
+                  fontWeight={"900"}
                   color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -243,6 +252,7 @@ const ClientProjectPage = () => {
                 <Text
                   style={{ fontWeight: "700", marginLeft: "10px" }}
                   textTransform={"capitalize"}
+                  fontSize={isMobile && "10px"}
                 >
                   {project?.duration}
                 </Text>
@@ -250,9 +260,9 @@ const ClientProjectPage = () => {
 
               <Box>
                 <Text
-                  fontSize={{ base: "16px", lg: "18px" }}
+                  fontSize={isMobile ? "12px" : "18px"}
+                  fontWeight={"900"}
                   color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -262,6 +272,7 @@ const ClientProjectPage = () => {
                 <Text
                   style={{ fontWeight: "700", marginLeft: "10px" }}
                   textTransform={"capitalize"}
+                  fontSize={isMobile && "10px"}
                 >
                   {project?.experienceType}
                 </Text>
@@ -269,9 +280,9 @@ const ClientProjectPage = () => {
 
               <Box>
                 <Text
-                  fontSize={{ base: "16px", lg: "18px" }}
+                  fontSize={isMobile ? "12px" : "18px"}
+                  fontWeight={"900"}
                   color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -281,6 +292,7 @@ const ClientProjectPage = () => {
                 <Text
                   style={{ fontWeight: "700", marginLeft: "10px" }}
                   textTransform={"capitalize"}
+                  fontSize={isMobile && "10px"}
                 >
                   {project?.totalProposals}
                 </Text>
@@ -293,9 +305,10 @@ const ClientProjectPage = () => {
                 rounded={"none"}
                 w={"full"}
                 mt={8}
-                size={"lg"}
-                py={"7"}
+                size={isMobile ? "sm" : "lg"}
+                py={isMobile ? 3 : "7"}
                 color={"white"}
+                fontSize={isMobile && "10px"}
                 textTransform={"uppercase"}
                 variant="outline"
                 _hover={{
@@ -309,8 +322,8 @@ const ClientProjectPage = () => {
                 rounded={"none"}
                 w={"full"}
                 mt={8}
-                size={"lg"}
-                py={"7"}
+                size={isMobile ? "sm" : "lg"}
+                py={isMobile ? 3 : "7"}
                 bg={"rgb(46,78,116)"}
                 color={("white", "gray.900")}
                 textTransform={"uppercase"}
@@ -350,11 +363,13 @@ const ClientProjectPage = () => {
                 justifyContent={"space-between"}
               >
                 <Link to={`/client/project/proposals/${project._id}`}>
-                  <Button colorScheme="facebook">view al</Button>
+                  <Button fontSize={isMobile && "10px"} colorScheme="facebook">
+                    View All
+                  </Button>
                 </Link>
                 <Heading
                   color={"white"}
-                  size={"md"}
+                  size={isMobile ? "xs" : "md"}
                   textAlign={"center"}
                   my={6}
                 >

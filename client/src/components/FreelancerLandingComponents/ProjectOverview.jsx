@@ -15,6 +15,7 @@ import {
   Text,
   Textarea,
   Stack,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
@@ -24,11 +25,15 @@ import axios from "../../utils/axiosInstance";
 
 const ProjectOverview = ({ project, location }) => {
   const [isProjectLiked, setIsProjectLiked] = useState(false);
+
+  const [isMobile] = useMediaQuery("(max-width: 500px)");
+  const [isTab] = useMediaQuery("(max-width: 950px)");
+
   const { user, setRefresh } = useContext(FlexWorkContext);
   let statusColor = "red";
-  if (project?.status == "Accepted") {
+  if (project?.status === "Accepted") {
     statusColor = "green";
-  } else if (project?.status == "Pending") {
+  } else if (project?.status === "Pending") {
     statusColor = "yellow";
   }
   const navigate = useNavigate();
@@ -86,9 +91,11 @@ const ProjectOverview = ({ project, location }) => {
             <Flex width={"100%"} justifyContent={"space-between"}>
               <Box>
                 <Link to={`/client/project/${project._id}`}>
-                  <Heading size="md">{project?.title}</Heading>
+                  <Heading size={isMobile ? "xs" : "md"}>
+                    {project?.title}
+                  </Heading>
                 </Link>
-                <Text color={"gray.400"}>
+                <Text color={"gray.400"} fontSize={isMobile && "8px"}>
                   Created At {project?.createdAt?.split("T")[0]} On{" "}
                   {project?.createdAt.split("T")[1].split(".")[0]}
                 </Text>
@@ -96,16 +103,23 @@ const ProjectOverview = ({ project, location }) => {
               {project?.status ? (
                 <Box
                   letterSpacing={"1px"}
+                  fontSize={isMobile && "x-small"}
                   fontWeight={"bolder"}
                   color={statusColor}
                 >
                   {project?.status}
                 </Box>
               ) : (
-                <Box>
+                <Flex flexDir={isMobile ? "column" : "row"} gap={2}>
                   {user.isClient ? (
                     <Link to={`/client/project/${project._id}`}>
-                      <Button colorScheme="teal" size={"sm"} mx={3}>
+                      <Button
+                        colorScheme="teal"
+                        size={isMobile ? "xs" : "sm"}
+                        mx={3}
+                        fontSize={isMobile && "9px"}
+                        minW={!isMobile && "100px"}
+                      >
                         view
                       </Button>
                     </Link>
@@ -116,9 +130,10 @@ const ProjectOverview = ({ project, location }) => {
                       onClick={() => {
                         publishProject();
                       }}
+                      fontSize={isMobile && "9px"}
                       colorScheme="facebook"
-                      size={"sm"}
-                      minW="100px"
+                      size={isMobile ? "xs" : "sm"}
+                      minW={!isMobile && "100px"}
                     >
                       publish
                     </Button>
@@ -138,25 +153,33 @@ const ProjectOverview = ({ project, location }) => {
                       </Button>
                     )
                   )}
-                </Box>
+                </Flex>
               )}
             </Flex>
           </Flex>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Text>{project?.description.slice(0, 300)}.... </Text>
+        <Text fontSize={isMobile && "10px"}>
+          {project?.description.slice(0, 300)}
+          ....{" "}
+        </Text>
       </CardBody>
 
-      <Flex marginLeft={5} gap={3} flexWrap={"wrap"}>
+      <Flex
+        marginLeft={5}
+        gap={3}
+        flexDir={"column"}
+        fontSize={isMobile && "10px"}
+        flexWrap={"wrap"}
+      >
         Skills required :
-        {project?.skills?.map((skill, index) => {
-          return (
-            <HStack key={index} spacing={4}>
-              {["md"].map((size) => (
+        <Flex gap={1}>
+          {project?.skills?.map((skill, index) => {
+            return (
+              <HStack key={index} spacing={4}>
                 <Tag
-                  size={size}
-                  key={size}
+                  fontSize={isMobile ? "xx-small" : "md"}
                   borderRadius="full"
                   variant="solid"
                   colorScheme="whiteAlpha"
@@ -166,12 +189,18 @@ const ProjectOverview = ({ project, location }) => {
                 >
                   <TagLabel>{skill}</TagLabel>
                 </Tag>
-              ))}
-            </HStack>
-          );
-        })}
+              </HStack>
+            );
+          })}
+        </Flex>
       </Flex>
-      <Text marginLeft={5} mb={3} marginTop={3} color={"gray.400"}>
+      <Text
+        marginLeft={5}
+        mb={3}
+        fontSize={isMobile && "12px"}
+        marginTop={3}
+        color={"gray.400"}
+      >
         {user.isClient ? "Proposals Received " : "Total Proposals"} :{" "}
         {project?.totalProposals}
       </Text>
@@ -211,6 +240,7 @@ const ProjectOverview = ({ project, location }) => {
                 alignItems={"center"}
                 variant="unstyled"
                 colorScheme="pink"
+                fontSize={isMobile && "12px"}
                 onClick={(e) => setIsProjectLiked(!isProjectLiked)}
               >
                 {isProjectLiked ? (
@@ -226,6 +256,7 @@ const ProjectOverview = ({ project, location }) => {
                 onMouseOver={(e) => {
                   e.target.style.background = "#212A3E";
                 }}
+                fontSize={isMobile && "12px"}
                 onMouseLeave={(e) => {
                   e.target.style.background = "#394867";
                 }}

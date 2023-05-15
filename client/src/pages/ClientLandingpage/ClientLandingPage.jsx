@@ -111,7 +111,6 @@ const ClientLandingPage = () => {
     }
   }, [user, location, refresh]);
 
-
   return (
     <Box width={"98vw"} display={"flex"} p={isMobile ? 5 : 0}>
       <Flex direction={"row"}>
@@ -124,8 +123,8 @@ const ClientLandingPage = () => {
             minWidth={"65vw"}
             flex={2}
             m={isMobile ? 1 : 5}
-            p={10}
-            bg={"#1a202c"}
+            p={isMobile ? 1 : 10}
+            bg={"#1a202c"}  
             rounded={"2xl"}
             roundedTopRight={0}
             roundedBottomRight={0}

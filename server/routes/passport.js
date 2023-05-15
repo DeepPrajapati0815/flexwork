@@ -1,9 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
 const { loginFailed, loginSuccess, logout } = require("../controller/passport");
-const User = require("../models/User");
-
-const CLIENT_URL = process.env.CLIENT_URL;
 
 // Login Related Routes
 

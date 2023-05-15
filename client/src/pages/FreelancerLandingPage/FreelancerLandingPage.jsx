@@ -90,11 +90,11 @@ const FreelancerLandingPage = () => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();
 
-    if (location.search.split("?")[1] == "recent") {
+    if (location.search.split("?")[1] === "recent") {
       getRecentProjects();
-    } else if (location.search.split("?")[1] == "saved") {
+    } else if (location.search.split("?")[1] === "saved") {
       getSavedProjects();
-    } else if (location.search.split("?")[1] == "applied") {
+    } else if (location.search.split("?")[1] === "applied") {
       getAppliedProjects();
     } else {
       getBestMatchProjects();
@@ -106,14 +106,14 @@ const FreelancerLandingPage = () => {
       <Flex direction={"row"}>
         <Box
           height={"100vh"}
-          w={isMobile ? "85vw" : isTab ? "90vw" : "65vw"}
+          w={isMobile ? "88vw" : isTab ? "90vw" : "65vw"}
           minWidth={"65vw"}
           flex={2}
           m={isMobile ? 1 : 5}
-          p={10}
+          p={isMobile ? 3 : 10}
           bg={"#1a202c"}
           rounded={"2xl"}
-          className="scrollbar"
+          className={"scrollbar"}
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>

@@ -4,12 +4,16 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  Text
+  Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const FreelancerLandingTabs = () => {
+  const [isMobile] = useMediaQuery("(max-width: 500px)");
+  const [isTab] = useMediaQuery("(max-width: 950px)");
+
   const navigate = useNavigate();
 
   const handleClick = (prop) => {
@@ -26,19 +30,51 @@ const FreelancerLandingTabs = () => {
 
   return (
     <Tabs colorScheme="blue">
-      <Text color={"gray.300"} mb={6} fontSize={"2xl"} fontWeight={"bold"}>
+      <Text
+        color={"gray.300"}
+        mb={6}
+        fontSize={isMobile ? "small" : "2xl"}
+        fontWeight={"bold"}
+      >
         Jobs you might like
       </Text>
       <TabList
         color={"gray"}
-        style={{ display: "flex", justifyContent: "space-between" }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
       >
-        <Box style={{ display: "flex" }}>
-          <Tab onClick={() => handleClick("bestmatch")}>Best Matches</Tab>
-          <Tab onClick={() => handleClick("recent")}>Most Recent</Tab>
-          <Tab onClick={() => handleClick("saved")}>Saved Jobs</Tab>
+        <Box
+          style={{
+            display: "flex",
+          }}
+        >
+          <Tab
+            fontSize={isMobile && "10px"}
+            onClick={() => handleClick("bestmatch")}
+          >
+            Best Matches
+          </Tab>
+          <Tab
+            fontSize={isMobile && "10px"}
+            onClick={() => handleClick("recent")}
+          >
+            Most Recent
+          </Tab>
+          <Tab
+            fontSize={isMobile && "10px"}
+            onClick={() => handleClick("saved")}
+          >
+            Saved Jobs
+          </Tab>
         </Box>
-        <Tab onClick={() => handleClick("applied")}>Applied Jobs</Tab>
+        <Tab
+          fontSize={isMobile && "10px"}
+          onClick={() => handleClick("applied")}
+        >
+          Applied Jobs
+        </Tab>
       </TabList>
 
       <TabPanels></TabPanels>

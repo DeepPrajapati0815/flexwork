@@ -12,6 +12,7 @@ import {
   IconButton,
   Stack,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 
 import { AiOutlineClose } from "react-icons/ai";
@@ -29,6 +30,9 @@ const ProposalOverview = ({ freelancer, proposal }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { id: projectId } = useParams();
+
+  const [isMobile] = useMediaQuery("(max-width: 500px)");
+  const [isTab] = useMediaQuery("(max-width: 950px)");
 
   const approveProposal = async () => {
     try {
@@ -79,15 +83,17 @@ const ProposalOverview = ({ freelancer, proposal }) => {
       border={"1px solid gray"}
     >
       <CardHeader>
-        <Flex spacing="2">
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar src={freelancer?.profileImg} />
-
+        <Flex flexDir={isMobile && "column"} spacing="2">
+          <Flex flex="1" gap="3" alignItems="center" flexWrap="wrap">
+            <Avatar
+              size={isMobile ? "sm" : "md"}
+              src={freelancer?.profileImg}
+            />
             <Box>
-              <Heading size="sm">
+              <Heading size={isMobile ? "xs" : "sm"}>
                 {freelancer?.firstName + " " + freelancer?.lastName}
               </Heading>
-              <Text>
+              <Text fontSize={isMobile && "10px"} py={1}>
                 {"Recived at " +
                   proposal?.createdAt.split("T")[0] +
                   " On " +
@@ -97,11 +103,24 @@ const ProposalOverview = ({ freelancer, proposal }) => {
           </Flex>
           {proposal?.status === "Accepted" ? (
             <>
-              <Flex alignItems={"center"} gap={2}>
-                <Button colorScheme="whatsapp" size={"xs"} py={4}>
+              <Flex
+                alignItems={"center"}
+                justify={isMobile && "space-between"}
+                gap={2}
+              >
+                <Button
+                  colorScheme="whatsapp"
+                  size={isMobile ? "sm" : "md"}
+                  fontSize={isMobile && "10px"}
+                  py={isMobile ? 1 : 4}
+                >
                   schedule meeting
                 </Button>
-                <Box color={"green"} fontWeight={"bolder"}>
+                <Box
+                  color={"green"}
+                  fontSize={isMobile && "13px"}
+                  fontWeight={"bolder"}
+                >
                   Approved
                 </Box>
               </Flex>
@@ -132,7 +151,7 @@ const ProposalOverview = ({ freelancer, proposal }) => {
         <Flex justify={"space-between"}>
           <Box w={"80%"}>
             {proposal?.coverLetter?.length > 300 && !isMore ? (
-              <Text>
+              <Text fontSize={isMobile && "8px"}>
                 {proposal?.coverLetter?.slice(0, 300)}
                 <span
                   onClick={() => setIsMore(true)}
@@ -142,7 +161,7 @@ const ProposalOverview = ({ freelancer, proposal }) => {
                 </span>
               </Text>
             ) : proposal?.coverLetter?.length > 300 ? (
-              <Text>
+              <Text fontSize={isMobile && "8px"}>
                 {proposal?.coverLetter}
                 <span
                   onClick={() => setIsMore(false)}
@@ -162,8 +181,11 @@ const ProposalOverview = ({ freelancer, proposal }) => {
             )}
           </Box>
           <Stack gap={0} align={"end"}>
-            <Text> ₹ {proposal?.expectedBidRate}</Text>
-            <Text>{proposal?.duration}</Text>
+            <Text fontSize={isMobile && "10px"}>
+              {" "}
+              ₹ {proposal?.expectedBidRate}
+            </Text>
+            <Text fontSize={isMobile && "10px"}>{proposal?.duration}</Text>
           </Stack>
         </Flex>
       </CardBody>
