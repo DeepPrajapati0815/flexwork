@@ -3,7 +3,7 @@ const {
   verifyToken,
 } = require("../middleware/verifyToken");
 
-const upload = require("../middleware/uploadFile");
+const { upload, uploadTOS3 } = require("../middleware/uploadFile");
 
 const {
   addPortfolio,

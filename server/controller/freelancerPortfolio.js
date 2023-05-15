@@ -1,5 +1,5 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
-
+const { s3 } = require("../middleware/uploadFile");
 const FreelancerPortfolio = require("../models/FreelancerPortfolio");
 
 const addPortfolio = async (req, res) => {
@@ -7,7 +7,15 @@ const addPortfolio = async (req, res) => {
 
   const { profileId } = req.params;
 
-  console.log("files", req.file.location);
+  const file = req.file;
+
+  const params = {
+    Bucket: "flexworkdata",
+    Key: "test/portfolio" + Date.now() + file.originalname,
+    Body: file.buffer,
+    ACL: "public-read",
+  };
+  let fileUrl = null;
 
   const { title, completionDate, role, projectChallange, projectSolution } =
     JSON.parse(req.body.portfolio);
@@ -27,24 +35,38 @@ const addPortfolio = async (req, res) => {
       return errorLog("Invalid Details");
     }
 
-    const file = req.file.filename;
+    s3.upload(params, async (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ isPortfolioAdded: false, data: {} });
+      }
 
-    console.log(file);
-    // const newPortfolio = new FreelancerPortfolio({
-    //   title,
-    //   role,
-    //   file,
-    //   completionDate,
-    //   projectChallange,
-    //   projectSolution,
-    //   profileId,
-    // });
+      console.log("aws data====>", data);
+      try {
+        const newPortfolio = new FreelancerPortfolio({
+          title,
+          role,
+          file: data.Location,
+          completionDate,
+          projectChallange,
+          projectSolution,
+          profileId,
+        });
 
-    // const data = await newPortfolio.save();
+        const newPortfolioData = await newPortfolio.save();
 
-    // successLog("Successfully portfolio added to Freelancer Profile!");
-    // infoLog("addEducation exit");
-    // return res.status(201).json({ isPortfolioAdded: true, data });
+        successLog("Successfully portfolio added to Freelancer Profile!");
+        infoLog("addEducation exit");
+        return res
+          .status(201)
+          .json({ isPortfolioAdded: true, data: newPortfolioData });
+      } catch (error) {
+        console.log(error);
+        infoLog("addEducation exit");
+        errorLog("Error While adding a portfolio to freelancer profile!");
+        return res.status(500).json({ isPortfolioAdded: false, data: {} });
+      }
+    });
   } catch (error) {
     console.log(error);
     infoLog("addEducation exit");
