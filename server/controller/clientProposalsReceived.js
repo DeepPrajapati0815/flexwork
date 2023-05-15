@@ -106,8 +106,8 @@ fleXwork`;
       },
       { new: true }
     );
-    // after approving a proposal find all the freelancer who bid in this project
 
+    // after approving a proposal find all the freelancer who bid in this project
     const restFreelancerProposals = await FreelancerProposalRequest.find({
       $and: [{ projectId: projectId }, { _id: { $ne: proposalId } }],
     });
@@ -121,7 +121,7 @@ fleXwork`;
       { status: "Rejected" }
     );
 
-    const acceptFreelancerEmail = await User.find(
+    const acceptFreelancerEmail = await User.findOne(
       {
         _id: approvedProposal?.freelancerId,
       },

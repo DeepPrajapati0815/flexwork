@@ -117,17 +117,30 @@ const FreelancerLandingPage = () => {
         >
           <SearchBar></SearchBar>
           <FreelancerLandingTabs></FreelancerLandingTabs>
-          <Box>
-            {projects.map((project, index) => {
-              return (
-                <ProjectOverview
-                  key={index}
-                  project={project}
-                  location={location.search.split("?")[1]}
-                />
-              );
-            })}
-          </Box>
+          {projects?.length !== 0 ? (
+            <Box>
+              {projects.map((project, index) => {
+                return (
+                  <ProjectOverview
+                    key={index}
+                    project={project}
+                    location={location.search.split("?")[1]}
+                  />
+                );
+              })}
+            </Box>
+          ) : (
+            <Box
+              display={"flex"}
+              height={"70vh"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Box color={"white"} fontWeight={"bolder"}>
+                No {location.search.split("?")[1]} Jobs
+              </Box>
+            </Box>
+          )}
         </Box>
         <Box
           flex={1}

@@ -25,6 +25,7 @@ const ClientAllProposalsPage = () => {
   useEffect(() => {
     getAllProposalOfProject();
   }, []);
+
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>
       <SimpleGrid
@@ -39,17 +40,21 @@ const ClientAllProposalsPage = () => {
         color={"white"}
         px={10}
       >
-        <Stack display="flex" flexDirection={"column"}>
-          {freelacersData?.map((freelancer, index) => {
-            return (
-              <ProposalOverview
-                key={index}
-                freelancer={freelacersData[index]}
-                proposal={allProposals[index]}
-              />
-            );
-          })}
-        </Stack>
+        {allProposals?.length !== 0 ? (
+          <Stack display="flex" flexDirection={"column"}>
+            {freelacersData?.map((freelancer, index) => {
+              return (
+                <ProposalOverview
+                  key={index}
+                  freelancer={freelacersData[index]}
+                  proposal={allProposals[index]}
+                />
+              );
+            })}
+          </Stack>
+        ) : (
+          <Stack color={"white"}>No Active Proposals</Stack>
+        )}
       </SimpleGrid>
     </Container>
   );

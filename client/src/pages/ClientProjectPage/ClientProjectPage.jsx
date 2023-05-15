@@ -186,8 +186,8 @@ const ClientProjectPage = () => {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("rgb(46,78,116)")}
-                fontWeight={"500"}
+                color={"grey"}
+                fontWeight={"900"}
                 textTransform={"uppercase"}
                 mb={"4"}
               >
@@ -213,8 +213,8 @@ const ClientProjectPage = () => {
               <Box>
                 <Text
                   fontSize={{ base: "16px", lg: "18px" }}
-                  color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
+                  color={"grey"}
+                  fontWeight={"900"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -232,8 +232,8 @@ const ClientProjectPage = () => {
               <Box>
                 <Text
                   fontSize={{ base: "16px", lg: "18px" }}
-                  color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
+                  color={"grey"}
+                  fontWeight={"900"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -251,8 +251,8 @@ const ClientProjectPage = () => {
               <Box>
                 <Text
                   fontSize={{ base: "16px", lg: "18px" }}
-                  color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
+                  color={"grey"}
+                  fontWeight={"900"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >
@@ -270,8 +270,8 @@ const ClientProjectPage = () => {
               <Box>
                 <Text
                   fontSize={{ base: "16px", lg: "18px" }}
-                  color={useColorModeValue("rgb(46,78,116)")}
-                  fontWeight={"500"}
+                  color={"grey"}
+                  fontWeight={"900"}
                   textTransform={"uppercase"}
                   my={"4"}
                 >

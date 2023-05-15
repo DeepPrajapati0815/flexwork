@@ -1,6 +1,7 @@
 // Import required packages and modules
 
 const express = require("express");
+const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./db/db");
 const router = require("./routes/index");
@@ -12,8 +13,6 @@ require("./service/googleAuth");
 require("./service/linkedInAuth");
 require("./service/githubAuth");
 const nodemailer = require("nodemailer");
-
-const dotenv = require("dotenv");
 
 dotenv.config();
 
