@@ -20,7 +20,13 @@ router.post(
   upload.single("file"),
   addPortfolio
 );
-router.put("/:portfolioId", verifyTokenAndFreelancer, updatePortfolio);
+router.put(
+  "/:portfolioId",
+  verifyTokenAndFreelancer,
+  upload.single("file"),
+  updatePortfolio
+);
+
 router.delete("/:portfolioId", verifyTokenAndFreelancer, removePortfolio);
 router.get("/:profileId", verifyToken, getPortfolios);
 

@@ -13,14 +13,13 @@ import {
   ModalOverlay,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import axios from "../../../utils/axiosInstance";
+import { FlexWorkContext } from "../../../context/ContextStore";
 
 const PortfolioModal = ({
-  refresh,
-  setRefresh,
   freelancerProfile,
   isOpen,
   onClose,
@@ -32,6 +31,7 @@ const PortfolioModal = ({
 
   const [isLoading, setisLoading] = useState(false);
 
+  const { setRefresh, refresh } = useContext(FlexWorkContext);
   const [freelancerPortfolio, setFreelancerPortfolio] = useState({
     title: "",
     role: "",
@@ -53,18 +53,26 @@ const PortfolioModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       if (isUpdate && updatePortfolio._id) {
         try {
           setisLoading(true);
 
+          const formData = new FormData();
+
+          formData.append("file", updatePortfolio.file);
+          formData.append("portfolio", JSON.stringify(updatePortfolio));
+
           const { data } = await axios.put(
             `/api/v1/freelancer/portfolio/${updatePortfolio._id}`,
-            updatePortfolio
+            formData
           );
+
           setisLoading(false);
           setUpdatePortfolio({});
-          setRefresh(Math.random() * 6000000);
+
+          setRefresh(Math.random() * 9000000);
 
           toast.success("Updated Portfolio!", {
             style: {
@@ -97,8 +105,6 @@ const PortfolioModal = ({
           formData.append("file", freelancerPortfolio.file);
           formData.append("portfolio", JSON.stringify(freelancerPortfolio));
 
-          console.log(formData);
-
           const { data } = await axios.post(
             `/api/v1/freelancer/portfolio/${freelancerPortfolio.profileId}`,
             formData
@@ -113,7 +119,7 @@ const PortfolioModal = ({
             file: "",
             completionDate: "",
           });
-          setRefresh(Math.random() * 6000000);
+          setRefresh(Math.random() * 9000000);
           toast.success("Added Portfolio!", {
             style: {
               padding: "16px",

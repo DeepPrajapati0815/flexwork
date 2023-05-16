@@ -20,7 +20,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiCheck } from "react-icons/bi";
 import { useState } from "react";
 import axios from "../../utils/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FlexWorkContext } from "../../context/ContextStore";
 import { toast } from "react-hot-toast";
 
@@ -37,7 +37,7 @@ const ProposalOverview = ({ freelancer, proposal }) => {
   const approveProposal = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.put(
+      await axios.put(
         `/api/v1/client/proposal/${proposal._id}?id=${projectId}`
       );
 
@@ -58,7 +58,7 @@ const ProposalOverview = ({ freelancer, proposal }) => {
 
   const rejectProposal = async () => {
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `/api/v1/client/proposal/${proposal._id}?id=${projectId}`
       );
 
@@ -73,6 +73,14 @@ const ProposalOverview = ({ freelancer, proposal }) => {
       console.log(error);
     }
   };
+
+  // const viewProfile = async () => {
+  //   return navigate("/freelancer/profile", {
+  //     state: {
+  //       freelancer,
+  //     },
+  //   });
+  // };
 
   return (
     <Card

@@ -25,6 +25,7 @@ const ClientAllProposalsPage = () => {
   useEffect(() => {
     getAllProposalOfProject();
   }, []);
+
   return (
     <Container maxW={"10xl"} w={"90vw"} my={10}>
       <SimpleGrid spacing={{ base: 8, md: 10 }} color={"white"}>

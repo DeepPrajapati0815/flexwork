@@ -11,11 +11,10 @@ const addPortfolio = async (req, res) => {
 
   const params = {
     Bucket: "flexworkdata",
-    Key: "test/portfolio" + Date.now() + file.originalname,
-    Body: file.buffer,
+    Key: "portfolio/" + file?.originalname,
+    Body: file?.buffer,
     ACL: "public-read",
   };
-  let fileUrl = null;
 
   const { title, completionDate, role, projectChallange, projectSolution } =
     JSON.parse(req.body.portfolio);
@@ -41,7 +40,6 @@ const addPortfolio = async (req, res) => {
         return res.status(400).json({ isPortfolioAdded: false, data: {} });
       }
 
-      console.log("aws data====>", data);
       try {
         const newPortfolio = new FreelancerPortfolio({
           title,
@@ -79,7 +77,16 @@ const updatePortfolio = async (req, res) => {
   infoLog("updatePortfolio entry");
   const portfolioId = req.params.portfolioId;
 
-  const data = req.body;
+  const data = JSON.parse(req.body.portfolio);
+
+  const file = req.file;
+
+  const params = {
+    Bucket: "flexworkdata",
+    Key: "portfolio/" + file?.originalname,
+    Body: file?.buffer,
+    ACL: "public-read",
+  };
 
   if (!data) {
     infoLog("updatePortfolio exit");
@@ -90,11 +97,28 @@ const updatePortfolio = async (req, res) => {
   try {
     const updatedPortfolio = await FreelancerPortfolio.findByIdAndUpdate(
       portfolioId,
-      data,
+      { ...data, file: "" },
       {
         new: true,
       }
     );
+
+    if (file) {
+      s3.upload(params, async (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ isPortfolioAdded: false, data: {} });
+        }
+
+        const updatedPortfolio = await FreelancerPortfolio.findByIdAndUpdate(
+          portfolioId,
+          { file: data.Location },
+          {
+            new: true,
+          }
+        );
+      });
+    }
 
     successLog("Successfully updated portfolio to Freelancer Profile!");
     infoLog("updatePortfolio exit");
@@ -102,6 +126,7 @@ const updatePortfolio = async (req, res) => {
       .status(200)
       .json({ isPortfolioUpdated: true, data: updatedPortfolio });
   } catch (error) {
+    console.log(error);
     infoLog("updatePortfolio exit");
     errorLog("Error While updating a portfolio to freelancer profile!");
     return res.status(500).json({ isPortfolioUpdated: false, data: {} });

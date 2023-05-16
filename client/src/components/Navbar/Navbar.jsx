@@ -333,12 +333,16 @@ const NAV_ITEMS = [
       : "Hire Freelancers",
     children: [
       {
-        label: window.location.href.includes("/freelancer")
-          ? "My work"
-          : "Post a job and hire a pro",
+        label: window.location.href.includes("/freelancer") ? (
+          <Link to={"#"}>My work</Link>
+        ) : (
+          <Link to={"/client/post"}>Post a job and hire a pro </Link>
+        ),
+
         subLabel: window.location.href.includes("/freelancer")
           ? "View your work"
           : "Explore Trending talents in your field",
+
         href: "#",
       },
       {

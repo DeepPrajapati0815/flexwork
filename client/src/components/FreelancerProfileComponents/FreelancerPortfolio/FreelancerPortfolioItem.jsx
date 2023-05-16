@@ -1,25 +1,17 @@
+import { DeleteIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import {
-  AddIcon,
-  DeleteIcon,
-  DownloadIcon,
-  EditIcon,
-  MinusIcon,
-} from "@chakra-ui/icons";
-import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Card,
   CardBody,
+  Flex,
   Stack,
   Text,
-  Button,
-  Box,
-  AccordionItem,
-  Accordion,
-  AccordionIcon,
-  AccordionButton,
-  AccordionPanel,
-  Flex,
 } from "@chakra-ui/react";
-import axios from "../../../utils/axiosInstance";
 import { useState } from "react";
 
 const FreelancerPortfolioItem = ({
@@ -30,6 +22,7 @@ const FreelancerPortfolioItem = ({
   setUpdatePortfolio,
 }) => {
   const [downloadFlag, setDownloadFlag] = useState(false);
+
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
@@ -60,7 +53,22 @@ const FreelancerPortfolioItem = ({
             <Flex direction={"row"} gap={"2"} pt={"2"}>
               <Box title="download">
                 <DownloadIcon
-                  onClick={() => setDownloadFlag(false)}
+                  onClick={() => {
+                    if (portfolio.file) {
+                      setDownloadFlag(true);
+                      const link = document.createElement("a");
+
+                      link.href = portfolio.file;
+
+                      link.download = portfolio.title;
+
+                      link.style.display = "none";
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      setDownloadFlag(false);
+                    }
+                  }}
                   bg={"blue.500"}
                   _hover={{ bg: "blue.400" }}
                   rounded={"full"}

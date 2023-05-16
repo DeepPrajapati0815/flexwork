@@ -9,7 +9,7 @@ const updateProfile = async (req, res) => {
     const { userId } = req.params;
 
     if (!data) {
-      infoLog("createProfile exit");
+      infoLog("updateProfile exit");
       res.status(400).json({ isProfileUpdated: false, data: {} });
       return errorLog("Invalid Details");
     }
@@ -57,7 +57,8 @@ const getProfile = async (req, res) => {
   infoLog("getProfile entry");
   const userId = req.params.userId;
   try {
-    const freelancerProfile = await FreelancerProfile.findOne({ userId }, {});
+    console.log(userId);
+    const freelancerProfile = await FreelancerProfile.findOne({ userId });
     successLog("Successfully Freelancer Profile fetched!");
     infoLog("getProfile exit");
     return res

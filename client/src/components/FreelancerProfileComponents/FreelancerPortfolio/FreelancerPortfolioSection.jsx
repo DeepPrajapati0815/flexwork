@@ -82,12 +82,11 @@ const FreelancerPortfolioSection = () => {
   };
 
   useEffect(() => {
+    console.log("calling use effect portfolio section........");
     if (freelancerProfile._id !== "") {
       getPortfolios();
     }
   }, [freelancerProfile._id, refresh]);
-
-  console.log(isData);
 
   return (
     <Box color={"white"} w={"95%"} p={5}>

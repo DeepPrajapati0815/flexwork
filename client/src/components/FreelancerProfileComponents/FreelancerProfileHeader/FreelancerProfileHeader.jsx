@@ -29,6 +29,7 @@ const FreelancerProfileHeader = () => {
     city: "",
     email: "",
     state: "",
+    file: "",
   });
 
   useEffect(() => {
@@ -40,8 +41,6 @@ const FreelancerProfileHeader = () => {
       state: user?.state ? user.state : "",
     });
   }, [user]);
-
-  const [isLoaded, setIsLoaded] = React.useState(false);
 
   return (
     <Card bg={"#1a202c"} color={"white"}>
@@ -71,20 +70,6 @@ const FreelancerProfileHeader = () => {
                     right: 3,
                   }}
                 />
-                <MdModeEdit
-                  style={{
-                    position: "absolute",
-                    borderRadius: "50%",
-                    padding: "2px",
-                    background: "#e2e9e2",
-                    color: "#2e4e74",
-                    top: 0,
-                    cursor: "pointer",
-                    left: 10,
-                    fontSize: "1.4rem",
-                  }}
-                  color={"white"}
-                ></MdModeEdit>
               </>
             )}
           </Box>

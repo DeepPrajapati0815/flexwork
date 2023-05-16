@@ -156,11 +156,7 @@ const App = () => {
           <Route
             path="/freelancer/profile"
             element={
-              isLogin && !isUserClient ? (
-                <FreelancerProfilePage />
-              ) : (
-                <Navigate to="/login" />
-              )
+              isLogin ? <FreelancerProfilePage /> : <Navigate to="/login" />
             }
           />
 
@@ -193,7 +189,9 @@ const App = () => {
 
           <Route
             path="/client/project/proposals/:id"
-            element={isLogin ? <ClientAllProposalsPage /> : <Navigate to="/login" />}
+            element={
+              isLogin ? <ClientAllProposalsPage /> : <Navigate to="/login" />
+            }
           />
 
           <Route

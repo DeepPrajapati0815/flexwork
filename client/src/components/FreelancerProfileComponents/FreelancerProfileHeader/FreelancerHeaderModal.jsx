@@ -29,10 +29,11 @@ const FreelancerHeaderModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(
-        `/api/v1/user/${userId}`,
-        freelancerPersonalDetails
-      );
+      const formData = new FormData();
+      formData.append("file", freelancerPersonalDetails.file);
+      formData.append("data", JSON.stringify(freelancerPersonalDetails));
+
+      const { data } = await axios.put(`/api/v1/user/${userId}`, formData);
       if (data.isUserUpdated) {
         toast.success("Updated Profile!", {
           style: {
@@ -132,6 +133,22 @@ const FreelancerHeaderModal = ({
                       setFreelancerPersonalDetails({
                         ...freelancerPersonalDetails,
                         state: e.target.value,
+                      })
+                    }
+                    placeholder="State"
+                  />
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel>Profile Image</FormLabel>
+                  <Input
+                    type="file"
+                    required
+                    ref={initialRef}
+                    onChange={(e) =>
+                      setFreelancerPersonalDetails({
+                        ...freelancerPersonalDetails,
+                        file: e.target.files[0],
                       })
                     }
                     placeholder="State"

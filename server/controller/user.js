@@ -1,17 +1,45 @@
 const { infoLog, errorLog, successLog } = require("../helper/logHelper");
 const User = require("../models/User");
 
+const { s3 } = require("../middleware/uploadFile");
+
 const updateUser = async (req, res) => {
   try {
     infoLog("updateUser entry");
-    const data = req.body;
+    const data = JSON.parse(req.body.data);
     const { userId } = req.params;
-    console.log(data);
+
+    const file = req.file;
+
+    const params = {
+      Bucket: "flexworkdata",
+      Key: "profile/" + Date.now() + file.originalname,
+      Body: file.buffer,
+      ACL: "public-read",
+    };
 
     if (!data) {
       infoLog("updateUser exit");
       res.status(400).json({ isUserUpdated: false, data: {} });
       return errorLog("Invalid Details");
+    }
+
+    if (file) {
+      s3.upload(params, async (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ isPortfolioAdded: false, data: {} });
+        }
+
+        console.log(data);
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { profileImg: data.Location },
+          { new: true }
+        );
+
+        console.log("updated Successfully");
+      });
     }
 
     const user = await User.findByIdAndUpdate(userId, data, { new: true });

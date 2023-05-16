@@ -61,6 +61,7 @@ const ClientCompanyDetails = () => {
         </Box>
 
         <Text
+          mt={4}
           width={"fit-content"}
           fontWeight={"bold"}
           fontSize={isMobile ? "0.8rem" : isTab ? "1.4rem " : "1.7rem"}
