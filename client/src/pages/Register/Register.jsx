@@ -62,7 +62,7 @@ const Register = ({ isUserClient, isLogin, title }) => {
 
   const google = () => {
     window.open(
-      `http://localhost:5000/auth/google?isClient=${window.location.href.includes(
+      `/auth/google?isClient=${window.location.href.includes(
         "/client"
       )}&isFirstTime=${window.location.href.includes("/register")}`,
       "_self"
@@ -71,7 +71,7 @@ const Register = ({ isUserClient, isLogin, title }) => {
 
   const github = () => {
     window.open(
-      `http://localhost:5000/auth/github?isClient=${window.location.href.includes(
+      `http://localhost:/auth/github?isClient=${window.location.href.includes(
         "/client"
       )}&isFirstTime=${window.location.href.includes("/register")}`,
       "_self"

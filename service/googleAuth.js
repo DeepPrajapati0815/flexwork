@@ -10,11 +10,10 @@ passport.use(
       clientID:
         "917391406583-lig9dagoocatsu7hv0bqh4sbgb18e6vo.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "http://localhost:5000/auth/google/callback",
+      callbackURL: "/auth/google/callback",
       scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
-      
       done(null, profile);
     }
   )
