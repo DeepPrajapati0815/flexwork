@@ -77,9 +77,9 @@ const FreelancerLandingPage = () => {
   };
   useEffect(() => {
     if (
-      location.search.split("?")[1] == "recent" ||
-      location.search.split("?")[1] == "saved" ||
-      location.search.split("?")[1] == "applied"
+      location.search.split("?")[1] === "recent" ||
+      location.search.split("?")[1] === "saved" ||
+      location.search.split("?")[1] === "applied"
     ) {
       navigate("/freelancer?bestmatch");
     }
@@ -89,11 +89,11 @@ const FreelancerLandingPage = () => {
     setFreelancerProfile({ ...freelancerProfile, userId: user._id });
     getProfileData();
 
-    if (location.search.split("?")[1] == "recent") {
+    if (location.search.split("?")[1] === "recent") {
       getRecentProjects();
-    } else if (location.search.split("?")[1] == "saved") {
+    } else if (location.search.split("?")[1] === "saved") {
       getSavedProjects();
-    } else if (location.search.split("?")[1] == "applied") {
+    } else if (location.search.split("?")[1] === "applied") {
       getAppliedProjects();
     } else {
       getBestMatchProjects();

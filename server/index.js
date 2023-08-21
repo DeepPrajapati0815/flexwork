@@ -1,10 +1,11 @@
 // Import required packages and modules
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const connectDB = require("./db/db");
-const router = require("./routes/index");
+const router = require("./api/routes/index");
 const passport = require("passport");
-const passportRouter = require("./routes/passport");
+const passportRouter = require("./api/routes/passport");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 require("./service/googleAuth");
@@ -56,9 +57,17 @@ app.use(function (request, response, next) {
 app.use(passport.initialize()); // Initialize Passport authentication middleware
 app.use(passport.session()); // Add session support to Passport middleware
 
+app.use(express.static(path.resolve(path.dirname(__filename), "build")));
+
 // Define app routes
 app.use("/auth", passportRouter); // Route requests to /auth to the passportRouter module
 app.use("/api/v1", router); // Route requests to /api/v1 to the router module
+
+// frontend routes
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(path.dirname(__filename), "build", "index.html"));
+});
 
 const PORT = process.env.PORT;
 

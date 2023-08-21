@@ -82,13 +82,13 @@ const App = () => {
         }
       }
     } catch (error) {
-      if (error.response.data.isToken === false) {
+      if (error.response?.data?.isToken === false) {
         localStorage.setItem("isLogin", false);
         localStorage.removeItem("isClient");
         localStorage.removeItem("userId");
         if (window.location.href.includes("/register")) {
           navigate("/register");
-        } else if (window.location.href === "http://localhost:3000/") {
+        } else if (window.location.href === "/") {
           navigate("/");
         } else {
           navigate("/login");

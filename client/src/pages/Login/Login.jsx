@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import { FaGithub } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
 import AuthButton from "../../components/AuthButton/AuthButton";
-import { FlexWorkContext } from "../../context/ContextStore";
 import googleIcon from "../../img/google.ico";
 import logo from "../../img/png/logo.png";
 import axios from "../../utils/axiosInstance";
@@ -14,8 +13,6 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
     username: "",
     password: "",
   });
-
-  const { setUser, setUserId } = useContext(FlexWorkContext);
 
   const navigate = useNavigate();
 
@@ -51,11 +48,11 @@ const Login = ({ isUserClient, isLogin, setIsClient, isClient }) => {
   };
 
   const google = () => {
-    window.open("http://localhost:5000/auth/google", "_self");
+    window.open("/auth/google", "_self");
   };
 
   const github = () => {
-    window.open("http://localhost:5000/auth/github", "_self");
+    window.open("/auth/github", "_self");
   };
 
   return !isLogin ? (
